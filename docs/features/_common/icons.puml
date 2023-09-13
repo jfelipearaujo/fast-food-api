@@ -1,0 +1,13 @@
+@startuml
+
+!include ./common.puml
+
+!include ./hamburger.puml
+!include ./ice_cream.puml
+!include ./wine_bottle.puml
+!include ./bacon.puml
+!include ./qrcode.puml
+!include ./mobile.puml
+!include ./database.puml
+
+@enduml
