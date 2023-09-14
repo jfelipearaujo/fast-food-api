@@ -1,0 +1,34 @@
+@startuml realizacao_pagamento
+
+!include ./../_common/domainStory.puml
+!include ./../_common/icons.puml
+
+title "Realização do Pagamento"
+
+' Actors
+Boundary(cliente, Cliente) {
+    Person(Cliente1, Cliente)
+}
+
+Boundary(sistema, Sistema) {
+    System(Sistema1, Sistema)
+    System(Sistema2, Sistema)
+}
+
+' Workitems
+Boundary(pedido, Pedido) {
+    Document(Pedido1, Pedido)
+    Document(Pedido2, Pedido)
+}
+
+Boundary(pagamento, Pagamento) {
+    FA_QRCODE(QRCode1, QR Code, label) #White
+    GOV_MOBILE(Celular, Celular, label) #White
+}
+
+' Phases
+activity(_, Sistema1, recebe o, Pedido1, que gera um, QRCode1)
+activity(_, QRCode1, que é pago pelo, Cliente1, através do, Celular, -->, <--)
+activity(_, Celular, que atualiza o, Pedido2, para o status\nde **pago** no, Sistema2)
+
+@enduml
