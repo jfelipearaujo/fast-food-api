@@ -42,6 +42,6 @@ activity(_, Combo1, adiciona o, Acompanhamento, ao, Combo2, -->)
 activity(_, Combo1, adiciona a, Bebida, ao, Combo2, -->)
 activity(_, Combo1, adiciona a, Sobremesa, ao, Combo2, -->)
 activity(_, Combo2, adicionado ao, Pedido2, do, Cliente, <--)
-activity(_, Cliente, finaliza, Pedido3, que é enviado\npara o, Sistema)
+activity(_, Cliente, finaliza, Pedido3, que é enviado\ncomo **criado**\npara o, Sistema)
 
 @enduml
