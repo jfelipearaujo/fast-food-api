@@ -29,6 +29,6 @@ Boundary(pagamento, Pagamento) {
 ' Phases
 activity(_, Sistema1, recebe o, Pedido1, que gera um, QRCode1)
 activity(_, QRCode1, que é pago pelo, Cliente1, através do, Celular, -->, <--)
-activity(_, Celular, que atualiza o, Pedido2, para o status\nde **pago** no, Sistema2)
+activity(_, Celular, que atualiza o, Pedido2,que é salvo\ncomo **pago** no, Sistema2)
 
 @enduml
