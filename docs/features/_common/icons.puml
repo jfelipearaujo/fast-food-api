@@ -9,5 +9,7 @@
 !include ./qrcode.puml
 !include ./mobile.puml
 !include ./database.puml
+!include ./box.puml
+!include ./cutlery.puml
 
 @enduml

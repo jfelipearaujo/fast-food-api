@@ -1,0 +1,47 @@
+@startuml realizacao_pedido
+
+!include ./../_common/domainStory.puml
+!include ./../_common/icons.puml
+
+title "Realização do Pedido"
+
+' Actors
+Boundary(cliente, Cliente) {
+    Person(Cliente)
+}
+
+System(Sistema, Sistema)
+
+' Workitems
+Boundary(pedido, Pedido) {
+    Document(Pedido1, Pedido)
+    Document(Pedido2, Pedido)
+    Document(Pedido3, Pedido)
+
+    note bottom of Pedido1
+        Cliente pode
+        optar por se
+        identificar ou não
+    end note
+}
+
+FA5_BOX(Combo1, Combo, label) #White
+FA5_BOX(Combo2, Combo, label) #White
+
+Boundary(item_pedido, Itens do Pedido) {
+    FA5_HAMBURGER(Lanche, Lanche, label) #White
+    FA5_BACON(Acompanhamento, Acompanhamento, label) #White
+    FA5_WINE_BOTTLE(Bebida, Bebida, label) #White
+    FA5_ICE_CREAM(Sobremesa, Sobremesa, label) #White
+}
+
+' Phases
+activity(_, Cliente, inicia, Pedido1, dando inicio\na montagem do, Combo1)
+activity(_, Combo1, adiciona o, Lanche, ao, Combo2, -->)
+activity(_, Combo1, adiciona o, Acompanhamento, ao, Combo2, -->)
+activity(_, Combo1, adiciona a, Bebida, ao, Combo2, -->)
+activity(_, Combo1, adiciona a, Sobremesa, ao, Combo2, -->)
+activity(_, Combo2, adicionado ao, Pedido2, do, Cliente, <--)
+activity(_, Cliente, finaliza, Pedido3, que é enviado\npara o, Sistema)
+
+@enduml
