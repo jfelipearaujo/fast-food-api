@@ -1,0 +1,37 @@
+@startuml preparacao_pedido
+
+!include ./../_common/domainStory.puml
+!include ./../_common/icons.puml
+
+title "Preparação do Pedido"
+
+' Actors
+Boundary(cliente, Cliente) {
+    Person(Cliente1, Cliente)
+}
+
+Boundary(sistema, Sistema) {
+    System(Sistema1, Sistema)
+    System(Sistema2, Sistema)
+    System(Sistema3, Sistema)
+    DEV_DATABASE(bancoDados1, Banco de Dados, label) #White
+}
+
+' Workitems
+Boundary(pedido, Pedido) {
+    Document(Pedido1, Pedido)
+}
+
+Boundary(cozinha, Cozinha) {
+    FA_CUTLERY(Cozinha1, Cozinha, label) #White
+    FA_CUTLERY(Cozinha2, Cozinha, label) #White
+}
+
+' Phases
+activity(_, Sistema1, recebe o, Pedido1, atualiza\npara **recebido**, bancoDados1, <--, -->)
+activity(_, Pedido1, disponibilizado\npara a, Cozinha1)
+activity(_, Cozinha1, atualiza o status\npara **em preparação**, Sistema2)
+activity(_, Cozinha2, atualiza o status\npara **pronto**, Sistema3)
+activity(_, Sistema3, que libera para\nretirada pelo, Cliente1)
+
+@enduml

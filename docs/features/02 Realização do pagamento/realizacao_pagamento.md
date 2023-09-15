@@ -1,4 +1,4 @@
-# Realização do Pedido e Pagamento
+# Realização do Pagamento
 
 ## Entidades
 
@@ -10,7 +10,7 @@
 
 1. Sistema recebe um pedido onde é gerado um QR Code
 2. Cliente paga através do Celular
-3. Pedido atualizado para Pago
+3. Pedido atualizado para **pago**
 
 ## Storytelling
 
