@@ -14,7 +14,7 @@
 4. Adiciona a bebida
 5. Adiciona a sobremesa
 6. Combo adicionado ao pedido
-7. Cliente finaliza o pedido
+7. Cliente finaliza o pedido que é persistido como **criado**
 
 ## Storytelling
 
