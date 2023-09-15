@@ -1,0 +1,32 @@
+@startuml entrega_pedido
+
+!include ./../_common/domainStory.puml
+!include ./../_common/icons.puml
+
+title "Entrega do Pedido"
+
+' Actors
+Boundary(cliente, Cliente) {
+    Person(Cliente1, Cliente)
+}
+
+Boundary(sistema, Sistema) {
+    System(Sistema1, Sistema)
+    System(Sistema2, Sistema)
+}
+
+' Workitems
+Boundary(pedido, Pedido) {
+    Document(Pedido1, Pedido)
+    Document(Pedido2, Pedido)
+}
+
+Boundary(funcionario, Funcionário) {
+    Person(Funcionario1, Funcionário)
+}
+
+' Phases
+activity(_, Sistema1, notifica o, Cliente1, para retirar o, Pedido1, <--)
+activity(_, Funcionario1, atualiza o, Pedido2, para **finalizado**, Sistema2)
+
+@enduml
