@@ -11,4 +11,5 @@
 - [Event Storming](https://miro.com/app/board/uXjVMlp82Do=/?share_link_id=110707337684)
 - [Domínios](./docs/features/00%20Domínios/dominios.md)
 - [Funcionalidades](./docs/features/features.md)
+- [Diagrama de Relacionamento de Entidades](./docs/database/database.md)
  
