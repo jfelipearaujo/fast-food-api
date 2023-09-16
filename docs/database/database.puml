@@ -6,7 +6,7 @@ title "Ctrl+Eat Banco de dados"
 skinparam linetype ortho
 
 
-entity "Cliente" as client {
+entity "Client" as client {
     *Id: Guid <<PK>>
     ---
     FirstName: String <<nullable>>
@@ -20,7 +20,7 @@ entity "Cliente" as client {
     UpdatedAtUtc: DateTime
 }
 
-entity "Categoria de Produto" as productCategory {
+entity "Product Category" as productCategory {
     *Id: Guid <<PK>>
     ---
     Description: String
@@ -29,19 +29,20 @@ entity "Categoria de Produto" as productCategory {
     UpdatedAtUtc: DateTime
 }
 
-entity "Produto" as product {
+entity "Product" as product {
     *Id: Guid <<PK>>
     ---
     CategoryId: Guid <<FK>>
     Description: String
     UnitPrice: Decimal
     Currency: String
+    ImageUrl: String
     ---
     CreatedAtUtc: DateTime
     UpdatedAtUtc: DateTime
 }
 
-entity "Estoque" as warehouse {
+entity "Warehouse" as warehouse {
     *Id: Guid <<PK>>
     ---
     ProductId: Guid <<FK>>
@@ -51,7 +52,7 @@ entity "Estoque" as warehouse {
     UpdatedAtUtc: DateTime
 }
 
-entity "Produto do Pedido" as orderProduct {
+entity "Order's Product" as orderProduct {
     *Id: Guid <<PK>>
     ---
     OrderId: Guid <<FK>>
@@ -63,7 +64,7 @@ entity "Produto do Pedido" as orderProduct {
     UpdatedAtUtc: DateTime
 }
 
-entity "Pagamento" as payment {
+entity "Payment" as payment {
     *Id: Guid <<PK>>
     ---
     OrderId: Guid <<FK>>
@@ -76,7 +77,7 @@ entity "Pagamento" as payment {
     UpdatedAtUtc: DateTime
 }
 
-entity "Pedido" as order {
+entity "Order" as order {
     *Id: Guid <<PK>>
     ---
     ClientId: Guid <<FK>>
