@@ -1,0 +1,138 @@
+@startuml database
+
+title "Ctrl+Eat Banco de dados"
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+
+entity "Cliente" as client {
+    *Id: Guid <<PK>>
+    ---
+    FirstName: String <<nullable>>
+    LastName: String <<nullable>>
+    Email: String <<nullable>>
+    DocumentId: String <<nullable>>
+    DocumentType: Integer <<nullable>>
+    IsAnonymous: Boolean
+    ---
+    CreatedAtUtc: DateTime
+    UpdatedAtUtc: DateTime
+}
+
+entity "Categoria de Produto" as productCategory {
+    *Id: Guid <<PK>>
+    ---
+    Description: String
+    ---
+    CreatedAtUtc: DateTime
+    UpdatedAtUtc: DateTime
+}
+
+entity "Produto" as product {
+    *Id: Guid <<PK>>
+    ---
+    CategoryId: Guid <<FK>>
+    Description: String
+    UnitPrice: Decimal
+    Currency: String
+    ---
+    CreatedAtUtc: DateTime
+    UpdatedAtUtc: DateTime
+}
+
+entity "Estoque" as warehouse {
+    *Id: Guid <<PK>>
+    ---
+    ProductId: Guid <<FK>>
+    Quantity: Integer
+    ---
+    CreatedAtUtc: DateTime
+    UpdatedAtUtc: DateTime
+}
+
+entity "Produto do Pedido" as orderProduct {
+    *Id: Guid <<PK>>
+    ---
+    OrderId: Guid <<FK>>
+    ProductId: Guid <<FK>>
+    Quantity: Integer
+    Observation: String
+    ---
+    CreatedAtUtc: DateTime
+    UpdatedAtUtc: DateTime
+}
+
+entity "Pagamento" as payment {
+    *Id: Guid <<PK>>
+    ---
+    OrderId: Guid <<FK>>
+    Status: Integer
+    Amount: Decimal
+    Currency: String
+    Details: String
+    ---
+    CreatedAtUtc: DateTime
+    UpdatedAtUtc: DateTime
+}
+
+entity "Pedido" as order {
+    *Id: Guid <<PK>>
+    ---
+    ClientId: Guid <<FK>>
+    PaymentId: Guid <<FK>>
+    Status: Integer
+    ---
+    CreatedAtUtc: DateTime
+    UpdatedAtUtc: DateTime
+}
+
+note right of client
+    **DocumentType**
+
+    1 = CPF
+end note
+
+note right of payment
+    **Status**
+
+    1 = Aguardando Pagamento
+    2 = Aprovado
+    3 = Rejeitado
+end note
+
+note right of order
+    **Status**
+
+    1 = Criado
+    2 = Recebido
+    3 = Em Preparação
+    4 = Pronto
+    5 = Finalizado
+end note
+
+' a product has Exactly One category
+' a category has One or More products
+product ||--|{ productCategory
+
+' a product has Exactly One warehouse
+' a warehouse has One or More products
+product ||--|{ warehouse
+
+' a payment has Exactly One order
+' a order has Exactly One payment
+payment ||--|| order
+
+' a order has Exactly One client
+' a client has One or More order
+order ||--|{ client
+
+' a product has Exactly One orderProduct
+' a orderProduct has One or More products
+product ||--|| orderProduct
+
+' a order has One or Mode orderProduct
+' a orderProduct has Exactly One order
+order }|--|| orderProduct
+
+@enduml
