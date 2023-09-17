@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  app-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: CtrlEat.Db
+    volumes:
+      - ./.containers/database:/var/opt/mssql/data
+    environment:
+      SA_PASSWORD: "StrongPassword123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - api
+
+  web.api:
+    depends_on: 
+      - app-db
+    image: ${DOCKER_REGISTRY-}webapi
+    container_name: CtrlEat.Api
+    build:
+      context: .
+      dockerfile: src/Adapters/Driving/Web.Api/Dockerfile
+    ports:
+      - "5001:443"
+    networks:
+      - api
+
+networks:
+  api:
+    driver: bridge
