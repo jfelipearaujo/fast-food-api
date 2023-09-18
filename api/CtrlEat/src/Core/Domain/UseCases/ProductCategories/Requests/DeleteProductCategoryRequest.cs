@@ -1,6 +1,6 @@
 ﻿namespace Domain.UseCases.ProductCategories.Requests
 {
-    public class GetProductCategoryUseCaseRequest
+    public class DeleteProductCategoryRequest
     {
         public Guid Id { get; set; }
     }

@@ -1,5 +1,5 @@
 ﻿using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
@@ -17,7 +17,7 @@ namespace Application.UseCases.ProductCategories
             _productCategoryRepository = productCategoryRepository;
         }
 
-        public async Task<CreateProductCategoryUseCaseResponse> ExecuteAsync(CreateProductCategoryUseCaseRequest request, CancellationToken cancellationToken)
+        public async Task<ProductCategoryResponse> ExecuteAsync(CreateProductCategoryRequest request, CancellationToken cancellationToken)
         {
             var productsCategory = new ProductCategory
             {
@@ -27,7 +27,7 @@ namespace Application.UseCases.ProductCategories
 
             await _productCategoryRepository.CreateAsync(productsCategory, cancellationToken);
 
-            return productsCategory.Adapt<CreateProductCategoryUseCaseResponse>();
+            return productsCategory.Adapt<ProductCategoryResponse>();
         }
     }
 }

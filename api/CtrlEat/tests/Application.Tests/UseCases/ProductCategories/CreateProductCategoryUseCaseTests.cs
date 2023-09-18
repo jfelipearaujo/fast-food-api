@@ -1,7 +1,7 @@
 ﻿using Application.UseCases.ProductCategories;
 
 using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
@@ -24,12 +24,12 @@ namespace Application.Tests.UseCases.ProductCategories
         public async Task ShouldCreateProductCategorySuccessfully()
         {
             // Arrange
-            var request = new CreateProductCategoryUseCaseRequest
+            var request = new CreateProductCategoryRequest
             {
                 Description = "Product Category Description",
             };
 
-            var expectedResponse = new CreateProductCategoryUseCaseResponse
+            var expectedResponse = new ProductCategoryResponse
             {
                 Description = "Product Category Description",
             };

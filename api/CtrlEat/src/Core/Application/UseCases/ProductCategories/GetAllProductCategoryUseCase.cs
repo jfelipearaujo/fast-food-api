@@ -15,11 +15,11 @@ namespace Application.UseCases.ProductCategories
             _productCategoryRepository = productCategoryRepository;
         }
 
-        public async Task<IEnumerable<GetProductCategoryUseCaseResponse>> ExecuteAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<ProductCategoryResponse>> ExecuteAsync(CancellationToken cancellationToken)
         {
             var productCategories = await _productCategoryRepository.GetAllAsync(cancellationToken);
 
-            return productCategories.Adapt<IEnumerable<GetProductCategoryUseCaseResponse>>();
+            return productCategories.Adapt<IEnumerable<ProductCategoryResponse>>();
         }
     }
 }

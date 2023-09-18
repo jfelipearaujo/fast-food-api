@@ -5,8 +5,8 @@ namespace Domain.UseCases.ProductCategories
 {
     public interface IUpdateProductCategoryUseCase
     {
-        Task<UpdateProductCategoryUseCaseResponse?> ExecuteAsync(
-            UpdateProductCategoryUseCaseRequest request,
+        Task<ProductCategoryResponse?> ExecuteAsync(
+            UpdateProductCategoryRequest request,
             CancellationToken cancellationToken);
     }
 }

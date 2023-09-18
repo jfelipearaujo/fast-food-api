@@ -13,7 +13,7 @@ namespace Application.UseCases.ProductCategories
             _productCategoryRepository = productCategoryRepository;
         }
 
-        public async Task<int?> ExecuteAsync(DeleteProductCategoryUseCaseRequest request,
+        public async Task<int?> ExecuteAsync(DeleteProductCategoryRequest request,
             CancellationToken cancellationToken)
         {
             var exists = await _productCategoryRepository.GetByIdAsync(request.Id, cancellationToken);

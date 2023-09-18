@@ -5,7 +5,7 @@ namespace Domain.UseCases.ProductCategories
     public interface IDeleteProductCategoryUseCase
     {
         Task<int?> ExecuteAsync(
-            DeleteProductCategoryUseCaseRequest request,
+            DeleteProductCategoryRequest request,
             CancellationToken cancellationToken);
     }
 }

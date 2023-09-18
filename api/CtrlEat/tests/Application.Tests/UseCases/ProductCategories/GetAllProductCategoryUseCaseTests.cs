@@ -1,7 +1,7 @@
 ﻿using Application.UseCases.ProductCategories;
 
 using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
 using Domain.UseCases.ProductCategories.Responses;
 
 namespace Application.Tests.UseCases.ProductCategories
@@ -49,14 +49,14 @@ namespace Application.Tests.UseCases.ProductCategories
             // Assert
             result.Should().NotBeNullOrEmpty();
 
-            result.Should().BeEquivalentTo(new List<GetProductCategoryUseCaseResponse>
+            result.Should().BeEquivalentTo(new List<ProductCategoryResponse>
             {
-                new GetProductCategoryUseCaseResponse
+                new ProductCategoryResponse
                 {
                     Id = productCategoryOne.Id,
                     Description = productCategoryOne.Description,
                 },
-                new GetProductCategoryUseCaseResponse
+                new ProductCategoryResponse
                 {
                     Id = productCategoryTwo.Id,
                     Description = productCategoryTwo.Description,

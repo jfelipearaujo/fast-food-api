@@ -1,6 +1,6 @@
-﻿namespace Web.Api.Endpoints.Responses
+﻿namespace Web.Api.Endpoints.ProductCategories.Responses
 {
-    public class ProductCategoryResponse
+    public class ProductCategoryEndpointResponse
     {
         public Guid Id { get; set; }
 

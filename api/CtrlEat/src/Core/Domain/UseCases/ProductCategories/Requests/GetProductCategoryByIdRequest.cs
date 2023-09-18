@@ -1,9 +1,7 @@
 ﻿namespace Domain.UseCases.ProductCategories.Requests
 {
-    public class UpdateProductCategoryUseCaseRequest
+    public class GetProductCategoryByIdRequest
     {
         public Guid Id { get; set; }
-
-        public string Description { get; set; }
     }
 }

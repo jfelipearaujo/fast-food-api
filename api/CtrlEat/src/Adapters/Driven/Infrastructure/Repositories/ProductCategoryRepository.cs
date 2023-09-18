@@ -1,5 +1,5 @@
 ﻿using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,44 +9,44 @@ namespace Infrastructure.Repositories
 {
     public class ProductCategoryRepository : IProductCategoryRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext context;
 
-        public ProductCategoryRepository(AppDbContext dbContext)
+        public ProductCategoryRepository(AppDbContext context)
         {
-            _dbContext = dbContext;
+            this.context = context;
         }
 
         public async Task<int> CreateAsync(ProductCategory productCategory, CancellationToken cancellationToken)
         {
-            _dbContext.ProductCategory.Add(productCategory);
+            context.ProductCategory.Add(productCategory);
 
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            return await context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<int> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            var productCategory = await _dbContext.ProductCategory.FirstAsync(x => x.Id == id, cancellationToken);
+            var productCategory = await context.ProductCategory.FirstAsync(x => x.Id == id, cancellationToken);
 
-            _dbContext.ProductCategory.Remove(productCategory);
+            context.ProductCategory.Remove(productCategory);
 
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            return await context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<ProductCategory>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _dbContext.ProductCategory.ToListAsync(cancellationToken);
+            return await context.ProductCategory.ToListAsync(cancellationToken);
         }
 
         public async Task<ProductCategory?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _dbContext.ProductCategory.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return await context.ProductCategory.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         public async Task<int> UpdateAsync(ProductCategory productCategory, CancellationToken cancellationToken)
         {
-            _dbContext.ProductCategory.Update(productCategory);
+            context.ProductCategory.Update(productCategory);
 
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            return await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

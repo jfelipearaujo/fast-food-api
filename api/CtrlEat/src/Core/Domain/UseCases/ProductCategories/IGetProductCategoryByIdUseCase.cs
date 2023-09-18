@@ -3,10 +3,10 @@ using Domain.UseCases.ProductCategories.Responses;
 
 namespace Domain.UseCases.ProductCategories
 {
-    public interface IGetProductCategoryUseCase
+    public interface IGetProductCategoryByIdUseCase
     {
-        Task<GetProductCategoryUseCaseResponse?> ExecuteAsync(
-            GetProductCategoryUseCaseRequest request,
+        Task<ProductCategoryResponse?> ExecuteAsync(
+            GetProductCategoryByIdRequest request,
             CancellationToken cancellationToken);
     }
 }

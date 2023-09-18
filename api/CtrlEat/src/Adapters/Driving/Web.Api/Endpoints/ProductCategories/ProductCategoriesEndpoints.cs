@@ -5,10 +5,10 @@ using Mapster;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
-using Web.Api.Endpoints.Requests;
-using Web.Api.Endpoints.Responses;
+using Web.Api.Endpoints.ProductCategories.Requests;
+using Web.Api.Endpoints.ProductCategories.Responses;
 
-namespace Web.Api.Endpoints
+namespace Web.Api.Endpoints.ProductCategories
 {
     public static class ProductCategoriesEndpoints
     {
@@ -16,8 +16,8 @@ namespace Web.Api.Endpoints
         {
             var group = app.MapGroup("/product/category");
 
-            group.MapGet("{id}", GetProductCategory)
-                .WithName(nameof(GetProductCategory))
+            group.MapGet("{id}", GetProductCategoryById)
+                .WithName(nameof(GetProductCategoryById))
                 .WithOpenApi();
 
             group.MapGet("/", GetAllProductCategory)
@@ -37,12 +37,12 @@ namespace Web.Api.Endpoints
                .WithOpenApi();
         }
 
-        public static async Task<Results<Ok<ProductCategoryResponse>, NotFound<string>>> GetProductCategory(
+        public static async Task<Results<Ok<ProductCategoryEndpointResponse>, NotFound<string>>> GetProductCategoryById(
             Guid id,
-            IGetProductCategoryUseCase getProductCategoryUseCase,
+            IGetProductCategoryByIdUseCase getProductCategoryUseCase,
             CancellationToken cancellationToken)
         {
-            var useCaseRequest = new GetProductCategoryUseCaseRequest
+            var useCaseRequest = new GetProductCategoryByIdRequest
             {
                 Id = id
             };
@@ -54,64 +54,70 @@ namespace Web.Api.Endpoints
                 return TypedResults.NotFound("Product Category Not Found");
             }
 
-            var response = result.Adapt<ProductCategoryResponse>();
+            var response = result.Adapt<ProductCategoryEndpointResponse>();
 
             return TypedResults.Ok(response);
         }
 
-        public static async Task<Ok<IEnumerable<ProductCategoryResponse>>> GetAllProductCategory(
+        public static async Task<Ok<IEnumerable<ProductCategoryEndpointResponse>>> GetAllProductCategory(
             IGetAllProductCategoryUseCase getAllProductCategoryUseCase,
             CancellationToken cancellationToken)
         {
             var result = await getAllProductCategoryUseCase.ExecuteAsync(cancellationToken);
 
-            var response = result.Adapt<IEnumerable<ProductCategoryResponse>>();
+            var response = result.Adapt<IEnumerable<ProductCategoryEndpointResponse>>();
 
             return TypedResults.Ok(response);
         }
 
-        public static async Task<CreatedAtRoute<ProductCategoryResponse>> CreateProductCategory(
-            CreateProductCategoryRequest request,
+        public static async Task<CreatedAtRoute<ProductCategoryEndpointResponse>> CreateProductCategory(
+            CreateProductCategoryEndpointRequest endpointRequest,
             ICreateProductCategoryUseCase createProductCategoryUseCase,
             CancellationToken cancellationToken)
         {
-            var useCaseRequest = request.Adapt<CreateProductCategoryUseCaseRequest>();
+            var request = new CreateProductCategoryRequest
+            {
+                Description = endpointRequest.Description,
+            };
 
-            var result = await createProductCategoryUseCase.ExecuteAsync(useCaseRequest, cancellationToken);
+            var result = await createProductCategoryUseCase.ExecuteAsync(request, cancellationToken);
 
-            var response = result.Adapt<ProductCategoryResponse>();
+            var response = result.Adapt<ProductCategoryEndpointResponse>();
 
             return TypedResults.CreatedAtRoute(
                 response,
-                nameof(GetProductCategory),
+                nameof(GetProductCategoryById),
                 new
                 {
                     id = response.Id,
                 });
         }
 
-        public static async Task<Results<CreatedAtRoute<ProductCategoryResponse>, NotFound<string>>> UpdateProductCategory(
+        public static async Task<Results<CreatedAtRoute<ProductCategoryEndpointResponse>, NotFound<string>>> UpdateProductCategory(
             Guid id,
-            UpdateProductCategoryRequest request,
+            UpdateProductCategoryEndpointRequest endpointRequest,
             IUpdateProductCategoryUseCase updateProductCategoryUseCase,
             CancellationToken cancellationToken)
         {
-            var useCaseRequest = request.Adapt<UpdateProductCategoryUseCaseRequest>();
+            var request = new UpdateProductCategoryRequest
+            {
+                Id = id,
+                Description = endpointRequest.Description,
+            };
 
-            useCaseRequest.Id = id;
-
-            var result = await updateProductCategoryUseCase.ExecuteAsync(useCaseRequest, cancellationToken);
+            var result = await updateProductCategoryUseCase.ExecuteAsync(request, cancellationToken);
 
             if (result is null)
             {
                 return TypedResults.NotFound("Product Category Not Found");
             }
 
-            var response = result.Adapt<ProductCategoryResponse>();
+            var response = result.Adapt<ProductCategoryEndpointResponse>();
 
             return TypedResults.CreatedAtRoute(
                 response,
-                nameof(GetProductCategory), new
+                nameof(GetProductCategoryById),
+                new
                 {
                     id = response.Id,
                 });
@@ -122,7 +128,7 @@ namespace Web.Api.Endpoints
             IDeleteProductCategoryUseCase deleteProductCategoryUseCase,
             CancellationToken cancellationToken)
         {
-            var useCaseRequest = new DeleteProductCategoryUseCaseRequest
+            var useCaseRequest = new DeleteProductCategoryRequest
             {
                 Id = id
             };

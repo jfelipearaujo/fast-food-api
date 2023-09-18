@@ -4,7 +4,8 @@ using Infrastructure;
 
 using Persistence;
 
-using Web.Api.Endpoints;
+using Web.Api.Endpoints.ProductCategories;
+using Web.Api.Endpoints.Products;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,5 +28,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapProductCategoriesEndpoints();
+app.MapProductsEndpoints();
 
 app.Run();

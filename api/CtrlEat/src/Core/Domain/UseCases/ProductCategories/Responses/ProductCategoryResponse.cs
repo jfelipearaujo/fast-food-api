@@ -1,6 +1,6 @@
 ﻿namespace Domain.UseCases.ProductCategories.Responses
 {
-    public class CreateProductCategoryUseCaseResponse
+    public class ProductCategoryResponse
     {
         public Guid Id { get; set; }
 

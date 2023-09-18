@@ -16,7 +16,7 @@ namespace Application.UseCases.ProductCategories
             _productCategoryRepository = productCategoryRepository;
         }
 
-        public async Task<UpdateProductCategoryUseCaseResponse?> ExecuteAsync(UpdateProductCategoryUseCaseRequest request, CancellationToken cancellationToken)
+        public async Task<ProductCategoryResponse?> ExecuteAsync(UpdateProductCategoryRequest request, CancellationToken cancellationToken)
         {
             var productCategory = await _productCategoryRepository.GetByIdAsync(request.Id, cancellationToken);
 
@@ -27,7 +27,7 @@ namespace Application.UseCases.ProductCategories
 
             await _productCategoryRepository.UpdateAsync(productCategory, cancellationToken);
 
-            return productCategory.Adapt<UpdateProductCategoryUseCaseResponse>();
+            return productCategory.Adapt<ProductCategoryResponse>();
         }
     }
 }

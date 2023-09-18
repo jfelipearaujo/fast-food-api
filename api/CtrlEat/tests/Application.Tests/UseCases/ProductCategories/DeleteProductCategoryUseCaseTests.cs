@@ -1,7 +1,7 @@
 ﻿using Application.UseCases.ProductCategories;
 
 using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
 using Domain.UseCases.ProductCategories.Requests;
 
 namespace Application.Tests.UseCases.ProductCategories
@@ -23,7 +23,7 @@ namespace Application.Tests.UseCases.ProductCategories
         public async Task ShouldDeleteProductCategorySuccessfully()
         {
             // Arrange
-            var request = new DeleteProductCategoryUseCaseRequest
+            var request = new DeleteProductCategoryRequest
             {
                 Id = Guid.NewGuid(),
             };
@@ -53,7 +53,7 @@ namespace Application.Tests.UseCases.ProductCategories
         public async Task ShouldReturnNullIfNothingWasFound()
         {
             // Arrange
-            var request = new DeleteProductCategoryUseCaseRequest
+            var request = new DeleteProductCategoryRequest
             {
                 Id = Guid.NewGuid(),
             };

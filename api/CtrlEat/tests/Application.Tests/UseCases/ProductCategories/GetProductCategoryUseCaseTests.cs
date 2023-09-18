@@ -1,7 +1,7 @@
 ﻿using Application.UseCases.ProductCategories;
 
 using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
@@ -9,7 +9,7 @@ namespace Application.Tests.UseCases.ProductCategories
 {
     public class GetProductCategoryUseCaseTests
     {
-        private readonly GetProductCategoryUseCase sut;
+        private readonly GetProductCategoryByIdUseCase sut;
 
         private readonly IProductCategoryRepository productCategoryRepository;
 
@@ -17,14 +17,14 @@ namespace Application.Tests.UseCases.ProductCategories
         {
             productCategoryRepository = Substitute.For<IProductCategoryRepository>();
 
-            sut = new GetProductCategoryUseCase(productCategoryRepository);
+            sut = new GetProductCategoryByIdUseCase(productCategoryRepository);
         }
 
         [Fact]
         public async Task ShouldGetProductCategorySuccessfully()
         {
             // Arrange
-            var request = new GetProductCategoryUseCaseRequest
+            var request = new GetProductCategoryByIdRequest
             {
                 Id = Guid.NewGuid()
             };
@@ -42,7 +42,7 @@ namespace Application.Tests.UseCases.ProductCategories
 
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(new GetProductCategoryUseCaseResponse
+            result.Should().BeEquivalentTo(new ProductCategoryResponse
             {
                 Id = request.Id,
                 Description = "Product Category"
@@ -53,7 +53,7 @@ namespace Application.Tests.UseCases.ProductCategories
         public async Task ShouldHandleWhenNothingWasFound()
         {
             // Arrange
-            var request = new GetProductCategoryUseCaseRequest
+            var request = new GetProductCategoryByIdRequest
             {
                 Id = Guid.NewGuid()
             };

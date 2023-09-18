@@ -4,7 +4,7 @@ namespace Domain.UseCases.ProductCategories
 {
     public interface IGetAllProductCategoryUseCase
     {
-        Task<IEnumerable<GetProductCategoryUseCaseResponse>> ExecuteAsync(
+        Task<IEnumerable<ProductCategoryResponse>> ExecuteAsync(
             CancellationToken cancellationToken);
     }
 }

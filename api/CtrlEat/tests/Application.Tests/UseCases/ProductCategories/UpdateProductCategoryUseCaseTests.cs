@@ -1,7 +1,7 @@
 ﻿using Application.UseCases.ProductCategories;
 
 using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
@@ -24,7 +24,7 @@ namespace Application.Tests.UseCases.ProductCategories
         public async Task ShouldUpdateProductCategorySuccessfully()
         {
             // Arrange
-            var request = new UpdateProductCategoryUseCaseRequest
+            var request = new UpdateProductCategoryRequest
             {
                 Id = Guid.NewGuid(),
                 Description = "New Product Description"
@@ -43,7 +43,7 @@ namespace Application.Tests.UseCases.ProductCategories
 
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(new UpdateProductCategoryUseCaseResponse
+            result.Should().BeEquivalentTo(new ProductCategoryResponse
             {
                 Id = request.Id,
                 Description = request.Description
@@ -60,7 +60,7 @@ namespace Application.Tests.UseCases.ProductCategories
         public async Task ShouldHandleWhenNothingWasFound()
         {
             // Arrange
-            var request = new UpdateProductCategoryUseCaseRequest
+            var request = new UpdateProductCategoryRequest
             {
                 Id = Guid.NewGuid(),
                 Description = "New Product Description"
