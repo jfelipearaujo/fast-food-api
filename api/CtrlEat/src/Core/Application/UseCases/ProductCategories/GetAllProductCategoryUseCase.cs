@@ -17,9 +17,9 @@ namespace Application.UseCases.ProductCategories
 
         public async Task<IEnumerable<GetProductCategoryUseCaseResponse>> ExecuteAsync(CancellationToken cancellationToken)
         {
-            var result = await _productCategoryRepository.GetAllAsync(cancellationToken);
+            var productCategories = await _productCategoryRepository.GetAllAsync(cancellationToken);
 
-            return result.Adapt<IEnumerable<GetProductCategoryUseCaseResponse>>();
+            return productCategories.Adapt<IEnumerable<GetProductCategoryUseCaseResponse>>();
         }
     }
 }

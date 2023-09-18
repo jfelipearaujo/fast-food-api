@@ -5,11 +5,7 @@ using Domain.Models;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
-using FluentAssertions;
-
-using NSubstitute;
-
-namespace Application.Tests.UseCases
+namespace Application.Tests.UseCases.ProductCategories
 {
     public class CreateProductCategoryUseCaseTests
     {

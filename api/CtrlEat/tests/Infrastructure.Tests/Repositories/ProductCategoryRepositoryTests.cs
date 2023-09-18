@@ -1,7 +1,5 @@
 using Domain.Models;
 
-using FluentAssertions;
-
 using Infrastructure.Repositories;
 
 using Microsoft.Data.Sqlite;
