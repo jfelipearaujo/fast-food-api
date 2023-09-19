@@ -1,6 +1,9 @@
 ﻿using Domain.Adapters;
+using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
+
+using FluentResults;
 
 namespace Application.UseCases.ProductCategories
 {
@@ -13,15 +16,18 @@ namespace Application.UseCases.ProductCategories
             this.repository = repository;
         }
 
-        public async Task<int?> ExecuteAsync(DeleteProductCategoryRequest request,
+        public async Task<Result<int>> ExecuteAsync(
+            DeleteProductCategoryRequest request,
             CancellationToken cancellationToken)
         {
             var exists = await repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (exists is null)
-                return null;
+                return Result.Fail(new ProductCategoryNotFoundError(request.Id));
 
-            return await repository.DeleteAsync(request.Id, cancellationToken);
+            var deletedEntities = await repository.DeleteAsync(request.Id, cancellationToken);
+
+            return Result.Ok(deletedEntities);
         }
     }
 }

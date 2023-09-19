@@ -1,7 +1,11 @@
 ﻿using Domain.Adapters;
+using Domain.Errors.ProductCategories;
+using Domain.Errors.Products;
 using Domain.UseCases.Products;
 using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
+
+using FluentResults;
 
 using Mapster;
 
@@ -20,19 +24,25 @@ namespace Application.UseCases.Products
             this.productCategoryRepository = productCategoryRepository;
         }
 
-        public async Task<ProductResponse?> ExecuteAsync(UpdateProductRequest request, CancellationToken cancellationToken)
+        public async Task<Result<ProductResponse>> ExecuteAsync(
+            UpdateProductRequest request,
+            CancellationToken cancellationToken)
         {
             var product = await productRepository.GetByIdAsync(request.ProductId, cancellationToken);
 
             if (product is null)
-                return null;
+            {
+                return Result.Fail(new ProductNotFoundError(request.ProductId));
+            }
 
             if (product.ProductCategoryId != request.ProductCategoryId)
             {
                 var productCategory = await productCategoryRepository.GetByIdAsync(request.ProductCategoryId, cancellationToken);
 
                 if (productCategory is null)
-                    return null;
+                {
+                    return Result.Fail(new ProductCategoryNotFoundError(request.ProductCategoryId));
+                }
 
                 product.ProductCategory = productCategory;
             }
@@ -44,7 +54,9 @@ namespace Application.UseCases.Products
 
             await productRepository.UpdateAsync(product, cancellationToken);
 
-            return product.Adapt<ProductResponse>();
+            var response = product.Adapt<ProductResponse>();
+
+            return Result.Ok(response);
         }
     }
 }

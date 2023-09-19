@@ -1,11 +1,13 @@
 ﻿using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
+using FluentResults;
+
 namespace Domain.UseCases.ProductCategories
 {
     public interface IUpdateProductCategoryUseCase
     {
-        Task<ProductCategoryResponse?> ExecuteAsync(
+        Task<Result<ProductCategoryResponse>> ExecuteAsync(
             UpdateProductCategoryRequest request,
             CancellationToken cancellationToken);
     }

@@ -2,6 +2,8 @@
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Responses;
 
+using FluentResults;
+
 using Mapster;
 
 namespace Application.UseCases.ProductCategories
@@ -15,11 +17,14 @@ namespace Application.UseCases.ProductCategories
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<ProductCategoryResponse>> ExecuteAsync(CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<ProductCategoryResponse>>> ExecuteAsync(
+            CancellationToken cancellationToken)
         {
             var productCategories = await repository.GetAllAsync(cancellationToken);
 
-            return productCategories.Adapt<IEnumerable<ProductCategoryResponse>>();
+            var response = productCategories.Adapt<IEnumerable<ProductCategoryResponse>>();
+
+            return Result.Ok(response);
         }
     }
 }

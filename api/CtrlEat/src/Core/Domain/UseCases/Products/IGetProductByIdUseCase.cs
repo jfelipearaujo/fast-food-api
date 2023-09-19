@@ -1,11 +1,13 @@
 ﻿using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
 
+using FluentResults;
+
 namespace Domain.UseCases.Products
 {
     public interface IGetProductByIdUseCase
     {
-        Task<ProductResponse?> ExecuteAsync(
+        Task<Result<ProductResponse>> ExecuteAsync(
             GetProductByIdRequest request,
             CancellationToken cancellationToken);
     }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 using Web.Api.Endpoints.Products.Requests;
 using Web.Api.Endpoints.Products.Responses;
+using Web.Api.Extensions;
 
 namespace Web.Api.Endpoints.Products
 {
@@ -40,7 +41,7 @@ namespace Web.Api.Endpoints.Products
                 .WithOpenApi();
         }
 
-        public static async Task<Results<Ok<ProductEndpointResponse>, NotFound<string>>> GetProductById(
+        public static async Task<Results<Ok<ProductEndpointResponse>, NotFound<ApiError>>> GetProductById(
             Guid id,
             IGetProductByIdUseCase useCase,
             CancellationToken cancellationToken)
@@ -52,12 +53,12 @@ namespace Web.Api.Endpoints.Products
 
             var result = await useCase.ExecuteAsync(request, cancellationToken);
 
-            if (result is null)
+            if (result.IsFailed)
             {
-                return TypedResults.NotFound("Product Not Found");
+                return TypedResults.NotFound(result.ToApiError());
             }
 
-            var response = result.Adapt<ProductEndpointResponse>();
+            var response = result.Value.Adapt<ProductEndpointResponse>();
 
             return TypedResults.Ok(response);
         }
@@ -68,12 +69,12 @@ namespace Web.Api.Endpoints.Products
         {
             var result = await useCase.ExecuteAsync(cancellationToken);
 
-            var response = result.Adapt<IEnumerable<ProductEndpointResponse>>();
+            var response = result.Value.Adapt<IEnumerable<ProductEndpointResponse>>();
 
             return TypedResults.Ok(response);
         }
 
-        public static async Task<Results<CreatedAtRoute<ProductEndpointResponse>, NotFound<string>>> CreateProduct(
+        public static async Task<Results<CreatedAtRoute<ProductEndpointResponse>, NotFound<ApiError>>> CreateProduct(
             CreateProductEndpointRequest endpointRequest,
             ICreateProductUseCase useCase,
             CancellationToken cancellationToken)
@@ -82,12 +83,12 @@ namespace Web.Api.Endpoints.Products
 
             var result = await useCase.ExecuteAsync(request, cancellationToken);
 
-            if (result is null)
+            if (result.IsFailed)
             {
-                return TypedResults.NotFound("Product Category Not Found");
+                return TypedResults.NotFound(result.ToApiError());
             }
 
-            var response = result.Adapt<ProductEndpointResponse>();
+            var response = result.Value.Adapt<ProductEndpointResponse>();
 
             return TypedResults.CreatedAtRoute(
                 response,
@@ -98,7 +99,7 @@ namespace Web.Api.Endpoints.Products
                 });
         }
 
-        public static async Task<Results<CreatedAtRoute<ProductEndpointResponse>, NotFound<string>>> UpdateProduct(
+        public static async Task<Results<CreatedAtRoute<ProductEndpointResponse>, NotFound<ApiError>>> UpdateProduct(
             Guid id,
             UpdateProductEndpointRequest endpointRequest,
             IUpdateProductUseCase useCase,
@@ -108,12 +109,12 @@ namespace Web.Api.Endpoints.Products
 
             var result = await useCase.ExecuteAsync(request, cancellationToken);
 
-            if (result is null)
+            if (result.IsFailed)
             {
-                return TypedResults.NotFound("Product Category or Product Not Found");
+                return TypedResults.NotFound(result.ToApiError());
             }
 
-            var response = result.Adapt<ProductEndpointResponse>();
+            var response = result.Value.Adapt<ProductEndpointResponse>();
 
             return TypedResults.CreatedAtRoute(
                 response,
@@ -124,7 +125,7 @@ namespace Web.Api.Endpoints.Products
                 });
         }
 
-        public static async Task<Results<NoContent, NotFound<string>>> DeleteProduct(
+        public static async Task<Results<NoContent, NotFound<ApiError>>> DeleteProduct(
             Guid id,
             IDeleteProductUseCase useCase,
             CancellationToken cancellationToken)
@@ -136,9 +137,9 @@ namespace Web.Api.Endpoints.Products
 
             var result = await useCase.ExecuteAsync(request, cancellationToken);
 
-            if (result is null)
+            if (result.IsFailed)
             {
-                return TypedResults.NotFound("Product Not Found");
+                return TypedResults.NotFound(result.ToApiError());
             }
 
             return TypedResults.NoContent();
