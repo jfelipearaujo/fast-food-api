@@ -10,11 +10,11 @@ namespace Application.UseCases.ProductCategories
 {
     public class CreateProductCategoryUseCase : ICreateProductCategoryUseCase
     {
-        private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
-        public CreateProductCategoryUseCase(IProductCategoryRepository productCategoryRepository)
+        public CreateProductCategoryUseCase(IProductCategoryRepository repository)
         {
-            _productCategoryRepository = productCategoryRepository;
+            this.repository = repository;
         }
 
         public async Task<ProductCategoryResponse> ExecuteAsync(CreateProductCategoryRequest request, CancellationToken cancellationToken)
@@ -25,7 +25,7 @@ namespace Application.UseCases.ProductCategories
                 Description = request.Description,
             };
 
-            await _productCategoryRepository.CreateAsync(productsCategory, cancellationToken);
+            await repository.CreateAsync(productsCategory, cancellationToken);
 
             return productsCategory.Adapt<ProductCategoryResponse>();
         }

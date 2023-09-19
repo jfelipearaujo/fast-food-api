@@ -9,16 +9,16 @@ namespace Application.UseCases.ProductCategories
 {
     public class GetProductCategoryByIdUseCase : IGetProductCategoryByIdUseCase
     {
-        private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
-        public GetProductCategoryByIdUseCase(IProductCategoryRepository productCategoryRepository)
+        public GetProductCategoryByIdUseCase(IProductCategoryRepository repository)
         {
-            _productCategoryRepository = productCategoryRepository;
+            this.repository = repository;
         }
 
         public async Task<ProductCategoryResponse?> ExecuteAsync(GetProductCategoryByIdRequest request, CancellationToken cancellationToken)
         {
-            var productCategory = await _productCategoryRepository.GetByIdAsync(request.Id, cancellationToken);
+            var productCategory = await repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (productCategory is null)
                 return null;

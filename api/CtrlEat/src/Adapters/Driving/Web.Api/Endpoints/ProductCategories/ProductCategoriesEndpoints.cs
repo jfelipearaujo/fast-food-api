@@ -12,16 +12,19 @@ namespace Web.Api.Endpoints.ProductCategories
 {
     public static class ProductCategoriesEndpoints
     {
+        private const string EndpointTag = "Product Category";
+
         public static void MapProductCategoriesEndpoints(this IEndpointRouteBuilder app)
         {
-            var group = app.MapGroup("/product/category");
+            var group = app.MapGroup("/product/category")
+                .WithTags(EndpointTag);
 
             group.MapGet("{id}", GetProductCategoryById)
                 .WithName(nameof(GetProductCategoryById))
                 .WithOpenApi();
 
-            group.MapGet("/", GetAllProductCategory)
-                .WithName(nameof(GetAllProductCategory))
+            group.MapGet("/", GetAllProductCategories)
+                .WithName(nameof(GetAllProductCategories))
                 .WithOpenApi();
 
             group.MapPost("/", CreateProductCategory)
@@ -59,8 +62,8 @@ namespace Web.Api.Endpoints.ProductCategories
             return TypedResults.Ok(response);
         }
 
-        public static async Task<Ok<IEnumerable<ProductCategoryEndpointResponse>>> GetAllProductCategory(
-            IGetAllProductCategoryUseCase getAllProductCategoryUseCase,
+        public static async Task<Ok<IEnumerable<ProductCategoryEndpointResponse>>> GetAllProductCategories(
+            IGetAllProductCategoriesUseCase getAllProductCategoryUseCase,
             CancellationToken cancellationToken)
         {
             var result = await getAllProductCategoryUseCase.ExecuteAsync(cancellationToken);

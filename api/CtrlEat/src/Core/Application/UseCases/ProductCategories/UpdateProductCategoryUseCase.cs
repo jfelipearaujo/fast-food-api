@@ -9,23 +9,23 @@ namespace Application.UseCases.ProductCategories
 {
     public class UpdateProductCategoryUseCase : IUpdateProductCategoryUseCase
     {
-        private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
-        public UpdateProductCategoryUseCase(IProductCategoryRepository productCategoryRepository)
+        public UpdateProductCategoryUseCase(IProductCategoryRepository repository)
         {
-            _productCategoryRepository = productCategoryRepository;
+            this.repository = repository;
         }
 
         public async Task<ProductCategoryResponse?> ExecuteAsync(UpdateProductCategoryRequest request, CancellationToken cancellationToken)
         {
-            var productCategory = await _productCategoryRepository.GetByIdAsync(request.Id, cancellationToken);
+            var productCategory = await repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (productCategory is null)
                 return null;
 
             productCategory.Description = request.Description;
 
-            await _productCategoryRepository.UpdateAsync(productCategory, cancellationToken);
+            await repository.UpdateAsync(productCategory, cancellationToken);
 
             return productCategory.Adapt<ProductCategoryResponse>();
         }

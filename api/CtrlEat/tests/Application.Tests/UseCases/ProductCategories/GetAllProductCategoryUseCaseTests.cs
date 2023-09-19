@@ -8,7 +8,7 @@ namespace Application.Tests.UseCases.ProductCategories
 {
     public class GetAllProductCategoryUseCaseTests
     {
-        private readonly GetAllProductCategoryUseCase sut;
+        private readonly GetAllProductCategoriesUseCase sut;
 
         private readonly IProductCategoryRepository productCategoryRepository;
 
@@ -16,7 +16,7 @@ namespace Application.Tests.UseCases.ProductCategories
         {
             productCategoryRepository = Substitute.For<IProductCategoryRepository>();
 
-            sut = new GetAllProductCategoryUseCase(productCategoryRepository);
+            sut = new GetAllProductCategoriesUseCase(productCategoryRepository);
         }
 
         [Fact]

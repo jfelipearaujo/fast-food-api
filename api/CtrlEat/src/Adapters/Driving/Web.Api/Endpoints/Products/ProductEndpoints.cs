@@ -12,22 +12,37 @@ namespace Web.Api.Endpoints.Products
 {
     public static class ProductEndpoints
     {
+        private const string EndpointTag = "Product";
+
         public static void MapProductsEndpoints(this IEndpointRouteBuilder app)
         {
-            var group = app.MapGroup("/product");
+            var group = app.MapGroup("/product")
+                .WithTags(EndpointTag);
 
             group.MapGet("{id}", GetProductById)
                 .WithName(nameof(GetProductById))
                 .WithOpenApi();
 
+            group.MapGet("/", GetAllProducts)
+                .WithName(nameof(GetAllProducts))
+                .WithOpenApi();
+
             group.MapPost("/", CreateProduct)
                 .WithName(nameof(CreateProduct))
+                .WithOpenApi();
+
+            group.MapPut("{id}", UpdateProduct)
+                .WithName(nameof(UpdateProduct))
+                .WithOpenApi();
+
+            group.MapDelete("{id}", DeleteProduct)
+                .WithName(nameof(DeleteProduct))
                 .WithOpenApi();
         }
 
         public static async Task<Results<Ok<ProductEndpointResponse>, NotFound<string>>> GetProductById(
             Guid id,
-            IGetProductByIdUseCase getProductByIdUseCase,
+            IGetProductByIdUseCase useCase,
             CancellationToken cancellationToken)
         {
             var request = new GetProductByIdRequest
@@ -35,7 +50,7 @@ namespace Web.Api.Endpoints.Products
                 Id = id
             };
 
-            var result = await getProductByIdUseCase.ExecuteAsync(request, cancellationToken);
+            var result = await useCase.ExecuteAsync(request, cancellationToken);
 
             if (result is null)
             {
@@ -47,14 +62,25 @@ namespace Web.Api.Endpoints.Products
             return TypedResults.Ok(response);
         }
 
+        public static async Task<Ok<IEnumerable<ProductEndpointResponse>>> GetAllProducts(
+            IGetAllProductsUseCase useCase,
+            CancellationToken cancellationToken)
+        {
+            var result = await useCase.ExecuteAsync(cancellationToken);
+
+            var response = result.Adapt<IEnumerable<ProductEndpointResponse>>();
+
+            return TypedResults.Ok(response);
+        }
+
         public static async Task<Results<CreatedAtRoute<ProductEndpointResponse>, NotFound<string>>> CreateProduct(
             CreateProductEndpointRequest endpointRequest,
-            ICreateProductUseCase createProductUseCase,
+            ICreateProductUseCase useCase,
             CancellationToken cancellationToken)
         {
             var request = endpointRequest.Adapt<CreateProductRequest>();
 
-            var result = await createProductUseCase.ExecuteAsync(request, cancellationToken);
+            var result = await useCase.ExecuteAsync(request, cancellationToken);
 
             if (result is null)
             {
@@ -70,6 +96,52 @@ namespace Web.Api.Endpoints.Products
                 {
                     id = response.Id
                 });
+        }
+
+        public static async Task<Results<CreatedAtRoute<ProductEndpointResponse>, NotFound<string>>> UpdateProduct(
+            Guid id,
+            UpdateProductEndpointRequest endpointRequest,
+            IUpdateProductUseCase useCase,
+            CancellationToken cancellationToken)
+        {
+            var request = endpointRequest.Adapt<UpdateProductRequest>();
+
+            var result = await useCase.ExecuteAsync(request, cancellationToken);
+
+            if (result is null)
+            {
+                return TypedResults.NotFound("Product Category or Product Not Found");
+            }
+
+            var response = result.Adapt<ProductEndpointResponse>();
+
+            return TypedResults.CreatedAtRoute(
+                response,
+                nameof(GetProductById),
+                new
+                {
+                    id = response.Id
+                });
+        }
+
+        public static async Task<Results<NoContent, NotFound<string>>> DeleteProduct(
+            Guid id,
+            IDeleteProductUseCase useCase,
+            CancellationToken cancellationToken)
+        {
+            var request = new DeleteProductRequest
+            {
+                Id = id,
+            };
+
+            var result = await useCase.ExecuteAsync(request, cancellationToken);
+
+            if (result is null)
+            {
+                return TypedResults.NotFound("Product Not Found");
+            }
+
+            return TypedResults.NoContent();
         }
     }
 }

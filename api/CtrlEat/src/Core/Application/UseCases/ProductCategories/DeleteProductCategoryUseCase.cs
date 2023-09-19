@@ -6,22 +6,22 @@ namespace Application.UseCases.ProductCategories
 {
     public class DeleteProductCategoryUseCase : IDeleteProductCategoryUseCase
     {
-        private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
-        public DeleteProductCategoryUseCase(IProductCategoryRepository productCategoryRepository)
+        public DeleteProductCategoryUseCase(IProductCategoryRepository repository)
         {
-            _productCategoryRepository = productCategoryRepository;
+            this.repository = repository;
         }
 
         public async Task<int?> ExecuteAsync(DeleteProductCategoryRequest request,
             CancellationToken cancellationToken)
         {
-            var exists = await _productCategoryRepository.GetByIdAsync(request.Id, cancellationToken);
+            var exists = await repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (exists is null)
                 return null;
 
-            return await _productCategoryRepository.DeleteAsync(request.Id, cancellationToken);
+            return await repository.DeleteAsync(request.Id, cancellationToken);
         }
     }
 }

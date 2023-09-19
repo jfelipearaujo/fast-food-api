@@ -6,18 +6,18 @@ using Mapster;
 
 namespace Application.UseCases.ProductCategories
 {
-    public class GetAllProductCategoryUseCase : IGetAllProductCategoryUseCase
+    public class GetAllProductCategoriesUseCase : IGetAllProductCategoriesUseCase
     {
-        private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
-        public GetAllProductCategoryUseCase(IProductCategoryRepository productCategoryRepository)
+        public GetAllProductCategoriesUseCase(IProductCategoryRepository repository)
         {
-            _productCategoryRepository = productCategoryRepository;
+            this.repository = repository;
         }
 
         public async Task<IEnumerable<ProductCategoryResponse>> ExecuteAsync(CancellationToken cancellationToken)
         {
-            var productCategories = await _productCategoryRepository.GetAllAsync(cancellationToken);
+            var productCategories = await repository.GetAllAsync(cancellationToken);
 
             return productCategories.Adapt<IEnumerable<ProductCategoryResponse>>();
         }

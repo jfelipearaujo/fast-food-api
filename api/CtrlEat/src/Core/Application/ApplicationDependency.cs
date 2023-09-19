@@ -14,12 +14,15 @@ namespace Application
         {
             services.AddTransient<ICreateProductCategoryUseCase, CreateProductCategoryUseCase>();
             services.AddTransient<IGetProductCategoryByIdUseCase, GetProductCategoryByIdUseCase>();
-            services.AddTransient<IGetAllProductCategoryUseCase, GetAllProductCategoryUseCase>();
+            services.AddTransient<IGetAllProductCategoriesUseCase, GetAllProductCategoriesUseCase>();
             services.AddTransient<IUpdateProductCategoryUseCase, UpdateProductCategoryUseCase>();
             services.AddTransient<IDeleteProductCategoryUseCase, DeleteProductCategoryUseCase>();
 
             services.AddTransient<ICreateProductUseCase, CreateProductUseCase>();
             services.AddTransient<IGetProductByIdUseCase, GetProductByIdUseCase>();
+            services.AddTransient<IGetAllProductsUseCase, GetAllProductsUseCase>();
+            services.AddTransient<IUpdateProductUseCase, UpdateProductUseCase>();
+            services.AddTransient<IDeleteProductUseCase, DeleteProductUseCase>();
 
             return services;
         }
