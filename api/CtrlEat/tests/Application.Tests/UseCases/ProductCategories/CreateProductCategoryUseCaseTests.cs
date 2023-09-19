@@ -1,7 +1,7 @@
 ﻿using Application.UseCases.ProductCategories;
 
 using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
@@ -11,25 +11,25 @@ namespace Application.Tests.UseCases.ProductCategories
     {
         private readonly CreateProductCategoryUseCase sut;
 
-        private readonly IProductCategoryRepository productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
         public CreateProductCategoryUseCaseTests()
         {
-            productCategoryRepository = Substitute.For<IProductCategoryRepository>();
+            repository = Substitute.For<IProductCategoryRepository>();
 
-            sut = new CreateProductCategoryUseCase(productCategoryRepository);
+            sut = new CreateProductCategoryUseCase(repository);
         }
 
         [Fact]
         public async Task ShouldCreateProductCategorySuccessfully()
         {
             // Arrange
-            var request = new CreateProductCategoryUseCaseRequest
+            var request = new CreateProductCategoryRequest
             {
                 Description = "Product Category Description",
             };
 
-            var expectedResponse = new CreateProductCategoryUseCaseResponse
+            var expectedResponse = new ProductCategoryResponse
             {
                 Description = "Product Category Description",
             };
@@ -38,10 +38,13 @@ namespace Application.Tests.UseCases.ProductCategories
             var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
             // Assert
-            response.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
-            response.Id.Should().NotBeEmpty();
+            response.Should().BeSuccess().And.Satisfy(result =>
+            {
+                result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
+                result.Value.Id.Should().NotBeEmpty();
+            });
 
-            await productCategoryRepository
+            await repository
                 .Received(1)
                 .CreateAsync(
                     Arg.Any<ProductCategory>(),

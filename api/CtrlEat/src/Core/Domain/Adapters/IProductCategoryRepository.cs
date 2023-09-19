@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿using Domain.Entities;
 
 namespace Domain.Adapters
 {
@@ -6,12 +6,12 @@ namespace Domain.Adapters
     {
         Task<int> CreateAsync(ProductCategory productCategory, CancellationToken cancellationToken);
 
-        Task<int> DeleteAsync(Guid id, CancellationToken cancellationToken);
+        Task<ProductCategory?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
         Task<IEnumerable<ProductCategory>> GetAllAsync(CancellationToken cancellationToken);
 
-        Task<ProductCategory?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
-
         Task<int> UpdateAsync(ProductCategory productCategory, CancellationToken cancellationToken);
+
+        Task<int> DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

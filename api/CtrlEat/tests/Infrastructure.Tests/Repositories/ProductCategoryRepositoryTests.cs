@@ -1,4 +1,4 @@
-using Domain.Models;
+using Domain.Entities;
 
 using Infrastructure.Repositories;
 
@@ -15,26 +15,26 @@ namespace Infrastructure.Tests.Repositories
     {
         private readonly ProductCategoryRepository sut;
 
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext dbContext;
 
-        private readonly DbConnection _dbConnection;
+        private readonly DbConnection dbConnection;
 
-        private readonly DbContextOptions<AppDbContext> _dbContextOptions;
+        private readonly DbContextOptions<AppDbContext> dbContextOptions;
 
         public ProductCategoryRepositoryTests()
         {
-            _dbConnection = new SqliteConnection("Filename=:memory:");
-            _dbConnection.Open();
+            dbConnection = new SqliteConnection("Filename=:memory:");
+            dbConnection.Open();
 
-            _dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
-                .UseSqlite(_dbConnection)
+            dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
+                .UseSqlite(dbConnection)
                 .Options;
 
-            _dbContext = new AppDbContext(_dbContextOptions);
+            dbContext = new AppDbContext(dbContextOptions);
 
-            _dbContext.Database.Migrate();
+            dbContext.Database.Migrate();
 
-            sut = new ProductCategoryRepository(_dbContext);
+            sut = new ProductCategoryRepository(dbContext);
         }
 
         [Fact]
@@ -48,13 +48,13 @@ namespace Infrastructure.Tests.Repositories
             };
 
             // Act
-            var result = await sut.CreateAsync(category, cancellationToken: default);
+            var response = await sut.CreateAsync(category, cancellationToken: default);
 
             // Assert
-            result.Should().Be(1);
-            _dbContext.ProductCategory.Should().NotBeNullOrEmpty();
+            response.Should().Be(1);
+            dbContext.ProductCategory.Should().NotBeNullOrEmpty();
 
-            var categoryOnDb = await _dbContext.ProductCategory.FindAsync(category.Id);
+            var categoryOnDb = await dbContext.ProductCategory.FindAsync(category.Id);
 
             categoryOnDb.Should().NotBeNull().And.BeEquivalentTo(category);
         }
@@ -72,11 +72,11 @@ namespace Infrastructure.Tests.Repositories
             await sut.CreateAsync(category, cancellationToken: default);
 
             // Act
-            var result = await sut.DeleteAsync(category.Id, cancellationToken: default);
+            var response = await sut.DeleteAsync(category.Id, cancellationToken: default);
 
             // Assert
-            result.Should().Be(1);
-            _dbContext.ProductCategory.Should().BeNullOrEmpty();
+            response.Should().Be(1);
+            dbContext.ProductCategory.Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -99,24 +99,16 @@ namespace Infrastructure.Tests.Repositories
             await sut.CreateAsync(secondCategory, cancellationToken: default);
 
             // Act
-            var result = await sut.GetAllAsync(cancellationToken: default);
+            var response = await sut.GetAllAsync(cancellationToken: default);
 
             // Assert
-            var expectedResult = new List<ProductCategory>
+            response.Should().NotBeNullOrEmpty().And.BeEquivalentTo(new List<ProductCategory>
             {
                 firstCategory,
                 secondCategory
-            };
+            });
 
-            result
-                .Should()
-                .NotBeNullOrEmpty()
-                .And.BeEquivalentTo(expectedResult);
-
-            _dbContext.ProductCategory
-                .Count()
-                .Should()
-                .Be(2);
+            dbContext.ProductCategory.Count().Should().Be(2);
         }
 
         [Fact]
@@ -125,12 +117,10 @@ namespace Infrastructure.Tests.Repositories
             // Arrange
 
             // Act
-            var result = await sut.GetAllAsync(cancellationToken: default);
+            var response = await sut.GetAllAsync(cancellationToken: default);
 
             // Assert
-            result
-                .Should()
-                .BeNullOrEmpty();
+            response.Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -146,10 +136,10 @@ namespace Infrastructure.Tests.Repositories
             await sut.CreateAsync(category, cancellationToken: default);
 
             // Act
-            var result = await sut.GetByIdAsync(category.Id, cancellationToken: default);
+            var response = await sut.GetByIdAsync(category.Id, cancellationToken: default);
 
             // Assert
-            result.Should().BeEquivalentTo(category);
+            response.Should().BeEquivalentTo(category);
         }
 
         [Fact]
@@ -162,10 +152,10 @@ namespace Infrastructure.Tests.Repositories
             };
 
             // Act
-            var result = await sut.GetByIdAsync(category.Id, cancellationToken: default);
+            var response = await sut.GetByIdAsync(category.Id, cancellationToken: default);
 
             // Assert
-            result.Should().BeNull();
+            response.Should().BeNull();
         }
 
         [Fact]
@@ -183,12 +173,12 @@ namespace Infrastructure.Tests.Repositories
             category.Description = "New Description";
 
             // Act
-            var result = await sut.UpdateAsync(category, cancellationToken: default);
+            var response = await sut.UpdateAsync(category, cancellationToken: default);
 
             // Assert
-            result.Should().Be(1);
+            response.Should().Be(1);
 
-            var categoryOnDb = await _dbContext.ProductCategory.FindAsync(category.Id);
+            var categoryOnDb = await dbContext.ProductCategory.FindAsync(category.Id);
 
             categoryOnDb.Should().NotBeNull().And.BeEquivalentTo(category);
         }
@@ -203,8 +193,8 @@ namespace Infrastructure.Tests.Repositories
         {
             if (disposing)
             {
-                _dbConnection.Dispose();
-                _dbContext.Dispose();
+                dbConnection.Dispose();
+                dbContext.Dispose();
             }
         }
     }

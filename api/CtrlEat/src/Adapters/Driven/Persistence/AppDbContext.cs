@@ -1,5 +1,5 @@
 ﻿using Domain.Abstract;
-using Domain.Models;
+using Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +18,7 @@ namespace Persistence
         }
 
         public DbSet<ProductCategory> ProductCategory { get; set; }
+        public DbSet<Product> Product { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

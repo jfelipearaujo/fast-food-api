@@ -1,22 +1,22 @@
 ﻿using Application.UseCases.ProductCategories;
 
 using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
 using Domain.UseCases.ProductCategories.Responses;
 
 namespace Application.Tests.UseCases.ProductCategories
 {
     public class GetAllProductCategoryUseCaseTests
     {
-        private readonly GetAllProductCategoryUseCase sut;
+        private readonly GetAllProductCategoriesUseCase sut;
 
-        private readonly IProductCategoryRepository productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
         public GetAllProductCategoryUseCaseTests()
         {
-            productCategoryRepository = Substitute.For<IProductCategoryRepository>();
+            repository = Substitute.For<IProductCategoryRepository>();
 
-            sut = new GetAllProductCategoryUseCase(productCategoryRepository);
+            sut = new GetAllProductCategoriesUseCase(repository);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Application.Tests.UseCases.ProductCategories
                 Description = "Product Category 2"
             };
 
-            productCategoryRepository
+            repository
                 .GetAllAsync(Arg.Any<CancellationToken>())
                 .Returns(new List<ProductCategory>
                 {
@@ -44,23 +44,24 @@ namespace Application.Tests.UseCases.ProductCategories
                 });
 
             // Act
-            var result = await sut.ExecuteAsync(cancellationToken: default);
+            var response = await sut.ExecuteAsync(cancellationToken: default);
 
             // Assert
-            result.Should().NotBeNullOrEmpty();
-
-            result.Should().BeEquivalentTo(new List<GetProductCategoryUseCaseResponse>
+            response.Should().BeSuccess().And.Satisfy(result =>
             {
-                new GetProductCategoryUseCaseResponse
+                result.Value.Should().BeEquivalentTo(new List<ProductCategoryResponse>
                 {
-                    Id = productCategoryOne.Id,
-                    Description = productCategoryOne.Description,
-                },
-                new GetProductCategoryUseCaseResponse
-                {
-                    Id = productCategoryTwo.Id,
-                    Description = productCategoryTwo.Description,
-                }
+                    new ProductCategoryResponse
+                    {
+                        Id = productCategoryOne.Id,
+                        Description = productCategoryOne.Description,
+                    },
+                    new ProductCategoryResponse
+                    {
+                        Id = productCategoryTwo.Id,
+                        Description = productCategoryTwo.Description,
+                    }
+                });
             });
         }
 
@@ -68,15 +69,18 @@ namespace Application.Tests.UseCases.ProductCategories
         public async Task ShouldReturnNothingIfNothingWasFound()
         {
             // Arrange
-            productCategoryRepository
+            repository
                 .GetAllAsync(Arg.Any<CancellationToken>())
                 .Returns(new List<ProductCategory>());
 
             // Act
-            var result = await sut.ExecuteAsync(cancellationToken: default);
+            var response = await sut.ExecuteAsync(cancellationToken: default);
 
             // Assert
-            result.Should().BeNullOrEmpty();
+            response.Should().BeSuccess().And.Satisfy(result =>
+            {
+                result.Value.Should().BeEquivalentTo(Enumerable.Empty<ProductCategoryResponse>());
+            });
         }
     }
 }

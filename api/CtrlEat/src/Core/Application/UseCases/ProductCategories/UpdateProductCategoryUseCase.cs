@@ -1,7 +1,10 @@
 ﻿using Domain.Adapters;
+using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
+
+using FluentResults;
 
 using Mapster;
 
@@ -9,25 +12,27 @@ namespace Application.UseCases.ProductCategories
 {
     public class UpdateProductCategoryUseCase : IUpdateProductCategoryUseCase
     {
-        private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
-        public UpdateProductCategoryUseCase(IProductCategoryRepository productCategoryRepository)
+        public UpdateProductCategoryUseCase(IProductCategoryRepository repository)
         {
-            _productCategoryRepository = productCategoryRepository;
+            this.repository = repository;
         }
 
-        public async Task<UpdateProductCategoryUseCaseResponse?> ExecuteAsync(UpdateProductCategoryUseCaseRequest request, CancellationToken cancellationToken)
+        public async Task<Result<ProductCategoryResponse>> ExecuteAsync(UpdateProductCategoryRequest request, CancellationToken cancellationToken)
         {
-            var productCategory = await _productCategoryRepository.GetByIdAsync(request.Id, cancellationToken);
+            var productCategory = await repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (productCategory is null)
-                return null;
+                return Result.Fail(new ProductCategoryNotFoundError(request.Id));
 
             productCategory.Description = request.Description;
 
-            await _productCategoryRepository.UpdateAsync(productCategory, cancellationToken);
+            await repository.UpdateAsync(productCategory, cancellationToken);
 
-            return productCategory.Adapt<UpdateProductCategoryUseCaseResponse>();
+            var response = productCategory.Adapt<ProductCategoryResponse>();
+
+            return Result.Ok(response);
         }
     }
 }

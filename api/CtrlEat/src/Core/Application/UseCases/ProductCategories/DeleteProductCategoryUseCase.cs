@@ -1,27 +1,33 @@
 ﻿using Domain.Adapters;
+using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
+
+using FluentResults;
 
 namespace Application.UseCases.ProductCategories
 {
     public class DeleteProductCategoryUseCase : IDeleteProductCategoryUseCase
     {
-        private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
-        public DeleteProductCategoryUseCase(IProductCategoryRepository productCategoryRepository)
+        public DeleteProductCategoryUseCase(IProductCategoryRepository repository)
         {
-            _productCategoryRepository = productCategoryRepository;
+            this.repository = repository;
         }
 
-        public async Task<int?> ExecuteAsync(DeleteProductCategoryUseCaseRequest request,
+        public async Task<Result<int>> ExecuteAsync(
+            DeleteProductCategoryRequest request,
             CancellationToken cancellationToken)
         {
-            var exists = await _productCategoryRepository.GetByIdAsync(request.Id, cancellationToken);
+            var exists = await repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (exists is null)
-                return null;
+                return Result.Fail(new ProductCategoryNotFoundError(request.Id));
 
-            return await _productCategoryRepository.DeleteAsync(request.Id, cancellationToken);
+            var deletedEntities = await repository.DeleteAsync(request.Id, cancellationToken);
+
+            return Result.Ok(deletedEntities);
         }
     }
 }

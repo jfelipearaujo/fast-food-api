@@ -1,7 +1,8 @@
 ﻿using Application.UseCases.ProductCategories;
 
 using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
+using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 
 namespace Application.Tests.UseCases.ProductCategories
@@ -10,39 +11,39 @@ namespace Application.Tests.UseCases.ProductCategories
     {
         private readonly DeleteProductCategoryUseCase sut;
 
-        private readonly IProductCategoryRepository productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
         public DeleteProductCategoryUseCaseTests()
         {
-            productCategoryRepository = Substitute.For<IProductCategoryRepository>();
+            repository = Substitute.For<IProductCategoryRepository>();
 
-            sut = new DeleteProductCategoryUseCase(productCategoryRepository);
+            sut = new DeleteProductCategoryUseCase(repository);
         }
 
         [Fact]
         public async Task ShouldDeleteProductCategorySuccessfully()
         {
             // Arrange
-            var request = new DeleteProductCategoryUseCaseRequest
+            var request = new DeleteProductCategoryRequest
             {
                 Id = Guid.NewGuid(),
             };
 
-            productCategoryRepository
+            repository
                 .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
                 .Returns(new ProductCategory());
 
-            productCategoryRepository
+            repository
                 .DeleteAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
                 .Returns(1);
 
             // Act
-            var result = await sut.ExecuteAsync(request, cancellationToken: default);
+            var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
             // Assert
-            result.Should().Be(1);
+            response.Should().BeSuccess().And.HaveValue(1);
 
-            await productCategoryRepository
+            await repository
                 .Received(1)
                 .DeleteAsync(
                     Arg.Any<Guid>(),
@@ -53,26 +54,22 @@ namespace Application.Tests.UseCases.ProductCategories
         public async Task ShouldReturnNullIfNothingWasFound()
         {
             // Arrange
-            var request = new DeleteProductCategoryUseCaseRequest
+            var request = new DeleteProductCategoryRequest
             {
                 Id = Guid.NewGuid(),
             };
 
-            productCategoryRepository
+            repository
                 .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
                 .Returns(default(ProductCategory));
 
-            productCategoryRepository
-                .DeleteAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(1);
-
             // Act
-            var result = await sut.ExecuteAsync(request, cancellationToken: default);
+            var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
             // Assert
-            result.Should().BeNull();
+            response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.Id));
 
-            await productCategoryRepository
+            await repository
                 .DidNotReceive()
                 .DeleteAsync(
                     Arg.Any<Guid>(),

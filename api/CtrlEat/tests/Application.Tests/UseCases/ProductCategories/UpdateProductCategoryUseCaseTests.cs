@@ -1,7 +1,8 @@
 ﻿using Application.UseCases.ProductCategories;
 
 using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
+using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
@@ -11,26 +12,26 @@ namespace Application.Tests.UseCases.ProductCategories
     {
         private readonly UpdateProductCategoryUseCase sut;
 
-        private readonly IProductCategoryRepository productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
         public UpdateProductCategoryUseCaseTests()
         {
-            productCategoryRepository = Substitute.For<IProductCategoryRepository>();
+            repository = Substitute.For<IProductCategoryRepository>();
 
-            sut = new UpdateProductCategoryUseCase(productCategoryRepository);
+            sut = new UpdateProductCategoryUseCase(repository);
         }
 
         [Fact]
         public async Task ShouldUpdateProductCategorySuccessfully()
         {
             // Arrange
-            var request = new UpdateProductCategoryUseCaseRequest
+            var request = new UpdateProductCategoryRequest
             {
                 Id = Guid.NewGuid(),
                 Description = "New Product Description"
             };
 
-            productCategoryRepository
+            repository
                 .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
                 .Returns(new ProductCategory
                 {
@@ -39,17 +40,19 @@ namespace Application.Tests.UseCases.ProductCategories
                 });
 
             // Act
-            var result = await sut.ExecuteAsync(request, cancellationToken: default);
+            var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(new UpdateProductCategoryUseCaseResponse
+            response.Should().BeSuccess().And.Satisfy(result =>
             {
-                Id = request.Id,
-                Description = request.Description
+                result.Value.Should().BeEquivalentTo(new ProductCategoryResponse
+                {
+                    Id = request.Id,
+                    Description = request.Description
+                });
             });
 
-            await productCategoryRepository
+            await repository
                 .Received(1)
                 .UpdateAsync(
                     Arg.Is<ProductCategory>(x => x.Description == request.Description),
@@ -60,22 +63,23 @@ namespace Application.Tests.UseCases.ProductCategories
         public async Task ShouldHandleWhenNothingWasFound()
         {
             // Arrange
-            var request = new UpdateProductCategoryUseCaseRequest
+            var request = new UpdateProductCategoryRequest
             {
                 Id = Guid.NewGuid(),
                 Description = "New Product Description"
             };
 
-            productCategoryRepository
+            repository
                 .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
                 .Returns(default(ProductCategory));
 
             // Act
-            var result = await sut.ExecuteAsync(request, cancellationToken: default);
+            var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
             // Assert
-            result.Should().BeNull();
-            await productCategoryRepository
+            response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.Id));
+
+            await repository
                 .DidNotReceive()
                 .UpdateAsync(
                     Arg.Any<ProductCategory>(),

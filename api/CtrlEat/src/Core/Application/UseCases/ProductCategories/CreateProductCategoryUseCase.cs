@@ -1,8 +1,10 @@
 ﻿using Domain.Adapters;
-using Domain.Models;
+using Domain.Entities;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
+
+using FluentResults;
 
 using Mapster;
 
@@ -10,14 +12,16 @@ namespace Application.UseCases.ProductCategories
 {
     public class CreateProductCategoryUseCase : ICreateProductCategoryUseCase
     {
-        private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IProductCategoryRepository repository;
 
-        public CreateProductCategoryUseCase(IProductCategoryRepository productCategoryRepository)
+        public CreateProductCategoryUseCase(IProductCategoryRepository repository)
         {
-            _productCategoryRepository = productCategoryRepository;
+            this.repository = repository;
         }
 
-        public async Task<CreateProductCategoryUseCaseResponse> ExecuteAsync(CreateProductCategoryUseCaseRequest request, CancellationToken cancellationToken)
+        public async Task<Result<ProductCategoryResponse>> ExecuteAsync(
+            CreateProductCategoryRequest request,
+            CancellationToken cancellationToken)
         {
             var productsCategory = new ProductCategory
             {
@@ -25,9 +29,11 @@ namespace Application.UseCases.ProductCategories
                 Description = request.Description,
             };
 
-            await _productCategoryRepository.CreateAsync(productsCategory, cancellationToken);
+            await repository.CreateAsync(productsCategory, cancellationToken);
 
-            return productsCategory.Adapt<CreateProductCategoryUseCaseResponse>();
+            var response = productsCategory.Adapt<ProductCategoryResponse>();
+
+            return Result.Ok(response);
         }
     }
 }
