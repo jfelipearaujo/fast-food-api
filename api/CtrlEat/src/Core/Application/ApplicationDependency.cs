@@ -23,6 +23,7 @@ namespace Application
             services.AddTransient<ICreateProductUseCase, CreateProductUseCase>();
             services.AddTransient<IGetProductByIdUseCase, GetProductByIdUseCase>();
             services.AddTransient<IGetAllProductsUseCase, GetAllProductsUseCase>();
+            services.AddTransient<IGetProductsByCategoryUseCase, GetProductsByCategoryUseCase>();
             services.AddTransient<IUpdateProductUseCase, UpdateProductUseCase>();
             services.AddTransient<IDeleteProductUseCase, DeleteProductUseCase>();
 

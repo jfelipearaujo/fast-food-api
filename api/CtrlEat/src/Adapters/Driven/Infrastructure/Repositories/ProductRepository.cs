@@ -35,6 +35,14 @@ namespace Infrastructure.Repositories
             return await context.Product.ToListAsync(cancellationToken);
         }
 
+        public async Task<IEnumerable<Product>> GetAllByCategoryAsync(string category, CancellationToken cancellationToken)
+        {
+            return await context.Product
+                .Include(x => x.ProductCategory)
+                .Where(x => x.ProductCategory.Description == category)
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await context.Product.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);

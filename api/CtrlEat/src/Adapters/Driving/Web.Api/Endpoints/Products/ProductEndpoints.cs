@@ -17,7 +17,7 @@ namespace Web.Api.Endpoints.Products
 
         public static void MapProductEndpoints(this IEndpointRouteBuilder app)
         {
-            var group = app.MapGroup("/product")
+            var group = app.MapGroup("/products")
                 .WithTags(EndpointTag);
 
             group.MapGet("{id}", GetProductById)
@@ -26,6 +26,10 @@ namespace Web.Api.Endpoints.Products
 
             group.MapGet("/", GetAllProducts)
                 .WithName(nameof(GetAllProducts))
+                .WithOpenApi();
+
+            group.MapGet("/category/{category}", GetAllProductsByCategory)
+                .WithName(nameof(GetAllProductsByCategory))
                 .WithOpenApi();
 
             group.MapPost("/", CreateProduct)
@@ -68,6 +72,23 @@ namespace Web.Api.Endpoints.Products
             CancellationToken cancellationToken)
         {
             var result = await useCase.ExecuteAsync(cancellationToken);
+
+            var response = result.Value.Adapt<IEnumerable<ProductEndpointResponse>>();
+
+            return TypedResults.Ok(response);
+        }
+
+        public static async Task<Ok<IEnumerable<ProductEndpointResponse>>> GetAllProductsByCategory(
+            string category,
+            IGetProductsByCategoryUseCase useCase,
+            CancellationToken cancellationToken)
+        {
+            var request = new GetProductsByCategoryRequest
+            {
+                Category = category,
+            };
+
+            var result = await useCase.ExecuteAsync(request, cancellationToken);
 
             var response = result.Value.Adapt<IEnumerable<ProductEndpointResponse>>();
 

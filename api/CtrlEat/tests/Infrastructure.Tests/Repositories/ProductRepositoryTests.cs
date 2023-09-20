@@ -139,6 +139,46 @@ namespace Infrastructure.Tests.Repositories
         }
 
         [Fact]
+        public async Task ShouldGetAllProductByCategorySuccessfully()
+        {
+            // Arrange
+            var firstProduct = new Product
+            {
+                Id = Guid.NewGuid(),
+                ProductCategoryId = productCategory.Id,
+                Description = "Product 1",
+                UnitPrice = 10,
+                Currency = "BRL",
+                ImageUrl = "http://image.com/123.png"
+            };
+
+            var secondProduct = new Product
+            {
+                Id = Guid.NewGuid(),
+                ProductCategoryId = productCategory.Id,
+                Description = "Product 2",
+                UnitPrice = 10,
+                Currency = "BRL",
+                ImageUrl = "http://image.com/123.png"
+            };
+
+            await sut.CreateAsync(firstProduct, cancellationToken: default);
+            await sut.CreateAsync(secondProduct, cancellationToken: default);
+
+            // Act
+            var response = await sut.GetAllByCategoryAsync(productCategory.Description, cancellationToken: default);
+
+            // Assert
+            response.Should().NotBeNullOrEmpty().And.BeEquivalentTo(new List<Product>
+            {
+                firstProduct,
+                secondProduct
+            });
+
+            dbContext.Product.Count().Should().Be(2);
+        }
+
+        [Fact]
         public async Task ShouldGetAllProductSuccessfullyWhenThereIsNoData()
         {
             // Arrange

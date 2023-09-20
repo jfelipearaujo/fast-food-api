@@ -17,7 +17,7 @@ namespace Web.Api.Endpoints.ProductCategories
 
         public static void MapProductCategoryEndpoints(this IEndpointRouteBuilder app)
         {
-            var group = app.MapGroup("/product/category")
+            var group = app.MapGroup("/products/categories")
                 .WithTags(EndpointTag);
 
             group.MapGet("{id}", GetProductCategoryById)
