@@ -91,7 +91,7 @@ namespace Infrastructure.Tests.Repositories
             await sut.CreateAsync(product, cancellationToken: default);
 
             // Act
-            var response = await sut.DeleteAsync(product.Id, cancellationToken: default);
+            var response = await sut.DeleteAsync(product, cancellationToken: default);
 
             // Assert
             response.Should().Be(1);

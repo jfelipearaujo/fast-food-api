@@ -12,6 +12,7 @@ namespace Infrastructure
         {
             services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IClientRepository, ClientRepository>();
 
             return services;
         }

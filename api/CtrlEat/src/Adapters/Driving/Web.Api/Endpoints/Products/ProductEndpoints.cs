@@ -15,7 +15,7 @@ namespace Web.Api.Endpoints.Products
     {
         private const string EndpointTag = "Product";
 
-        public static void MapProductsEndpoints(this IEndpointRouteBuilder app)
+        public static void MapProductEndpoints(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("/product")
                 .WithTags(EndpointTag);

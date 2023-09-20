@@ -27,7 +27,7 @@ namespace Application.UseCases.Products
                 return Result.Fail(new ProductNotFoundError(request.Id));
             }
 
-            var deletedEntities = await repository.DeleteAsync(request.Id, cancellationToken);
+            var deletedEntities = await repository.DeleteAsync(product, cancellationToken);
 
             return Result.Ok(deletedEntities);
         }

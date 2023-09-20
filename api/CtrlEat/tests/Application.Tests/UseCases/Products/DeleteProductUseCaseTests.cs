@@ -38,7 +38,7 @@ namespace Application.Tests.UseCases.Products
                 });
 
             repository
-                .DeleteAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+                .DeleteAsync(Arg.Any<Product>(), Arg.Any<CancellationToken>())
                 .Returns(1);
 
             // Act
@@ -56,7 +56,7 @@ namespace Application.Tests.UseCases.Products
             await repository
                 .Received(1)
                 .DeleteAsync(
-                    Arg.Is<Guid>(x => x == request.Id),
+                    Arg.Is<Product>(x => x.Id == request.Id),
                     Arg.Any<CancellationToken>());
         }
 
@@ -88,7 +88,7 @@ namespace Application.Tests.UseCases.Products
             await repository
                 .DidNotReceive()
                 .DeleteAsync(
-                    Arg.Any<Guid>(),
+                    Arg.Any<Product>(),
                     Arg.Any<CancellationToken>());
         }
     }

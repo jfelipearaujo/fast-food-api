@@ -23,10 +23,8 @@ namespace Infrastructure.Repositories
             return await context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<int> DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<int> DeleteAsync(ProductCategory productCategory, CancellationToken cancellationToken)
         {
-            var productCategory = await context.ProductCategory.FirstAsync(x => x.Id == id, cancellationToken);
-
             context.ProductCategory.Remove(productCategory);
 
             return await context.SaveChangesAsync(cancellationToken);
