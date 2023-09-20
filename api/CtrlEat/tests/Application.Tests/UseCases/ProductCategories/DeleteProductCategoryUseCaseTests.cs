@@ -34,7 +34,7 @@ namespace Application.Tests.UseCases.ProductCategories
                 .Returns(new ProductCategory());
 
             repository
-                .DeleteAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+                .DeleteAsync(Arg.Any<ProductCategory>(), Arg.Any<CancellationToken>())
                 .Returns(1);
 
             // Act
@@ -46,7 +46,7 @@ namespace Application.Tests.UseCases.ProductCategories
             await repository
                 .Received(1)
                 .DeleteAsync(
-                    Arg.Any<Guid>(),
+                    Arg.Any<ProductCategory>(),
                     Arg.Any<CancellationToken>());
         }
 
@@ -72,7 +72,7 @@ namespace Application.Tests.UseCases.ProductCategories
             await repository
                 .DidNotReceive()
                 .DeleteAsync(
-                    Arg.Any<Guid>(),
+                    Arg.Any<ProductCategory>(),
                     Arg.Any<CancellationToken>());
         }
     }

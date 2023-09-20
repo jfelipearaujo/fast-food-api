@@ -72,7 +72,7 @@ namespace Infrastructure.Tests.Repositories
             await sut.CreateAsync(category, cancellationToken: default);
 
             // Act
-            var response = await sut.DeleteAsync(category.Id, cancellationToken: default);
+            var response = await sut.DeleteAsync(category, cancellationToken: default);
 
             // Assert
             response.Should().Be(1);

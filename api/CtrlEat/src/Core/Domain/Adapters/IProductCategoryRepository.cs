@@ -12,6 +12,6 @@ namespace Domain.Adapters
 
         Task<int> UpdateAsync(ProductCategory productCategory, CancellationToken cancellationToken);
 
-        Task<int> DeleteAsync(Guid id, CancellationToken cancellationToken);
+        Task<int> DeleteAsync(ProductCategory productCategory, CancellationToken cancellationToken);
     }
 }

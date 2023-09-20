@@ -15,7 +15,7 @@ namespace Web.Api.Endpoints.ProductCategories
     {
         private const string EndpointTag = "Product Category";
 
-        public static void MapProductCategoriesEndpoints(this IEndpointRouteBuilder app)
+        public static void MapProductCategoryEndpoints(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("/product/category")
                 .WithTags(EndpointTag);

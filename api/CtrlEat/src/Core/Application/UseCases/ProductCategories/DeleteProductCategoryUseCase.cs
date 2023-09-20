@@ -20,12 +20,12 @@ namespace Application.UseCases.ProductCategories
             DeleteProductCategoryRequest request,
             CancellationToken cancellationToken)
         {
-            var exists = await repository.GetByIdAsync(request.Id, cancellationToken);
+            var productCategory = await repository.GetByIdAsync(request.Id, cancellationToken);
 
-            if (exists is null)
+            if (productCategory is null)
                 return Result.Fail(new ProductCategoryNotFoundError(request.Id));
 
-            var deletedEntities = await repository.DeleteAsync(request.Id, cancellationToken);
+            var deletedEntities = await repository.DeleteAsync(productCategory, cancellationToken);
 
             return Result.Ok(deletedEntities);
         }
