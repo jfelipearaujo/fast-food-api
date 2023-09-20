@@ -10,6 +10,8 @@ namespace Domain.Adapters
 
         Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken);
 
+        Task<IEnumerable<Product>> GetAllByCategoryAsync(string category, CancellationToken cancellationToken);
+
         Task<int> UpdateAsync(Product product, CancellationToken cancellationToken);
 
         Task<int> DeleteAsync(Product product, CancellationToken cancellationToken);

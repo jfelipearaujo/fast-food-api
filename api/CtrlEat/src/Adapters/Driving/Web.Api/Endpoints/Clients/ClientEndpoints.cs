@@ -17,7 +17,7 @@ namespace Web.Api.Endpoints.Clients
 
         public static void MapClientEndpoints(this IEndpointRouteBuilder app)
         {
-            var group = app.MapGroup("/client")
+            var group = app.MapGroup("/clients")
                 .WithTags(EndpointTag);
 
             group.MapGet("{id}", GetClientById)
