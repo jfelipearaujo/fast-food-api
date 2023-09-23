@@ -29,6 +29,7 @@ namespace Application
 
             services.AddTransient<ICreateClientUseCase, CreateClientUseCase>();
             services.AddTransient<IGetClientByIdUseCase, GetClientByIdUseCase>();
+            services.AddTransient<IGetAllClientsUseCase, GetAllClientsUseCase>();
 
             return services;
         }

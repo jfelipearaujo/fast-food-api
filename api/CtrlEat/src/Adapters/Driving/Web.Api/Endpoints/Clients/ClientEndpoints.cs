@@ -23,6 +23,10 @@ namespace Web.Api.Endpoints.Clients
                 .WithName(nameof(GetClientById))
                 .WithOpenApi();
 
+            group.MapGet("/", GetAllClients)
+                .WithName(nameof(GetAllClients))
+                .WithOpenApi();
+
             group.MapPost("/", CreateClient)
                 .WithName(nameof(CreateClient))
                 .WithOpenApi();
@@ -44,6 +48,17 @@ namespace Web.Api.Endpoints.Clients
             {
                 return TypedResults.NotFound(result.ToApiError());
             }
+
+            var response = result.Value.MapToResponse();
+
+            return TypedResults.Ok(response);
+        }
+
+        public static async Task<Ok<List<ClientEndpointResponse>>> GetAllClients(
+            IGetAllClientsUseCase useCase,
+            CancellationToken cancellationToken)
+        {
+            var result = await useCase.ExecuteAsync(cancellationToken);
 
             var response = result.Value.MapToResponse();
 

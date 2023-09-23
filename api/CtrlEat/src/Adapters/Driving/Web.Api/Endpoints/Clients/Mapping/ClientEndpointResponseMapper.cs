@@ -21,5 +21,17 @@ namespace Web.Api.Endpoints.Clients.Mapping
                 UpdatedAtUtc = client.UpdatedAtUtc,
             };
         }
+
+        public static List<ClientEndpointResponse> MapToResponse(this List<ClientResponse> clients)
+        {
+            var response = new List<ClientEndpointResponse>();
+
+            foreach (var client in clients)
+            {
+                response.Add(MapToResponse(client));
+            }
+
+            return response;
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
-using Domain.Entities.TypedIds;
+using Domain.Entities.StrongIds;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
@@ -24,8 +24,8 @@ namespace Application.UseCases.ProductCategories
         {
             var productsCategory = new ProductCategory
             {
-                Id = new ProductCategoryId(Guid.NewGuid()),
-                Description = request.Description,
+                Id = ProductCategoryId.Create(Guid.NewGuid()),
+                Description = request.Description
             };
 
             await repository.CreateAsync(productsCategory, cancellationToken);

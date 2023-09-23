@@ -1,5 +1,5 @@
 ﻿using Domain.Adapters;
-using Domain.Entities.TypedIds;
+using Domain.Entities.StrongIds;
 using Domain.Errors.ProductCategories;
 using Domain.Errors.Products;
 using Domain.UseCases.Products;
@@ -29,7 +29,7 @@ namespace Application.UseCases.Products
             CancellationToken cancellationToken)
         {
             var product = await productRepository.GetByIdAsync(
-                new ProductId(request.ProductId),
+                ProductId.Create(request.ProductId),
                 cancellationToken);
 
             if (product is null)
@@ -37,10 +37,10 @@ namespace Application.UseCases.Products
                 return Result.Fail(new ProductNotFoundError(request.ProductId));
             }
 
-            if (product.ProductCategoryId != new ProductCategoryId(request.ProductCategoryId))
+            if (product.ProductCategoryId != ProductCategoryId.Create(request.ProductCategoryId))
             {
                 var productCategory = await productCategoryRepository.GetByIdAsync(
-                    new ProductCategoryId(request.ProductCategoryId),
+                    ProductCategoryId.Create(request.ProductCategoryId),
                     cancellationToken);
 
                 if (productCategory is null)
@@ -51,15 +51,25 @@ namespace Application.UseCases.Products
                 product.ProductCategory = productCategory;
             }
 
-            var price = Money.Create(request.Currency, request.Amount);
+            var currency = new Currency(request.Currency);
+            var currencyValiation = currency.Validate();
 
-            if (price.IsFailed)
+            if (currencyValiation.IsFailed)
             {
-                return Result.Fail(price.Errors);
+                return Result.Fail(currencyValiation.Errors);
+            }
+
+            var currencyAmount = new CurrencyAmount(request.Amount);
+            var currencyAmountValiation = currencyAmount.Validate();
+
+            if (currencyAmountValiation.IsFailed)
+            {
+                return Result.Fail(currencyAmountValiation.Errors);
             }
 
             product.Description = request.Description;
-            product.Price = price.Value;
+            product.Currency = currency;
+            product.Amount = currencyAmount;
             product.ImageUrl = request.ImageUrl;
 
             await productRepository.UpdateAsync(product, cancellationToken);

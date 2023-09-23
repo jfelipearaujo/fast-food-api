@@ -1,6 +1,6 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
-using Domain.Entities.TypedIds;
+using Domain.Entities.StrongIds;
 using Domain.Errors.ProductCategories;
 using Domain.UseCases.Products;
 using Domain.UseCases.Products.Requests;
@@ -28,28 +28,38 @@ namespace Application.UseCases.Products
             CreateProductRequest request,
             CancellationToken cancellationToken)
         {
-            var productCategory = await productCategoryRepository.GetByIdAsync(new ProductCategoryId(request.ProductCategoryId), cancellationToken);
+            var productCategory = await productCategoryRepository.GetByIdAsync(ProductCategoryId.Create(request.ProductCategoryId), cancellationToken);
 
             if (productCategory is null)
             {
                 return Result.Fail(new ProductCategoryNotFoundError(request.ProductCategoryId));
             }
 
-            var price = Money.Create(request.Currency, request.Amount);
+            var currency = new Currency(request.Currency);
+            var currencyValiation = currency.Validate();
 
-            if (price.IsFailed)
+            if (currencyValiation.IsFailed)
             {
-                return Result.Fail(price.Errors);
+                return Result.Fail(currencyValiation.Errors);
+            }
+
+            var currencyAmount = new CurrencyAmount(request.Amount);
+            var currencyAmountValiation = currencyAmount.Validate();
+
+            if (currencyAmountValiation.IsFailed)
+            {
+                return Result.Fail(currencyAmountValiation.Errors);
             }
 
             var product = new Product
             {
-                Id = new ProductId(Guid.NewGuid()),
-                ProductCategoryId = productCategory.Id,
-                ProductCategory = productCategory,
+                Id = ProductId.Create(Guid.NewGuid()),
                 Description = request.Description,
-                Price = price.Value,
+                Currency = currency,
+                Amount = currencyAmount,
                 ImageUrl = request.ImageUrl,
+
+                ProductCategory = productCategory,
             };
 
             await productRepository.CreateAsync(product, cancellationToken);

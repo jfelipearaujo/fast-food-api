@@ -29,8 +29,8 @@ namespace Domain.UseCases.Products.Responses
             {
                 Id = product.Id.Value,
                 Description = product.Description,
-                Currency = product.Price.Currency,
-                Amount = product.Price.Amount,
+                Currency = product.Currency.Value,
+                Amount = product.Amount.Value,
                 ImageUrl = product.ImageUrl,
                 ProductCategory = ProductCategoryResponse.MapFromDomain(product.ProductCategory),
                 CreatedAtUtc = product.CreatedAtUtc,

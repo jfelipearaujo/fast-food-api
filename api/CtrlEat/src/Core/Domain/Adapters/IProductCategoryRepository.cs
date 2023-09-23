@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Domain.Entities.TypedIds;
+using Domain.Entities.StrongIds;
 
 namespace Domain.Adapters
 {

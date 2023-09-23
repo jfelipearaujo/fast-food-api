@@ -7,44 +7,35 @@ using System.Text.RegularExpressions;
 
 namespace Domain.ValueObjects
 {
-    public partial class Email : ValueObject
+    public partial class Email : ValueObject, IValueObject<Email>
     {
-        public string Address { get; private set; }
+        public string Value { get; private set; }
 
-        private Email(string address)
+        private Email()
         {
-            Address = address;
         }
 
-        public static Result<Email> Create(string address)
+        public Email(string address)
         {
-            if (!string.IsNullOrEmpty(address) && !EmailAddressRegex().IsMatch(address))
+            Value = string.IsNullOrEmpty(address) ? string.Empty : address;
+        }
+
+        public Result<Email> Validate()
+        {
+            if (!string.IsNullOrEmpty(Value) && !EmailAddressRegex().IsMatch(Value))
             {
                 return Result.Fail(new EmailInvalidAddressError());
             }
 
-            return new Email(address);
+            return Result.Ok();
         }
 
         [GeneratedRegex("^\\S+@\\S+\\.\\S+$")]
         private static partial Regex EmailAddressRegex();
 
-        protected override IEnumerable<object> GetAtomicValues()
+        protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return Address;
-        }
-    }
-
-    public static class EmailExtensions
-    {
-        public static bool HasData(this Result<Email> result)
-        {
-            if (result.IsFailed)
-            {
-                return false;
-            }
-
-            return !string.IsNullOrEmpty(result.Value.Address);
+            yield return Value;
         }
     }
 }

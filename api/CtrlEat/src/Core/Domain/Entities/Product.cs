@@ -1,5 +1,5 @@
 ﻿using Domain.Abstract;
-using Domain.Entities.TypedIds;
+using Domain.Entities.StrongIds;
 using Domain.ValueObjects;
 
 namespace Domain.Entities
@@ -8,10 +8,11 @@ namespace Domain.Entities
     {
         public string Description { get; set; }
 
-        public Money Price { get; set; }
+        public Currency Currency { get; set; }
+
+        public CurrencyAmount Amount { get; set; }
 
         public string ImageUrl { get; set; }
-
 
         public ProductCategoryId ProductCategoryId { get; set; }
         public ProductCategory ProductCategory { get; set; }

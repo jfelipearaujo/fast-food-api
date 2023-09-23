@@ -1,6 +1,6 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
-using Domain.Entities.TypedIds;
+using Domain.Entities.StrongIds;
 
 using Microsoft.EntityFrameworkCore;
 

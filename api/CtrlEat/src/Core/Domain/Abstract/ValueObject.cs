@@ -1,5 +1,12 @@
-﻿namespace Domain.Abstract
+﻿using FluentResults;
+
+namespace Domain.Abstract
 {
+    public interface IValueObject<T> where T : class
+    {
+        Result<T> Validate();
+    }
+
     public abstract class ValueObject
     {
         protected static bool EqualOperator(ValueObject left, ValueObject right)
@@ -8,7 +15,7 @@
             {
                 return false;
             }
-            return ReferenceEquals(left, null) || left.Equals(right);
+            return ReferenceEquals(left, right) || left.Equals(right);
         }
 
         protected static bool NotEqualOperator(ValueObject left, ValueObject right)
@@ -16,7 +23,7 @@
             return !EqualOperator(left, right);
         }
 
-        protected abstract IEnumerable<object> GetAtomicValues();
+        protected abstract IEnumerable<object> GetEqualityComponents();
 
         public override bool Equals(object obj)
         {
@@ -25,31 +32,17 @@
                 return false;
             }
 
-            ValueObject other = (ValueObject)obj;
-            IEnumerator<object> thisValues = GetAtomicValues().GetEnumerator();
-            IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
-            while (thisValues.MoveNext() && otherValues.MoveNext())
-            {
-                if (ReferenceEquals(thisValues.Current, null) ^
-                    ReferenceEquals(otherValues.Current, null))
-                {
-                    return false;
-                }
+            var other = (ValueObject)obj;
 
-                if (thisValues.Current != null &&
-                    !thisValues.Current.Equals(otherValues.Current))
-                {
-                    return false;
-                }
-            }
-            return !thisValues.MoveNext() && !otherValues.MoveNext();
+            return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
         }
 
         public override int GetHashCode()
         {
-            return GetAtomicValues()
-             .Select(x => x != null ? x.GetHashCode() : 0)
-             .Aggregate((x, y) => x ^ y);
+            return GetEqualityComponents()
+                .Select(x => x != null ? x.GetHashCode() : 0)
+                .Aggregate((x, y) => x ^ y);
         }
+        // Other utility methods
     }
 }

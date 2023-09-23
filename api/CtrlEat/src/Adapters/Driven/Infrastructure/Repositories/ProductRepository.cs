@@ -1,6 +1,6 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
-using Domain.Entities.TypedIds;
+using Domain.Entities.StrongIds;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -33,7 +33,9 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await context.Product.ToListAsync(cancellationToken);
+            return await context.Product
+                .Include(x => x.ProductCategory)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<Product>> GetAllByCategoryAsync(string category, CancellationToken cancellationToken)

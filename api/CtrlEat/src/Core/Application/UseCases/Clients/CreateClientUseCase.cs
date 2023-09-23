@@ -1,12 +1,13 @@
 ﻿using Domain.Adapters;
-using Domain.Adapters.Models;
 using Domain.Entities;
-using Domain.Entities.TypedIds;
+using Domain.Entities.StrongIds;
+using Domain.Enums;
 using Domain.Errors.Clients;
 using Domain.UseCases.Clients;
 using Domain.UseCases.Clients.Requests;
 using Domain.UseCases.Clients.Responses;
 using Domain.ValueObjects;
+using Domain.ValueObjects.Extensions;
 
 using FluentResults;
 
@@ -25,34 +26,45 @@ namespace Application.UseCases.Clients
             CreateClientRequest request,
             CancellationToken cancellationToken)
         {
-            var fullName = FullName.Create(request.FirstName, request.LastName);
-            var personalDocument = Cpf.Create(request.DocumentId);
-            var email = Email.Create(request.Email);
+            var firstName = new Name(request.FirstName);
+            var lastName = new Name(request.LastName);
+            var documentId = new DocumentId(request.DocumentId);
+            var email = new Email(request.Email);
 
-            if (fullName.IsFailed)
+            var firstNameValidation = firstName.Validate();
+            var lastNameValidation = lastName.Validate();
+            var documentIdValidation = documentId.Validate();
+            var emailValidation = email.Validate();
+
+            if (firstNameValidation.IsFailed)
             {
-                return Result.Fail(fullName.Errors);
+                return Result.Fail(firstNameValidation.Errors);
             }
 
-            if (personalDocument.IsFailed)
+            if (lastNameValidation.IsFailed)
             {
-                return Result.Fail(personalDocument.Errors);
+                return Result.Fail(lastNameValidation.Errors);
             }
 
-            if (email.IsFailed)
+            if (documentIdValidation.IsFailed)
             {
-                return Result.Fail(email.Errors);
+                return Result.Fail(documentIdValidation.Errors);
             }
 
-            if (fullName.HasData() && !email.HasData())
+            if (emailValidation.IsFailed)
+            {
+                return Result.Fail(emailValidation.Errors);
+            }
+
+            if (firstName.HasData() && !email.HasData())
             {
                 return Result.Fail(new ClientRegistrationWithoutEmailError());
             }
 
-            if (personalDocument.HasData())
+            if (documentId.HasData())
             {
                 var documentIdExists = await repository.GetByDocumentIdAsync(
-                    personalDocument.Value.DocumentId,
+                    documentId,
                     cancellationToken);
 
                 if (documentIdExists is not null)
@@ -64,7 +76,7 @@ namespace Application.UseCases.Clients
             if (email.HasData())
             {
                 var emailExists = await repository.GetByEmailAsync(
-                    email.Value.Address,
+                    email,
                     cancellationToken);
 
                 if (emailExists is not null)
@@ -73,29 +85,22 @@ namespace Application.UseCases.Clients
                 }
             }
 
+            var isAnonymous = !firstName.HasData() && !email.HasData() && !documentId.HasData();
+
             var client = new Client
             {
-                Id = new ClientId(Guid.NewGuid()),
-                FullName = fullName.Value,
-                PersonalDocument = personalDocument.Value,
-                Email = email.Value,
-                IsAnonymous = !personalDocument.HasData() && !fullName.HasData(),
+                Id = ClientId.Create(Guid.NewGuid()),
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                DocumentId = documentId,
+                DocumentType = isAnonymous ? DocumentType.None : DocumentType.CPF,
+                IsAnonymous = isAnonymous
             };
 
-            var clientModel = new ClientModel
-            {
-                Id = client.Id.Value,
-                FirstName = client.FullName.FirstName,
-                LastName = client.FullName.LastName,
-                Email = client.Email.Address,
-                DocumentType = (int)client.PersonalDocument.DocumentType,
-                DocumentId = client.PersonalDocument.DocumentId,
-                IsAnonymous = client.IsAnonymous,
-            };
+            await repository.CreateAsync(client, cancellationToken);
 
-            await repository.CreateAsync(clientModel, cancellationToken);
-
-            var response = ClientResponse.MapFromDomain(clientModel);
+            var response = ClientResponse.MapFromDomain(client);
 
             return Result.Ok(response);
         }

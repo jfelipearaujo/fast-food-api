@@ -1,4 +1,4 @@
-﻿using Domain.Adapters.Models;
+﻿using Domain.Entities;
 using Domain.Enums;
 
 namespace Domain.UseCases.Clients.Responses
@@ -25,16 +25,16 @@ namespace Domain.UseCases.Clients.Responses
 
         // ---
 
-        public static ClientResponse MapFromDomain(ClientModel client)
+        public static ClientResponse MapFromDomain(Client client)
         {
             return new ClientResponse
             {
-                Id = client.Id,
-                FirstName = client.FirstName,
-                LastName = client.LastName,
-                Email = client.Email,
-                DocumentId = client.DocumentId,
-                DocumentType = (DocumentType)client.DocumentType,
+                Id = client.Id.Value,
+                FirstName = client.FirstName.Value,
+                LastName = client.LastName.Value,
+                Email = client.Email.Value,
+                DocumentId = client.DocumentId.Value,
+                DocumentType = client.DocumentType,
                 IsAnonymous = client.IsAnonymous,
                 CreatedAtUtc = client.CreatedAtUtc,
                 UpdatedAtUtc = client.UpdatedAtUtc,
