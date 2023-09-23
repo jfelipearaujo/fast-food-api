@@ -1,10 +1,9 @@
 ﻿using Domain.UseCases.Products;
 using Domain.UseCases.Products.Requests;
 
-using Mapster;
-
 using Microsoft.AspNetCore.Http.HttpResults;
 
+using Web.Api.Endpoints.Products.Mapping;
 using Web.Api.Endpoints.Products.Requests;
 using Web.Api.Endpoints.Products.Responses;
 using Web.Api.Extensions;
@@ -62,23 +61,23 @@ namespace Web.Api.Endpoints.Products
                 return TypedResults.NotFound(result.ToApiError());
             }
 
-            var response = result.Value.Adapt<ProductEndpointResponse>();
+            var response = result.Value.MapToResponse();
 
             return TypedResults.Ok(response);
         }
 
-        public static async Task<Ok<IEnumerable<ProductEndpointResponse>>> GetAllProducts(
+        public static async Task<Ok<List<ProductEndpointResponse>>> GetAllProducts(
             IGetAllProductsUseCase useCase,
             CancellationToken cancellationToken)
         {
             var result = await useCase.ExecuteAsync(cancellationToken);
 
-            var response = result.Value.Adapt<IEnumerable<ProductEndpointResponse>>();
+            var response = result.Value.MapToResponse();
 
             return TypedResults.Ok(response);
         }
 
-        public static async Task<Ok<IEnumerable<ProductEndpointResponse>>> GetAllProductsByCategory(
+        public static async Task<Ok<List<ProductEndpointResponse>>> GetAllProductsByCategory(
             string category,
             IGetProductsByCategoryUseCase useCase,
             CancellationToken cancellationToken)
@@ -90,7 +89,7 @@ namespace Web.Api.Endpoints.Products
 
             var result = await useCase.ExecuteAsync(request, cancellationToken);
 
-            var response = result.Value.Adapt<IEnumerable<ProductEndpointResponse>>();
+            var response = result.Value.MapToResponse();
 
             return TypedResults.Ok(response);
         }
@@ -100,7 +99,7 @@ namespace Web.Api.Endpoints.Products
             ICreateProductUseCase useCase,
             CancellationToken cancellationToken)
         {
-            var request = endpointRequest.Adapt<CreateProductRequest>();
+            var request = endpointRequest.MapToRequest();
 
             var result = await useCase.ExecuteAsync(request, cancellationToken);
 
@@ -109,7 +108,7 @@ namespace Web.Api.Endpoints.Products
                 return TypedResults.NotFound(result.ToApiError());
             }
 
-            var response = result.Value.Adapt<ProductEndpointResponse>();
+            var response = result.Value.MapToResponse();
 
             return TypedResults.CreatedAtRoute(
                 response,
@@ -126,7 +125,7 @@ namespace Web.Api.Endpoints.Products
             IUpdateProductUseCase useCase,
             CancellationToken cancellationToken)
         {
-            var request = endpointRequest.Adapt<UpdateProductRequest>();
+            var request = endpointRequest.MapToRequest(id);
 
             var result = await useCase.ExecuteAsync(request, cancellationToken);
 
@@ -135,7 +134,7 @@ namespace Web.Api.Endpoints.Products
                 return TypedResults.NotFound(result.ToApiError());
             }
 
-            var response = result.Value.Adapt<ProductEndpointResponse>();
+            var response = result.Value.MapToResponse();
 
             return TypedResults.CreatedAtRoute(
                 response,

@@ -2,6 +2,7 @@
 
 using Domain.Adapters;
 using Domain.Entities;
+using Domain.Entities.TypedIds;
 using Domain.Errors.Products;
 using Domain.UseCases.Products.Requests;
 
@@ -30,10 +31,10 @@ namespace Application.Tests.UseCases.Products
             };
 
             repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+                .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
                 .Returns(new Product
                 {
-                    Id = request.Id,
+                    Id = new ProductId(request.Id),
                     Description = "Product"
                 });
 
@@ -50,13 +51,13 @@ namespace Application.Tests.UseCases.Products
             await repository
                 .Received(1)
                 .GetByIdAsync(
-                    Arg.Is<Guid>(x => x == request.Id),
+                    Arg.Is<ProductId>(x => x.Value == request.Id),
                     Arg.Any<CancellationToken>());
 
             await repository
                 .Received(1)
                 .DeleteAsync(
-                    Arg.Is<Product>(x => x.Id == request.Id),
+                    Arg.Is<Product>(x => x.Id.Value == request.Id),
                     Arg.Any<CancellationToken>());
         }
 
@@ -70,7 +71,7 @@ namespace Application.Tests.UseCases.Products
             };
 
             repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+                .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
                 .Returns(default(Product));
 
             // Act
@@ -82,7 +83,7 @@ namespace Application.Tests.UseCases.Products
             await repository
                 .Received(1)
                 .GetByIdAsync(
-                    Arg.Is<Guid>(x => x == request.Id),
+                    Arg.Is<ProductId>(x => x.Value == request.Id),
                     Arg.Any<CancellationToken>());
 
             await repository

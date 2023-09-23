@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.TypedIds;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,6 +13,10 @@ namespace Persistence.Configurations
             builder.ToTable("product_category");
 
             builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Id).HasConversion(
+                productCategoryId => productCategoryId.Value,
+                value => new ProductCategoryId(value));
 
             builder
                 .Property(x => x.Description)

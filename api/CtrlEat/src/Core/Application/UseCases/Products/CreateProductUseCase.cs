@@ -1,13 +1,13 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
+using Domain.Entities.TypedIds;
 using Domain.Errors.ProductCategories;
 using Domain.UseCases.Products;
 using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
+using Domain.ValueObjects;
 
 using FluentResults;
-
-using Mapster;
 
 namespace Application.UseCases.Products
 {
@@ -28,27 +28,33 @@ namespace Application.UseCases.Products
             CreateProductRequest request,
             CancellationToken cancellationToken)
         {
-            var productCategory = await productCategoryRepository.GetByIdAsync(request.ProductCategoryId, cancellationToken);
+            var productCategory = await productCategoryRepository.GetByIdAsync(new ProductCategoryId(request.ProductCategoryId), cancellationToken);
 
             if (productCategory is null)
             {
                 return Result.Fail(new ProductCategoryNotFoundError(request.ProductCategoryId));
             }
 
+            var price = Money.Create(request.Currency, request.Amount);
+
+            if (price.IsFailed)
+            {
+                return Result.Fail(price.Errors);
+            }
+
             var product = new Product
             {
-                Id = Guid.NewGuid(),
+                Id = new ProductId(Guid.NewGuid()),
                 ProductCategoryId = productCategory.Id,
                 ProductCategory = productCategory,
                 Description = request.Description,
-                UnitPrice = request.UnitPrice,
-                Currency = request.Currency,
+                Price = price.Value,
                 ImageUrl = request.ImageUrl,
             };
 
             await productRepository.CreateAsync(product, cancellationToken);
 
-            var response = product.Adapt<ProductResponse>();
+            var response = ProductResponse.MapFromDomain(product);
 
             return Result.Ok(response);
         }

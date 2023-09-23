@@ -1,6 +1,6 @@
 ﻿namespace Domain.Validators
 {
-    public static class Cpf
+    public static class CpfValidator
     {
         private const int CPF_LENGTH = 11;
 

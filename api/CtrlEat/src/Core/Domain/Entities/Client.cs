@@ -1,19 +1,16 @@
 ﻿using Domain.Abstract;
-using Domain.Enums;
+using Domain.Entities.TypedIds;
+using Domain.ValueObjects;
 
 namespace Domain.Entities
 {
-    public class Client : Entity
+    public class Client : Entity<ClientId>
     {
-        public string? FirstName { get; set; }
+        public FullName? FullName { get; set; }
 
-        public string? LastName { get; set; }
+        public Email? Email { get; set; }
 
-        public string? Email { get; set; }
-
-        public string? DocumentId { get; set; }
-
-        public DocumentType DocumentType { get; set; } = DocumentType.None;
+        public Cpf? PersonalDocument { get; set; }
 
         public bool IsAnonymous { get; set; }
     }

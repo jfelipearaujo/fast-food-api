@@ -2,8 +2,8 @@
 
 using Domain.Adapters;
 using Domain.Entities;
+using Domain.Entities.TypedIds;
 using Domain.Errors.ProductCategories;
-using Domain.UseCases.ProductCategories.Responses;
 using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
 
@@ -33,34 +33,31 @@ namespace Application.Tests.UseCases.Products
             {
                 ProductCategoryId = Guid.NewGuid(),
                 Description = "Product",
-                UnitPrice = 1.0m,
+                Amount = 1.0m,
                 Currency = "BRL",
                 ImageUrl = "http://image.com/123.png"
             };
+
+            var productCategory = new ProductCategoryBuilder()
+                .WithSample()
+                .WithId(request.ProductCategoryId)
+                .Build();
+
+            var product = new ProductBuilder()
+                .WithDescription(request.Description)
+                .WithProductCategoryId(request.ProductCategoryId)
+                .WithPrice(request.Currency, request.Amount)
+                .WithImageUrl(request.ImageUrl)
+                .Build();
 
             productCategoryRepository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(new ProductCategory
-                {
-                    Id = request.ProductCategoryId,
-                    Description = "Product Category"
-                });
-
-            var expectedResponse = new ProductResponse
-            {
-                ProductCategory = new ProductCategoryResponse
-                {
-                    Id = request.ProductCategoryId,
-                    Description = "Product Category"
-                },
-                Description = "Product",
-                UnitPrice = 1.0m,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+                .Returns(productCategory);
 
             // Act
             var response = await sut.ExecuteAsync(request, cancellationToken: default);
+
+            var expectedResponse = ProductResponse.MapFromDomain(product);
 
             // Assert
             response.Should().BeSuccess().And.Satisfy(result =>
@@ -72,7 +69,7 @@ namespace Application.Tests.UseCases.Products
             await productCategoryRepository
                 .Received(1)
                 .GetByIdAsync(
-                    Arg.Is<Guid>(x => x == request.ProductCategoryId),
+                    Arg.Is<ProductCategoryId>(x => x.Value == request.ProductCategoryId),
                     Arg.Any<CancellationToken>());
 
             await productRepository
@@ -90,13 +87,13 @@ namespace Application.Tests.UseCases.Products
             {
                 ProductCategoryId = Guid.NewGuid(),
                 Description = "Product",
-                UnitPrice = 1.0m,
+                Amount = 1.0m,
                 Currency = "BRL",
                 ImageUrl = "http://image.com/123.png"
             };
 
             productCategoryRepository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
                 .Returns(default(ProductCategory));
 
             // Act
@@ -108,7 +105,7 @@ namespace Application.Tests.UseCases.Products
             await productCategoryRepository
                 .Received(1)
                 .GetByIdAsync(
-                    Arg.Is<Guid>(x => x == request.ProductCategoryId),
+                    Arg.Is<ProductCategoryId>(x => x.Value == request.ProductCategoryId),
                     Arg.Any<CancellationToken>());
 
             await productRepository

@@ -1,12 +1,11 @@
 ﻿using Domain.Adapters;
+using Domain.Entities.TypedIds;
 using Domain.Errors.Clients;
 using Domain.UseCases.Clients;
 using Domain.UseCases.Clients.Requests;
 using Domain.UseCases.Clients.Responses;
 
 using FluentResults;
-
-using Mapster;
 
 namespace Application.UseCases.Clients
 {
@@ -23,14 +22,14 @@ namespace Application.UseCases.Clients
             GetClientByIdRequest request,
             CancellationToken cancellationToken)
         {
-            var client = await repository.GetByIdAsync(request.Id, cancellationToken);
+            var client = await repository.GetByIdAsync(new ClientId(request.Id), cancellationToken);
 
             if (client is null)
             {
                 return Result.Fail(new ClientNotFoundError(request.Id));
             }
 
-            var response = client.Adapt<ClientResponse>();
+            var response = ClientResponse.MapFromDomain(client);
 
             return Result.Ok(response);
         }

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.TypedIds;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,19 +14,19 @@ namespace Persistence.Configurations
 
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.Id).HasConversion(
+                productId => productId.Value,
+                value => new ProductId(value));
+
             builder
                 .Property(x => x.Description)
                 .IsRequired()
                 .HasMaxLength(250);
 
-            builder.Property(x => x.UnitPrice)
-                .IsRequired()
-                .HasPrecision(4, 2);
-
-            builder
-                .Property(x => x.Currency)
-                .IsRequired()
-                .HasMaxLength(5);
+            builder.OwnsOne(x => x.Price, priceBuilder =>
+            {
+                priceBuilder.Property(y => y.Currency).HasMaxLength(3);
+            });
 
             builder
                 .Property(x => x.ImageUrl)

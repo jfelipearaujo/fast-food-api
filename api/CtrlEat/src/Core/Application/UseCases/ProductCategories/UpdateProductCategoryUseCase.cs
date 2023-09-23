@@ -1,12 +1,11 @@
 ﻿using Domain.Adapters;
+using Domain.Entities.TypedIds;
 using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
 using FluentResults;
-
-using Mapster;
 
 namespace Application.UseCases.ProductCategories
 {
@@ -21,7 +20,7 @@ namespace Application.UseCases.ProductCategories
 
         public async Task<Result<ProductCategoryResponse>> ExecuteAsync(UpdateProductCategoryRequest request, CancellationToken cancellationToken)
         {
-            var productCategory = await repository.GetByIdAsync(request.Id, cancellationToken);
+            var productCategory = await repository.GetByIdAsync(new ProductCategoryId(request.Id), cancellationToken);
 
             if (productCategory is null)
                 return Result.Fail(new ProductCategoryNotFoundError(request.Id));
@@ -30,7 +29,7 @@ namespace Application.UseCases.ProductCategories
 
             await repository.UpdateAsync(productCategory, cancellationToken);
 
-            var response = productCategory.Adapt<ProductCategoryResponse>();
+            var response = ProductCategoryResponse.MapFromDomain(productCategory);
 
             return Result.Ok(response);
         }

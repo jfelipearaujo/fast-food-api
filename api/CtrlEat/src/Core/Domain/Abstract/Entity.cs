@@ -1,8 +1,8 @@
 ﻿namespace Domain.Abstract
 {
-    public abstract class Entity
+    public abstract class Entity<TEntityId> : IEntity
     {
-        public Guid Id { get; set; }
+        public TEntityId Id { get; set; }
 
         public DateTime CreatedAtUtc { get; set; }
 

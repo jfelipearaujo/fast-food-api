@@ -2,6 +2,7 @@
 
 using Domain.Adapters;
 using Domain.Entities;
+using Domain.Entities.TypedIds;
 using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
@@ -31,13 +32,14 @@ namespace Application.Tests.UseCases.ProductCategories
                 Description = "New Product Description"
             };
 
+            var productCategory = new ProductCategoryBuilder()
+                .WithId(request.Id)
+                .WithDescription(request.Description)
+                .Build();
+
             repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(new ProductCategory
-                {
-                    Id = request.Id,
-                    Description = "Old Product Description"
-                });
+                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+                .Returns(productCategory);
 
             // Act
             var response = await sut.ExecuteAsync(request, cancellationToken: default);
@@ -45,11 +47,7 @@ namespace Application.Tests.UseCases.ProductCategories
             // Assert
             response.Should().BeSuccess().And.Satisfy(result =>
             {
-                result.Value.Should().BeEquivalentTo(new ProductCategoryResponse
-                {
-                    Id = request.Id,
-                    Description = request.Description
-                });
+                result.Value.Should().BeEquivalentTo(ProductCategoryResponse.MapFromDomain(productCategory));
             });
 
             await repository
@@ -70,7 +68,7 @@ namespace Application.Tests.UseCases.ProductCategories
             };
 
             repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
                 .Returns(default(ProductCategory));
 
             // Act

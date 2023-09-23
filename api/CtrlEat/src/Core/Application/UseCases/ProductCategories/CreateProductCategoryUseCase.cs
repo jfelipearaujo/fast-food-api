@@ -1,12 +1,11 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
+using Domain.Entities.TypedIds;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
 using FluentResults;
-
-using Mapster;
 
 namespace Application.UseCases.ProductCategories
 {
@@ -25,13 +24,13 @@ namespace Application.UseCases.ProductCategories
         {
             var productsCategory = new ProductCategory
             {
-                Id = Guid.NewGuid(),
+                Id = new ProductCategoryId(Guid.NewGuid()),
                 Description = request.Description,
             };
 
             await repository.CreateAsync(productsCategory, cancellationToken);
 
-            var response = productsCategory.Adapt<ProductCategoryResponse>();
+            var response = ProductCategoryResponse.MapFromDomain(productsCategory);
 
             return Result.Ok(response);
         }

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.TypedIds;
 
 namespace Domain.Adapters
 {
@@ -6,7 +7,7 @@ namespace Domain.Adapters
     {
         Task<int> CreateAsync(Client client, CancellationToken cancellationToken);
 
-        Task<Client?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<Client?> GetByIdAsync(ClientId id, CancellationToken cancellationToken);
 
         Task<Client?> GetByDocumentIdAsync(string documentId, CancellationToken cancellationToken);
 

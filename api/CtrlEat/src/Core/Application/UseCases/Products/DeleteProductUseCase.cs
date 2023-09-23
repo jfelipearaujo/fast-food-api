@@ -1,4 +1,5 @@
 ﻿using Domain.Adapters;
+using Domain.Entities.TypedIds;
 using Domain.Errors.Products;
 using Domain.UseCases.Products;
 using Domain.UseCases.Products.Requests;
@@ -20,7 +21,7 @@ namespace Application.UseCases.Products
             DeleteProductRequest request,
             CancellationToken cancellationToken)
         {
-            var product = await repository.GetByIdAsync(request.Id, cancellationToken);
+            var product = await repository.GetByIdAsync(new ProductId(request.Id), cancellationToken);
 
             if (product is null)
             {

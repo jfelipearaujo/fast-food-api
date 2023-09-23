@@ -4,8 +4,6 @@ using Domain.UseCases.ProductCategories.Responses;
 
 using FluentResults;
 
-using Mapster;
-
 namespace Application.UseCases.ProductCategories
 {
     public class GetAllProductCategoriesUseCase : IGetAllProductCategoriesUseCase
@@ -17,12 +15,17 @@ namespace Application.UseCases.ProductCategories
             this.repository = repository;
         }
 
-        public async Task<Result<IEnumerable<ProductCategoryResponse>>> ExecuteAsync(
+        public async Task<Result<List<ProductCategoryResponse>>> ExecuteAsync(
             CancellationToken cancellationToken)
         {
             var productCategories = await repository.GetAllAsync(cancellationToken);
 
-            var response = productCategories.Adapt<IEnumerable<ProductCategoryResponse>>();
+            var response = new List<ProductCategoryResponse>();
+
+            foreach (var productCategory in productCategories)
+            {
+                response.Add(ProductCategoryResponse.MapFromDomain(productCategory));
+            }
 
             return Result.Ok(response);
         }

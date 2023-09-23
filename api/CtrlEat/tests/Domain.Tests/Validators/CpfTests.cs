@@ -15,7 +15,7 @@ namespace Domain.Tests.Validators
             // Arrange
 
             // Act
-            var result = Cpf.Check(cpf);
+            var result = CpfValidator.Check(cpf);
 
             // Assert
             result.Should().Be(expected);

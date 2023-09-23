@@ -41,11 +41,7 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldCreateProductCategorySuccessfully()
         {
             // Arrange
-            var category = new ProductCategory
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product Category"
-            };
+            var category = new ProductCategoryBuilder().WithSample().Build();
 
             // Act
             var response = await sut.CreateAsync(category, cancellationToken: default);
@@ -63,11 +59,7 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldDeleteProductCategorySuccessfully()
         {
             // Arrange
-            var category = new ProductCategory
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product Category"
-            };
+            var category = new ProductCategoryBuilder().WithSample().Build();
 
             await sut.CreateAsync(category, cancellationToken: default);
 
@@ -83,17 +75,8 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetAllProductCategorySuccessfully()
         {
             // Arrange
-            var firstCategory = new ProductCategory
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product Category #1"
-            };
-
-            var secondCategory = new ProductCategory
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product Category #2"
-            };
+            var firstCategory = new ProductCategoryBuilder().WithSample().Build();
+            var secondCategory = new ProductCategoryBuilder().WithSample().Build();
 
             await sut.CreateAsync(firstCategory, cancellationToken: default);
             await sut.CreateAsync(secondCategory, cancellationToken: default);
@@ -127,11 +110,7 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetByIdProductCategorySuccessfully()
         {
             // Arrange
-            var category = new ProductCategory
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product Category"
-            };
+            var category = new ProductCategoryBuilder().WithSample().Build();
 
             await sut.CreateAsync(category, cancellationToken: default);
 
@@ -146,10 +125,7 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetByIdProductCategorySuccessfullyWhenThereIsNoData()
         {
             // Arrange
-            var category = new ProductCategory
-            {
-                Id = Guid.NewGuid(),
-            };
+            var category = new ProductCategoryBuilder().WithSample().Build();
 
             // Act
             var response = await sut.GetByIdAsync(category.Id, cancellationToken: default);
@@ -162,11 +138,7 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldUpdateProductCategorySuccessfully()
         {
             // Arrange
-            var category = new ProductCategory
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product Category"
-            };
+            var category = new ProductCategoryBuilder().WithSample().Build();
 
             await sut.CreateAsync(category, cancellationToken: default);
 

@@ -1,12 +1,11 @@
 ﻿using Domain.Adapters;
+using Domain.Entities.TypedIds;
 using Domain.Errors.Products;
 using Domain.UseCases.Products;
 using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
 
 using FluentResults;
-
-using Mapster;
 
 namespace Application.UseCases.Products
 {
@@ -23,14 +22,14 @@ namespace Application.UseCases.Products
             GetProductByIdRequest request,
             CancellationToken cancellationToken)
         {
-            var product = await repository.GetByIdAsync(request.Id, cancellationToken);
+            var product = await repository.GetByIdAsync(new ProductId(request.Id), cancellationToken);
 
             if (product is null)
             {
                 return Result.Fail(new ProductNotFoundError(request.Id));
             }
 
-            var response = product.Adapt<ProductResponse>();
+            var response = ProductResponse.MapFromDomain(product);
 
             return Result.Ok(response);
         }

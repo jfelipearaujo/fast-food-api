@@ -2,7 +2,7 @@
 
 using Domain.Adapters;
 using Domain.Entities;
-using Domain.Enums;
+using Domain.Entities.TypedIds;
 using Domain.Errors.Clients;
 using Domain.UseCases.Clients.Requests;
 
@@ -30,29 +30,14 @@ namespace Application.Tests.UseCases.Clients
                 Id = Guid.NewGuid(),
             };
 
-            repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(new Client
-                {
-                    Id = request.Id,
-                    FirstName = "João",
-                    LastName = "Silva",
-                    Email = "joao.silva@email.com",
-                    DocumentType = DocumentType.CPF,
-                    DocumentId = "46808459029",
-                    IsAnonymous = false,
-                });
+            var client = new ClientBuilder()
+                .WithSample()
+                .WithId(request.Id)
+                .Build();
 
-            var expectedResponse = new Client
-            {
-                Id = request.Id,
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentType = DocumentType.CPF,
-                DocumentId = "46808459029",
-                IsAnonymous = false,
-            };
+            repository
+                .GetByIdAsync(Arg.Any<ClientId>(), Arg.Any<CancellationToken>())
+                .Returns(client);
 
             // Act
             var response = await sut.ExecuteAsync(request, cancellationToken: default);
@@ -60,7 +45,7 @@ namespace Application.Tests.UseCases.Clients
             // Assert
             response.Should().BeSuccess().And.Satisfy(result =>
             {
-                result.Value.Should().BeEquivalentTo(expectedResponse);
+                result.Value.Should().BeEquivalentTo(client);
             });
         }
 
@@ -74,9 +59,8 @@ namespace Application.Tests.UseCases.Clients
             };
 
             repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+                .GetByIdAsync(Arg.Any<ClientId>(), Arg.Any<CancellationToken>())
                 .Returns(default(Client));
-
 
             // Act
             var response = await sut.ExecuteAsync(request, cancellationToken: default);

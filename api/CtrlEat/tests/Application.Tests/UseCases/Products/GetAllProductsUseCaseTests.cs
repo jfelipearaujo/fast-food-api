@@ -23,17 +23,8 @@ namespace Application.Tests.UseCases.Products
         public async Task ShouldGetAllProductsSuccessfully()
         {
             // Arrange
-            var productOne = new Product
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product 1"
-            };
-
-            var productTwo = new Product
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product 2"
-            };
+            var productOne = new ProductBuilder().WithSample().Build();
+            var productTwo = new ProductBuilder().WithSample().Build();
 
             repository
                 .GetAllAsync(Arg.Any<CancellationToken>())
@@ -51,16 +42,8 @@ namespace Application.Tests.UseCases.Products
             {
                 result.Value.Should().BeEquivalentTo(new List<ProductResponse>
                 {
-                    new ProductResponse
-                    {
-                        Id = productOne.Id,
-                        Description = productOne.Description
-                    },
-                    new ProductResponse
-                    {
-                        Id = productTwo.Id,
-                        Description = productTwo.Description
-                    }
+                    ProductResponse.MapFromDomain(productOne),
+                    ProductResponse.MapFromDomain(productTwo),
                 });
             });
         }

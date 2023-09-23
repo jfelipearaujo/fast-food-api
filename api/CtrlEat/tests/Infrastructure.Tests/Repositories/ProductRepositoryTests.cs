@@ -36,11 +36,7 @@ namespace Infrastructure.Tests.Repositories
 
             dbContext.Database.Migrate();
 
-            productCategory = new ProductCategory
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product Category"
-            };
+            productCategory = new ProductCategoryBuilder().WithSample().Build();
 
             dbContext.ProductCategory.Add(productCategory);
             dbContext.SaveChanges();
@@ -52,15 +48,10 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldCreateProductSuccessfully()
         {
             // Arrange
-            var product = new Product
-            {
-                Id = Guid.NewGuid(),
-                ProductCategoryId = productCategory.Id,
-                Description = "Product",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            var product = new ProductBuilder()
+                .WithSample()
+                .WithProductCategoryId(productCategory.Id)
+                .Build();
 
             // Act
             var response = await sut.CreateAsync(product, cancellationToken: default);
@@ -78,15 +69,10 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldDeleteProductSuccessfully()
         {
             // Arrange
-            var product = new Product
-            {
-                Id = Guid.NewGuid(),
-                ProductCategoryId = productCategory.Id,
-                Description = "Product",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            var product = new ProductBuilder()
+                .WithSample()
+                .WithProductCategoryId(productCategory.Id)
+                .Build();
 
             await sut.CreateAsync(product, cancellationToken: default);
 
@@ -102,25 +88,15 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetAllProductSuccessfully()
         {
             // Arrange
-            var firstProduct = new Product
-            {
-                Id = Guid.NewGuid(),
-                ProductCategoryId = productCategory.Id,
-                Description = "Product 1",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            var firstProduct = new ProductBuilder()
+                .WithSample()
+                .WithProductCategoryId(productCategory.Id)
+                .Build();
 
-            var secondProduct = new Product
-            {
-                Id = Guid.NewGuid(),
-                ProductCategoryId = productCategory.Id,
-                Description = "Product 2",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            var secondProduct = new ProductBuilder()
+                .WithSample()
+                .WithProductCategoryId(productCategory.Id)
+                .Build();
 
             await sut.CreateAsync(firstProduct, cancellationToken: default);
             await sut.CreateAsync(secondProduct, cancellationToken: default);
@@ -142,25 +118,15 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetAllProductByCategorySuccessfully()
         {
             // Arrange
-            var firstProduct = new Product
-            {
-                Id = Guid.NewGuid(),
-                ProductCategoryId = productCategory.Id,
-                Description = "Product 1",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            var firstProduct = new ProductBuilder()
+                .WithSample()
+                .WithProductCategoryId(productCategory.Id)
+                .Build();
 
-            var secondProduct = new Product
-            {
-                Id = Guid.NewGuid(),
-                ProductCategoryId = productCategory.Id,
-                Description = "Product 2",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            var secondProduct = new ProductBuilder()
+                .WithSample()
+                .WithProductCategoryId(productCategory.Id)
+                .Build();
 
             await sut.CreateAsync(firstProduct, cancellationToken: default);
             await sut.CreateAsync(secondProduct, cancellationToken: default);
@@ -194,15 +160,10 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetByIdProductSuccessfully()
         {
             // Arrange
-            var product = new Product
-            {
-                Id = Guid.NewGuid(),
-                ProductCategoryId = productCategory.Id,
-                Description = "Product",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            var product = new ProductBuilder()
+                .WithSample()
+                .WithProductCategoryId(productCategory.Id)
+                .Build();
 
             await sut.CreateAsync(product, cancellationToken: default);
 
@@ -217,15 +178,10 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetByIdProductSuccessfullyWhenThereIsNoData()
         {
             // Arrange
-            var product = new Product
-            {
-                Id = Guid.NewGuid(),
-                ProductCategoryId = productCategory.Id,
-                Description = "Product",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            var product = new ProductBuilder()
+                .WithSample()
+                .WithProductCategoryId(productCategory.Id)
+                .Build();
 
             // Act
             var response = await sut.GetByIdAsync(product.Id, cancellationToken: default);
@@ -238,15 +194,10 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldUpdateProductSuccessfully()
         {
             // Arrange
-            var product = new Product
-            {
-                Id = Guid.NewGuid(),
-                ProductCategoryId = productCategory.Id,
-                Description = "Product",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            var product = new ProductBuilder()
+                .WithSample()
+                .WithProductCategoryId(productCategory.Id)
+                .Build();
 
             await sut.CreateAsync(product, cancellationToken: default);
 

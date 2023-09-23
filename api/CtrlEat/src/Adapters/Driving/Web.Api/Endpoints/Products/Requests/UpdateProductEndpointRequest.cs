@@ -11,7 +11,7 @@ namespace Web.Api.Endpoints.Products.Requests
         public string Description { get; set; }
 
         [Required]
-        public decimal UnitPrice { get; set; }
+        public decimal Amount { get; set; }
 
         [Required]
         public string Currency { get; set; }

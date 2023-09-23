@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Domain.Enums;
+using Domain.ValueObjects;
 
 using Infrastructure.Repositories;
 
@@ -42,16 +42,7 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldCreateClientSuccessfully()
         {
             // Arrange
-            var client = new Client
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentType = DocumentType.CPF,
-                DocumentId = "46808459029",
-                IsAnonymous = false,
-            };
+            var client = new ClientBuilder().WithSample().Build();
 
             // Act
             var response = await sut.CreateAsync(client, cancellationToken: default);
@@ -69,16 +60,7 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldDeleteClientSuccessfully()
         {
             // Arrange
-            var client = new Client
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentType = DocumentType.CPF,
-                DocumentId = "46808459029",
-                IsAnonymous = false,
-            };
+            var client = new ClientBuilder().WithSample().Build();
 
             await sut.CreateAsync(client, cancellationToken: default);
 
@@ -98,27 +80,8 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetAllClientsSuccessfully()
         {
             // Arrange
-            var clientOne = new Client
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentType = DocumentType.CPF,
-                DocumentId = "46808459029",
-                IsAnonymous = false,
-            };
-
-            var clientTwo = new Client
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "Luis",
-                LastName = "Silva",
-                Email = "luis.silva@email.com",
-                DocumentType = DocumentType.CPF,
-                DocumentId = "89414432027",
-                IsAnonymous = false,
-            };
+            var clientOne = new ClientBuilder().WithSample().Build();
+            var clientTwo = new ClientBuilder().WithSample().Build();
 
             await sut.CreateAsync(clientOne, cancellationToken: default);
             await sut.CreateAsync(clientTwo, cancellationToken: default);
@@ -140,21 +103,12 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetByDocumentIdSuccessfully()
         {
             // Arrange
-            var client = new Client
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentType = DocumentType.CPF,
-                DocumentId = "46808459029",
-                IsAnonymous = false,
-            };
+            var client = new ClientBuilder().WithSample().Build();
 
             await sut.CreateAsync(client, cancellationToken: default);
 
             // Act
-            var response = await sut.GetByDocumentIdAsync(client.DocumentId, cancellationToken: default);
+            var response = await sut.GetByDocumentIdAsync(client.PersonalDocument.DocumentId, cancellationToken: default);
 
             // Assert
             response.Should().BeEquivalentTo(client);
@@ -164,21 +118,12 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetByEmailSuccessfully()
         {
             // Arrange
-            var client = new Client
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentType = DocumentType.CPF,
-                DocumentId = "46808459029",
-                IsAnonymous = false,
-            };
+            var client = new ClientBuilder().WithSample().Build();
 
             await sut.CreateAsync(client, cancellationToken: default);
 
             // Act
-            var response = await sut.GetByEmailAsync(client.Email, cancellationToken: default);
+            var response = await sut.GetByEmailAsync(client.Email.Address, cancellationToken: default);
 
             // Assert
             response.Should().BeEquivalentTo(client);
@@ -188,16 +133,7 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldGetByIdSuccessfully()
         {
             // Arrange
-            var client = new Client
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentType = DocumentType.CPF,
-                DocumentId = "46808459029",
-                IsAnonymous = false,
-            };
+            var client = new ClientBuilder().WithSample().Build();
 
             await sut.CreateAsync(client, cancellationToken: default);
 
@@ -212,20 +148,11 @@ namespace Infrastructure.Tests.Repositories
         public async Task ShouldUpdateClientSuccessfully()
         {
             // Arrange
-            var client = new Client
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentType = DocumentType.CPF,
-                DocumentId = "46808459029",
-                IsAnonymous = false,
-            };
+            var client = new ClientBuilder().WithSample().Build();
 
             await sut.CreateAsync(client, cancellationToken: default);
 
-            client.Email = "joao.silva@email.com.br";
+            client.Email = Email.Create("joao.silva@email.com.br").Value;
 
             // Act
             var response = await sut.UpdateAsync(client, cancellationToken: default);

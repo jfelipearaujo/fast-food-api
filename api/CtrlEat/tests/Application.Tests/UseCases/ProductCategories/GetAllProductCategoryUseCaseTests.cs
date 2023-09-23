@@ -23,17 +23,8 @@ namespace Application.Tests.UseCases.ProductCategories
         public async Task ShouldGetAllProductCategorySuccessfully()
         {
             // Arrange
-            var productCategoryOne = new ProductCategory
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product Category 1"
-            };
-
-            var productCategoryTwo = new ProductCategory
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product Category 2"
-            };
+            var productCategoryOne = new ProductCategoryBuilder().WithSample().Build();
+            var productCategoryTwo = new ProductCategoryBuilder().WithSample().Build();
 
             repository
                 .GetAllAsync(Arg.Any<CancellationToken>())
@@ -51,16 +42,8 @@ namespace Application.Tests.UseCases.ProductCategories
             {
                 result.Value.Should().BeEquivalentTo(new List<ProductCategoryResponse>
                 {
-                    new ProductCategoryResponse
-                    {
-                        Id = productCategoryOne.Id,
-                        Description = productCategoryOne.Description,
-                    },
-                    new ProductCategoryResponse
-                    {
-                        Id = productCategoryTwo.Id,
-                        Description = productCategoryTwo.Description,
-                    }
+                    ProductCategoryResponse.MapFromDomain(productCategoryOne),
+                    ProductCategoryResponse.MapFromDomain(productCategoryTwo),
                 });
             });
         }

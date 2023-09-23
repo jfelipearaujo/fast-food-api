@@ -6,7 +6,7 @@ namespace Domain.UseCases.Products
 {
     public interface IGetAllProductsUseCase
     {
-        Task<Result<IEnumerable<ProductResponse>>> ExecuteAsync(
+        Task<Result<List<ProductResponse>>> ExecuteAsync(
             CancellationToken cancellationToken);
     }
 }

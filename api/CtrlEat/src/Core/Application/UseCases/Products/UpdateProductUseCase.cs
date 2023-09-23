@@ -1,13 +1,13 @@
 ﻿using Domain.Adapters;
+using Domain.Entities.TypedIds;
 using Domain.Errors.ProductCategories;
 using Domain.Errors.Products;
 using Domain.UseCases.Products;
 using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
+using Domain.ValueObjects;
 
 using FluentResults;
-
-using Mapster;
 
 namespace Application.UseCases.Products
 {
@@ -28,16 +28,20 @@ namespace Application.UseCases.Products
             UpdateProductRequest request,
             CancellationToken cancellationToken)
         {
-            var product = await productRepository.GetByIdAsync(request.ProductId, cancellationToken);
+            var product = await productRepository.GetByIdAsync(
+                new ProductId(request.ProductId),
+                cancellationToken);
 
             if (product is null)
             {
                 return Result.Fail(new ProductNotFoundError(request.ProductId));
             }
 
-            if (product.ProductCategoryId != request.ProductCategoryId)
+            if (product.ProductCategoryId != new ProductCategoryId(request.ProductCategoryId))
             {
-                var productCategory = await productCategoryRepository.GetByIdAsync(request.ProductCategoryId, cancellationToken);
+                var productCategory = await productCategoryRepository.GetByIdAsync(
+                    new ProductCategoryId(request.ProductCategoryId),
+                    cancellationToken);
 
                 if (productCategory is null)
                 {
@@ -47,14 +51,20 @@ namespace Application.UseCases.Products
                 product.ProductCategory = productCategory;
             }
 
+            var price = Money.Create(request.Currency, request.Amount);
+
+            if (price.IsFailed)
+            {
+                return Result.Fail(price.Errors);
+            }
+
             product.Description = request.Description;
-            product.UnitPrice = request.UnitPrice;
-            product.Currency = request.Currency;
+            product.Price = price.Value;
             product.ImageUrl = request.ImageUrl;
 
             await productRepository.UpdateAsync(product, cancellationToken);
 
-            var response = product.Adapt<ProductResponse>();
+            var response = ProductResponse.MapFromDomain(product);
 
             return Result.Ok(response);
         }

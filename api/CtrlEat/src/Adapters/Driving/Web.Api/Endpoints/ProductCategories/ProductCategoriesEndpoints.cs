@@ -1,10 +1,9 @@
 ﻿using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 
-using Mapster;
-
 using Microsoft.AspNetCore.Http.HttpResults;
 
+using Web.Api.Endpoints.ProductCategories.Mapping;
 using Web.Api.Endpoints.ProductCategories.Requests;
 using Web.Api.Endpoints.ProductCategories.Responses;
 using Web.Api.Extensions;
@@ -58,18 +57,18 @@ namespace Web.Api.Endpoints.ProductCategories
                 return TypedResults.NotFound(result.ToApiError());
             }
 
-            var response = result.Adapt<ProductCategoryEndpointResponse>();
+            var response = result.Value.MapToResponse();
 
             return TypedResults.Ok(response);
         }
 
-        public static async Task<Ok<IEnumerable<ProductCategoryEndpointResponse>>> GetAllProductCategories(
+        public static async Task<Ok<List<ProductCategoryEndpointResponse>>> GetAllProductCategories(
             IGetAllProductCategoriesUseCase useCase,
             CancellationToken cancellationToken)
         {
             var result = await useCase.ExecuteAsync(cancellationToken);
 
-            var response = result.ValueOrDefault.Adapt<IEnumerable<ProductCategoryEndpointResponse>>();
+            var response = result.Value.MapToResponse();
 
             return TypedResults.Ok(response);
         }
@@ -86,7 +85,7 @@ namespace Web.Api.Endpoints.ProductCategories
 
             var result = await useCase.ExecuteAsync(request, cancellationToken);
 
-            var response = result.ValueOrDefault.Adapt<ProductCategoryEndpointResponse>();
+            var response = result.Value.MapToResponse();
 
             return TypedResults.CreatedAtRoute(
                 response,
@@ -116,7 +115,7 @@ namespace Web.Api.Endpoints.ProductCategories
                 return TypedResults.NotFound(result.ToApiError());
             }
 
-            var response = result.Adapt<ProductCategoryEndpointResponse>();
+            var response = result.Value.MapToResponse();
 
             return TypedResults.CreatedAtRoute(
                 response,

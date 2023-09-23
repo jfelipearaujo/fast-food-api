@@ -1,15 +1,13 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
-using Domain.Enums;
+using Domain.Entities.TypedIds;
 using Domain.Errors.Clients;
 using Domain.UseCases.Clients;
 using Domain.UseCases.Clients.Requests;
 using Domain.UseCases.Clients.Responses;
-using Domain.Validators;
+using Domain.ValueObjects;
 
 using FluentResults;
-
-using Mapster;
 
 namespace Application.UseCases.Clients
 {
@@ -26,41 +24,35 @@ namespace Application.UseCases.Clients
             CreateClientRequest request,
             CancellationToken cancellationToken)
         {
-            var hasFirstName = !string.IsNullOrEmpty(request.FirstName?.Trim());
-            var hasLastName = !string.IsNullOrEmpty(request.LastName?.Trim());
-            var hasEmail = !string.IsNullOrEmpty(request.Email?.Trim());
-            var hasDocumentId = !string.IsNullOrEmpty(request.DocumentId?.Trim());
+            var fullName = FullName.Create(request.FirstName, request.LastName);
+            var personalDocument = Cpf.Create(request.DocumentId);
+            var email = Email.Create(request.Email);
 
-            var isAnonymous = !(hasFirstName || hasLastName || hasEmail || hasDocumentId);
-
-            if (!hasFirstName && hasLastName)
+            if (fullName.IsFailed)
             {
-                return Result.Fail(new ClientRegistrationWithoutFirstNameError());
+                return Result.Fail(fullName.Errors);
             }
 
-            if (hasFirstName && hasLastName && !hasEmail)
+            if (personalDocument.IsFailed)
+            {
+                return Result.Fail(personalDocument.Errors);
+            }
+
+            if (email.IsFailed)
+            {
+                return Result.Fail(email.Errors);
+            }
+
+            if (fullName.HasData() && !email.HasData())
             {
                 return Result.Fail(new ClientRegistrationWithoutEmailError());
             }
 
-            if (hasDocumentId && !Cpf.Check(request.DocumentId))
+            if (personalDocument.HasData())
             {
-                return Result.Fail(new ClientRegistrationInvalidDocumentIdError());
-            }
-
-            if (hasEmail)
-            {
-                var emailExists = await repository.GetByEmailAsync(request.Email, cancellationToken);
-
-                if (emailExists is not null)
-                {
-                    return Result.Fail(new ClientRegistrationEmailAlreadyExistsError());
-                }
-            }
-
-            if (hasDocumentId)
-            {
-                var documentIdExists = await repository.GetByDocumentIdAsync(request.DocumentId, cancellationToken);
+                var documentIdExists = await repository.GetByDocumentIdAsync(
+                    personalDocument.Value.DocumentId,
+                    cancellationToken);
 
                 if (documentIdExists is not null)
                 {
@@ -68,20 +60,30 @@ namespace Application.UseCases.Clients
                 }
             }
 
+            if (email.HasData())
+            {
+                var emailExists = await repository.GetByEmailAsync(
+                    email.Value.Address,
+                    cancellationToken);
+
+                if (emailExists is not null)
+                {
+                    return Result.Fail(new ClientRegistrationEmailAlreadyExistsError());
+                }
+            }
+
             var client = new Client
             {
-                Id = Guid.NewGuid(),
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Email = request.Email,
-                DocumentType = isAnonymous ? DocumentType.None : DocumentType.CPF,
-                DocumentId = request.DocumentId,
-                IsAnonymous = isAnonymous,
+                Id = new ClientId(Guid.NewGuid()),
+                FullName = fullName.Value,
+                PersonalDocument = personalDocument.Value,
+                Email = email.Value,
+                IsAnonymous = !personalDocument.HasData() && !fullName.HasData(),
             };
 
             await repository.CreateAsync(client, cancellationToken);
 
-            var response = client.Adapt<ClientResponse>();
+            var response = ClientResponse.MapFromDomain(client);
 
             return Result.Ok(response);
         }

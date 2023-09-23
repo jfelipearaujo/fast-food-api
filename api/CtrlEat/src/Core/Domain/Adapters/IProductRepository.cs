@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.TypedIds;
 
 namespace Domain.Adapters
 {
@@ -6,7 +7,7 @@ namespace Domain.Adapters
     {
         Task<int> CreateAsync(Product product, CancellationToken cancellationToken);
 
-        Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<Product?> GetByIdAsync(ProductId id, CancellationToken cancellationToken);
 
         Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken);
 

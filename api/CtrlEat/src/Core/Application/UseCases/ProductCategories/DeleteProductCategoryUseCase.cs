@@ -1,4 +1,5 @@
 ﻿using Domain.Adapters;
+using Domain.Entities.TypedIds;
 using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
@@ -20,7 +21,7 @@ namespace Application.UseCases.ProductCategories
             DeleteProductCategoryRequest request,
             CancellationToken cancellationToken)
         {
-            var productCategory = await repository.GetByIdAsync(request.Id, cancellationToken);
+            var productCategory = await repository.GetByIdAsync(new ProductCategoryId(request.Id), cancellationToken);
 
             if (productCategory is null)
                 return Result.Fail(new ProductCategoryNotFoundError(request.Id));

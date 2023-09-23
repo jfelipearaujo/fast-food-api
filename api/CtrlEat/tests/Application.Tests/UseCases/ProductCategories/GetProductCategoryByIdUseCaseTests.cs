@@ -2,6 +2,7 @@
 
 using Domain.Adapters;
 using Domain.Entities;
+using Domain.Entities.TypedIds;
 using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
@@ -30,13 +31,14 @@ namespace Application.Tests.UseCases.ProductCategories
                 Id = Guid.NewGuid()
             };
 
+            var productCategory = new ProductCategoryBuilder()
+                .WithSample()
+                .WithId(request.Id)
+                .Build();
+
             repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(new ProductCategory
-                {
-                    Id = request.Id,
-                    Description = "Product Category"
-                });
+                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+                .Returns(productCategory);
 
             // Act
             var response = await sut.ExecuteAsync(request, cancellationToken: default);
@@ -62,7 +64,7 @@ namespace Application.Tests.UseCases.ProductCategories
             };
 
             repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
                 .Returns(default(ProductCategory));
 
             // Act

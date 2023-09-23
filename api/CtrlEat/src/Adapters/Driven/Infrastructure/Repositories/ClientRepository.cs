@@ -1,5 +1,6 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
+using Domain.Entities.TypedIds;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -37,15 +38,15 @@ namespace Infrastructure.Repositories
 
         public async Task<Client?> GetByDocumentIdAsync(string documentId, CancellationToken cancellationToken)
         {
-            return await context.Client.FirstOrDefaultAsync(x => x.DocumentId == documentId, cancellationToken);
+            return await context.Client.FirstOrDefaultAsync(x => x.PersonalDocument.DocumentId == documentId, cancellationToken);
         }
 
         public async Task<Client?> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
-            return await context.Client.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+            return await context.Client.FirstOrDefaultAsync(x => x.Email.Address == email, cancellationToken);
         }
 
-        public async Task<Client?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<Client?> GetByIdAsync(ClientId id, CancellationToken cancellationToken)
         {
             return await context.Client.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }

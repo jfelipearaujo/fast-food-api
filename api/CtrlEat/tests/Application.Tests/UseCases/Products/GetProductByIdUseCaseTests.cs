@@ -2,6 +2,7 @@
 
 using Domain.Adapters;
 using Domain.Entities;
+using Domain.Entities.TypedIds;
 using Domain.Errors.Products;
 using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
@@ -30,13 +31,14 @@ namespace Application.Tests.UseCases.Products
                 Id = Guid.NewGuid(),
             };
 
+            var product = new ProductBuilder()
+                .WithSample()
+                .WithId(request.Id)
+                .Build();
+
             repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(new Product
-                {
-                    Id = request.Id,
-                    Description = "Product"
-                });
+                .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
+                .Returns(product);
 
             // Act
             var response = await sut.ExecuteAsync(request, cancellationToken: default);
@@ -44,16 +46,12 @@ namespace Application.Tests.UseCases.Products
             // Assert
             response.Should().BeSuccess().And.Satisfy(result =>
             {
-                result.Value.Should().BeEquivalentTo(new ProductResponse
-                {
-                    Id = request.Id,
-                    Description = "Product"
-                });
+                result.Value.Should().BeEquivalentTo(ProductResponse.MapFromDomain(product));
             });
 
             await repository
                 .Received(1)
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>());
+                .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -66,7 +64,7 @@ namespace Application.Tests.UseCases.Products
             };
 
             repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+                .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
                 .Returns(default(Product));
 
             // Act
@@ -77,7 +75,7 @@ namespace Application.Tests.UseCases.Products
 
             await repository
                 .Received(1)
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>());
+                .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>());
         }
     }
 }

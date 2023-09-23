@@ -30,8 +30,8 @@ namespace Persistence
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var entities = ChangeTracker.Entries()
-                .Where(x => x.Entity is Entity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+            var entities = ChangeTracker.Entries<IEntity>()
+                .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
 
             foreach (var entity in entities)
             {
@@ -39,10 +39,10 @@ namespace Persistence
 
                 if (entity.State == EntityState.Added)
                 {
-                    ((Entity)entity.Entity).CreatedAtUtc = now;
+                    entity.Entity.CreatedAtUtc = now;
                 }
 
-                ((Entity)entity.Entity).UpdatedAtUtc = now;
+                entity.Entity.UpdatedAtUtc = now;
             }
 
             return base.SaveChangesAsync(cancellationToken);
