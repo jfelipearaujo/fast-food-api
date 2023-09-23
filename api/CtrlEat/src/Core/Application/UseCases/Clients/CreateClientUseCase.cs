@@ -1,12 +1,9 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
-using Domain.Entities.StrongIds;
-using Domain.Enums;
 using Domain.Errors.Clients;
 using Domain.UseCases.Clients;
 using Domain.UseCases.Clients.Requests;
 using Domain.UseCases.Clients.Responses;
-using Domain.ValueObjects;
 using Domain.ValueObjects.Extensions;
 
 using FluentResults;
@@ -26,45 +23,23 @@ namespace Application.UseCases.Clients
             CreateClientRequest request,
             CancellationToken cancellationToken)
         {
-            var firstName = new Name(request.FirstName);
-            var lastName = new Name(request.LastName);
-            var documentId = new DocumentId(request.DocumentId);
-            var email = new Email(request.Email);
+            var clientValidation = Client.ValidateAndCreate(
+                request.FirstName,
+                request.LastName,
+                request.Email,
+                request.DocumentId);
 
-            var firstNameValidation = firstName.Validate();
-            var lastNameValidation = lastName.Validate();
-            var documentIdValidation = documentId.Validate();
-            var emailValidation = email.Validate();
-
-            if (firstNameValidation.IsFailed)
+            if (clientValidation.IsFailed)
             {
-                return Result.Fail(firstNameValidation.Errors);
+                return Result.Fail(clientValidation.Errors);
             }
 
-            if (lastNameValidation.IsFailed)
-            {
-                return Result.Fail(lastNameValidation.Errors);
-            }
+            Client client = clientValidation.Value;
 
-            if (documentIdValidation.IsFailed)
-            {
-                return Result.Fail(documentIdValidation.Errors);
-            }
-
-            if (emailValidation.IsFailed)
-            {
-                return Result.Fail(emailValidation.Errors);
-            }
-
-            if (firstName.HasData() && !email.HasData())
-            {
-                return Result.Fail(new ClientRegistrationWithoutEmailError());
-            }
-
-            if (documentId.HasData())
+            if (client.DocumentId.HasData())
             {
                 var documentIdExists = await repository.GetByDocumentIdAsync(
-                    documentId,
+                    client.DocumentId,
                     cancellationToken);
 
                 if (documentIdExists is not null)
@@ -73,10 +48,10 @@ namespace Application.UseCases.Clients
                 }
             }
 
-            if (email.HasData())
+            if (client.Email.HasData())
             {
                 var emailExists = await repository.GetByEmailAsync(
-                    email,
+                    client.Email,
                     cancellationToken);
 
                 if (emailExists is not null)
@@ -85,24 +60,9 @@ namespace Application.UseCases.Clients
                 }
             }
 
-            var isAnonymous = !firstName.HasData() && !email.HasData() && !documentId.HasData();
-
-            var client = new Client
-            {
-                Id = ClientId.Create(Guid.NewGuid()),
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                DocumentId = documentId,
-                DocumentType = isAnonymous ? DocumentType.None : DocumentType.CPF,
-                IsAnonymous = isAnonymous
-            };
-
             await repository.CreateAsync(client, cancellationToken);
 
-            var response = ClientResponse.MapFromDomain(client);
-
-            return Result.Ok(response);
+            return ClientResponse.MapFromDomain(client);
         }
     }
 }

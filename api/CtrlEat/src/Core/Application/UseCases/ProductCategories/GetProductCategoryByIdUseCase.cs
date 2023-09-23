@@ -1,5 +1,4 @@
 ﻿using Domain.Adapters;
-using Domain.Entities.StrongIds;
 using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
@@ -20,16 +19,14 @@ namespace Application.UseCases.ProductCategories
 
         public async Task<Result<ProductCategoryResponse>> ExecuteAsync(GetProductCategoryByIdRequest request, CancellationToken cancellationToken)
         {
-            var productCategory = await repository.GetByIdAsync(ProductCategoryId.Create(request.Id), cancellationToken);
+            var productCategory = await repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (productCategory is null)
             {
                 return Result.Fail(new ProductCategoryNotFoundError(request.Id));
             }
 
-            var response = ProductCategoryResponse.MapFromDomain(productCategory);
-
-            return Result.Ok(response);
+            return ProductCategoryResponse.MapFromDomain(productCategory);
         }
     }
 }

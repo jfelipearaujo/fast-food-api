@@ -1,5 +1,4 @@
 ﻿using Domain.Adapters;
-using Domain.Entities.StrongIds;
 using Domain.Errors.ProductCategories;
 using Domain.Errors.Products;
 using Domain.UseCases.Products;
@@ -29,18 +28,18 @@ namespace Application.UseCases.Products
             CancellationToken cancellationToken)
         {
             var product = await productRepository.GetByIdAsync(
-                ProductId.Create(request.ProductId),
+                request.ProductCategoryId,
                 cancellationToken);
 
             if (product is null)
             {
-                return Result.Fail(new ProductNotFoundError(request.ProductId));
+                return Result.Fail(new ProductNotFoundError(request.Guid));
             }
 
-            if (product.ProductCategoryId != ProductCategoryId.Create(request.ProductCategoryId))
+            if (product.ProductCategoryId != request.ProductCategoryId)
             {
                 var productCategory = await productCategoryRepository.GetByIdAsync(
-                    ProductCategoryId.Create(request.ProductCategoryId),
+                    request.ProductCategoryId,
                     cancellationToken);
 
                 if (productCategory is null)

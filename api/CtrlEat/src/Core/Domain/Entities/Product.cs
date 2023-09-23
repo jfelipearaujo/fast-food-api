@@ -1,10 +1,9 @@
 ﻿using Domain.Abstract;
-using Domain.Entities.StrongIds;
 using Domain.ValueObjects;
 
 namespace Domain.Entities
 {
-    public class Product : Entity<ProductId>
+    public class Product : Entity<Guid>
     {
         public string Description { get; set; }
 
@@ -14,7 +13,7 @@ namespace Domain.Entities
 
         public string ImageUrl { get; set; }
 
-        public ProductCategoryId ProductCategoryId { get; set; }
+        public Guid ProductCategoryId { get; set; }
         public ProductCategory ProductCategory { get; set; }
     }
 }

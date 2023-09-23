@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.StrongIds;
 
 namespace Domain.Adapters
 {
@@ -7,7 +6,7 @@ namespace Domain.Adapters
     {
         Task<int> CreateAsync(ProductCategory productCategory, CancellationToken cancellationToken);
 
-        Task<ProductCategory?> GetByIdAsync(ProductCategoryId id, CancellationToken cancellationToken);
+        Task<ProductCategory?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
         Task<IEnumerable<ProductCategory>> GetAllAsync(CancellationToken cancellationToken);
 

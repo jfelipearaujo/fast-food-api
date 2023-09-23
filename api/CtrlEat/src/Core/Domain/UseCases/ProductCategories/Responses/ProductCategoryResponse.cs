@@ -18,7 +18,7 @@ namespace Domain.UseCases.ProductCategories.Responses
         {
             return new ProductCategoryResponse
             {
-                Id = productCategory.Id.Value,
+                Id = productCategory.Id,
                 Description = productCategory.Description,
                 CreatedAtUtc = productCategory.CreatedAtUtc,
                 UpdatedAtUtc = productCategory.UpdatedAtUtc,

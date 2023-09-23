@@ -1,6 +1,5 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
-using Domain.Entities.StrongIds;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -46,7 +45,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<Product?> GetByIdAsync(ProductId id, CancellationToken cancellationToken)
+        public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await context.Product.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }

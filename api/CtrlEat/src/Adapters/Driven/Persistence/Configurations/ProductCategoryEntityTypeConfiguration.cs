@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.StrongIds;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,10 +12,6 @@ namespace Persistence.Configurations
             builder.ToTable("product_categories");
 
             builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.Id).HasConversion(
-                productCategoryId => productCategoryId.Value,
-                value => ProductCategoryId.Create(value));
 
             builder.Property(x => x.Description)
                 .IsRequired()

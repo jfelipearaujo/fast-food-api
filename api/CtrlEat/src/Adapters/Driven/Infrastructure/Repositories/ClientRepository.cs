@@ -1,6 +1,5 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
-using Domain.Entities.StrongIds;
 using Domain.ValueObjects;
 
 using Microsoft.EntityFrameworkCore;
@@ -47,7 +46,7 @@ namespace Infrastructure.Repositories
             return await context.Client.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
         }
 
-        public async Task<Client?> GetByIdAsync(ClientId id, CancellationToken cancellationToken)
+        public async Task<Client?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await context.Client.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }

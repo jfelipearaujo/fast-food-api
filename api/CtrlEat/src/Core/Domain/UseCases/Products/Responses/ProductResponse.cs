@@ -27,7 +27,7 @@ namespace Domain.UseCases.Products.Responses
         {
             return new ProductResponse
             {
-                Id = product.Id.Value,
+                Id = product.Id,
                 Description = product.Description,
                 Currency = product.Currency.Value,
                 Amount = product.Amount.Value,

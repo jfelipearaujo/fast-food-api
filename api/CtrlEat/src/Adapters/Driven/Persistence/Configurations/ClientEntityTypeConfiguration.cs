@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.StrongIds;
 using Domain.ValueObjects;
 
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +13,6 @@ namespace Persistence.Configurations
             builder.ToTable("clients");
 
             builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.Id).HasConversion(
-                clientId => clientId.Value,
-                value => ClientId.Create(value));
 
             builder.Property(y => y.FirstName)
                 .HasConversion(

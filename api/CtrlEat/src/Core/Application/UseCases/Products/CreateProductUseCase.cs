@@ -1,6 +1,5 @@
 ﻿using Domain.Adapters;
 using Domain.Entities;
-using Domain.Entities.StrongIds;
 using Domain.Errors.ProductCategories;
 using Domain.UseCases.Products;
 using Domain.UseCases.Products.Requests;
@@ -28,7 +27,7 @@ namespace Application.UseCases.Products
             CreateProductRequest request,
             CancellationToken cancellationToken)
         {
-            var productCategory = await productCategoryRepository.GetByIdAsync(ProductCategoryId.Create(request.ProductCategoryId), cancellationToken);
+            var productCategory = await productCategoryRepository.GetByIdAsync(request.ProductCategoryId, cancellationToken);
 
             if (productCategory is null)
             {
@@ -53,20 +52,19 @@ namespace Application.UseCases.Products
 
             var product = new Product
             {
-                Id = ProductId.Create(Guid.NewGuid()),
+                Id = Guid.NewGuid(),
                 Description = request.Description,
                 Currency = currency,
                 Amount = currencyAmount,
                 ImageUrl = request.ImageUrl,
 
+                ProductCategoryId = productCategory.Id,
                 ProductCategory = productCategory,
             };
 
             await productRepository.CreateAsync(product, cancellationToken);
 
-            var response = ProductResponse.MapFromDomain(product);
-
-            return Result.Ok(response);
+            return ProductResponse.MapFromDomain(product);
         }
     }
 }

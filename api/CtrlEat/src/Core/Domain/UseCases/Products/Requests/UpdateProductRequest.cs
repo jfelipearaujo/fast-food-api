@@ -2,7 +2,7 @@
 {
     public class UpdateProductRequest
     {
-        public Guid ProductId { get; set; }
+        public Guid Guid { get; set; }
 
         public Guid ProductCategoryId { get; set; }
 

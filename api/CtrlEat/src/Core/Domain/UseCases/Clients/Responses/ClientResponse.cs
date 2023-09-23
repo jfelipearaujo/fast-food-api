@@ -29,7 +29,7 @@ namespace Domain.UseCases.Clients.Responses
         {
             return new ClientResponse
             {
-                Id = client.Id.Value,
+                Id = client.Id,
                 FirstName = client.FirstName.Value,
                 LastName = client.LastName.Value,
                 Email = client.Email.Value,

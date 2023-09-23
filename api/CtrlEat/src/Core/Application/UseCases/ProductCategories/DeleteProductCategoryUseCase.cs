@@ -1,5 +1,4 @@
 ﻿using Domain.Adapters;
-using Domain.Entities.StrongIds;
 using Domain.Errors.ProductCategories;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
@@ -21,16 +20,14 @@ namespace Application.UseCases.ProductCategories
             DeleteProductCategoryRequest request,
             CancellationToken cancellationToken)
         {
-            var productCategory = await repository.GetByIdAsync(ProductCategoryId.Create(request.Id), cancellationToken);
+            var productCategory = await repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (productCategory is null)
             {
                 return Result.Fail(new ProductCategoryNotFoundError(request.Id));
             }
 
-            var deletedEntities = await repository.DeleteAsync(productCategory, cancellationToken);
-
-            return Result.Ok(deletedEntities);
+            return await repository.DeleteAsync(productCategory, cancellationToken);
         }
     }
 }

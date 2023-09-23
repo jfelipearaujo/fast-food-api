@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.StrongIds;
 using Domain.ValueObjects;
 
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +13,6 @@ namespace Persistence.Configurations
             builder.ToTable("products");
 
             builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.Id).HasConversion(
-                productId => productId.Value,
-                value => ProductId.Create(value));
 
             builder.Property(x => x.Description)
                 .IsRequired()
@@ -52,9 +47,6 @@ namespace Persistence.Configurations
             builder.HasOne(p => p.ProductCategory)
                 .WithMany(pc => pc.Products)
                 .HasForeignKey(p => p.ProductCategoryId);
-
-            builder.Navigation(x => x.ProductCategory)
-                .AutoInclude();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Web.Api.Endpoints.Products.Mapping
         {
             return new UpdateProductRequest
             {
-                ProductId = productId,
+                Guid = productId,
                 ProductCategoryId = request.ProductCategoryId,
                 Description = request.Description,
                 Currency = request.Currency,

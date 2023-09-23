@@ -1,5 +1,4 @@
 ﻿using Domain.Adapters;
-using Domain.Entities.StrongIds;
 using Domain.Errors.Clients;
 using Domain.UseCases.Clients;
 using Domain.UseCases.Clients.Requests;
@@ -22,16 +21,14 @@ namespace Application.UseCases.Clients
             GetClientByIdRequest request,
             CancellationToken cancellationToken)
         {
-            var client = await repository.GetByIdAsync(ClientId.Create(request.Id), cancellationToken);
+            var client = await repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (client is null)
             {
                 return Result.Fail(new ClientNotFoundError(request.Id));
             }
 
-            var response = ClientResponse.MapFromDomain(client);
-
-            return Result.Ok(response);
+            return ClientResponse.MapFromDomain(client);
         }
     }
 }

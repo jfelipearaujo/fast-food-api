@@ -27,7 +27,7 @@ namespace Application.UseCases.ProductCategories
                 response.Add(ProductCategoryResponse.MapFromDomain(productCategory));
             }
 
-            return Result.Ok(response);
+            return response;
         }
     }
 }
