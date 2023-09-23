@@ -1,4 +1,5 @@
 ﻿using Domain.Adapters;
+using Domain.Adapters.Models;
 using Domain.Entities;
 using Domain.Entities.TypedIds;
 using Domain.Errors.Clients;
@@ -81,9 +82,20 @@ namespace Application.UseCases.Clients
                 IsAnonymous = !personalDocument.HasData() && !fullName.HasData(),
             };
 
-            await repository.CreateAsync(client, cancellationToken);
+            var clientModel = new ClientModel
+            {
+                Id = client.Id.Value,
+                FirstName = client.FullName.FirstName,
+                LastName = client.FullName.LastName,
+                Email = client.Email.Address,
+                DocumentType = (int)client.PersonalDocument.DocumentType,
+                DocumentId = client.PersonalDocument.DocumentId,
+                IsAnonymous = client.IsAnonymous,
+            };
 
-            var response = ClientResponse.MapFromDomain(client);
+            await repository.CreateAsync(clientModel, cancellationToken);
+
+            var response = ClientResponse.MapFromDomain(clientModel);
 
             return Result.Ok(response);
         }

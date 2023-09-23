@@ -1,22 +1,21 @@
-﻿using Domain.Entities;
-using Domain.Entities.TypedIds;
+﻿using Domain.Adapters.Models;
 
 namespace Domain.Adapters
 {
     public interface IClientRepository
     {
-        Task<int> CreateAsync(Client client, CancellationToken cancellationToken);
+        Task<int> CreateAsync(ClientModel client, CancellationToken cancellationToken);
 
-        Task<Client?> GetByIdAsync(ClientId id, CancellationToken cancellationToken);
+        Task<ClientModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-        Task<Client?> GetByDocumentIdAsync(string documentId, CancellationToken cancellationToken);
+        Task<ClientModel?> GetByDocumentIdAsync(string documentId, CancellationToken cancellationToken);
 
-        Task<Client?> GetByEmailAsync(string email, CancellationToken cancellationToken);
+        Task<ClientModel?> GetByEmailAsync(string email, CancellationToken cancellationToken);
 
-        Task<IEnumerable<Client>> GetAllAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<ClientModel>> GetAllAsync(CancellationToken cancellationToken);
 
-        Task<int> UpdateAsync(Client client, CancellationToken cancellationToken);
+        Task<int> UpdateAsync(ClientModel client, CancellationToken cancellationToken);
 
-        Task<int> DeleteAsync(Client client, CancellationToken cancellationToken);
+        Task<int> DeleteAsync(ClientModel client, CancellationToken cancellationToken);
     }
 }

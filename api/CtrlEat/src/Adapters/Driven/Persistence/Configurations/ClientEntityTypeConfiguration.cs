@@ -1,58 +1,44 @@
-﻿using Domain.Entities;
-using Domain.Entities.TypedIds;
+﻿using Domain.Adapters.Models;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistence.Configurations
 {
-    public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
+    public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<ClientModel>
     {
-        public void Configure(EntityTypeBuilder<Client> builder)
+        public void Configure(EntityTypeBuilder<ClientModel> builder)
         {
             builder.ToTable("client");
 
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Id).HasConversion(
-                clientId => clientId.Value,
-                value => new ClientId(value));
+            builder
+                .Property(y => y.FirstName)
+                .HasMaxLength(250);
 
-            builder.OwnsOne(x => x.FullName, nameBuilder =>
-            {
-                nameBuilder
-                    .Property(y => y.FirstName)
-                    .HasMaxLength(250);
+            builder
+                .Property(y => y.LastName)
+                .HasMaxLength(250);
 
-                nameBuilder
-                    .Property(y => y.LastName)
-                    .HasMaxLength(250);
-            });
+            builder
+                .Property(y => y.Email)
+                .HasMaxLength(250);
 
-            builder.OwnsOne(x => x.Email, nameBuilder =>
-            {
-                nameBuilder
-                    .Property(y => y.Address)
-                    .HasMaxLength(250);
+            builder
+                .HasIndex(x => x.Email)
+                .IsUnique();
 
-                nameBuilder
-                    .HasIndex(x => x.Address)
-                    .IsUnique();
-            });
+            builder
+                .Property(y => y.DocumentId)
+                .HasMaxLength(14);
 
-            builder.OwnsOne(x => x.PersonalDocument, personalDocumentBuilder =>
-            {
-                personalDocumentBuilder
-                    .Property(y => y.DocumentId)
-                    .HasMaxLength(14);
+            builder
+                .HasIndex(x => x.DocumentId)
+                .IsUnique();
 
-                personalDocumentBuilder
-                    .HasIndex(x => x.DocumentId)
-                    .IsUnique();
-
-                personalDocumentBuilder
-                    .Property(y => y.DocumentType);
-            });
+            builder
+                .Property(y => y.DocumentType);
 
             builder
                 .Property(x => x.IsAnonymous);

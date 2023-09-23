@@ -1,4 +1,5 @@
-﻿using Domain.Errors.ValueObjects.Email;
+﻿using Domain.Abstract;
+using Domain.Errors.ValueObjects.Email;
 
 using FluentResults;
 
@@ -6,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Domain.ValueObjects
 {
-    public partial class Email
+    public partial class Email : ValueObject
     {
         public string Address { get; private set; }
 
@@ -27,6 +28,11 @@ namespace Domain.ValueObjects
 
         [GeneratedRegex("^\\S+@\\S+\\.\\S+$")]
         private static partial Regex EmailAddressRegex();
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return Address;
+        }
     }
 
     public static class EmailExtensions

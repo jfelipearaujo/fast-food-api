@@ -1,10 +1,11 @@
-﻿using Domain.Errors.ValueObjects.Name;
+﻿using Domain.Abstract;
+using Domain.Errors.ValueObjects.Name;
 
 using FluentResults;
 
 namespace Domain.ValueObjects
 {
-    public class FullName
+    public class FullName : ValueObject
     {
         public string? FirstName { get; private set; }
 
@@ -25,6 +26,12 @@ namespace Domain.ValueObjects
             }
 
             return new FullName(firstName, lastName);
+        }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return FirstName;
+            yield return LastName;
         }
     }
 

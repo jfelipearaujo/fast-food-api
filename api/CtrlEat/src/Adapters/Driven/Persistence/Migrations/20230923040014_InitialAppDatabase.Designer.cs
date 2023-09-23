@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230922230611_AddedValueObject_Money")]
-    partial class AddedValueObject_Money
+    [Migration("20230923040014_InitialAppDatabase")]
+    partial class InitialAppDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Client", b =>
+            modelBuilder.Entity("Domain.Adapters.Models.ClientModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,7 +77,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
@@ -111,7 +110,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.ProductCategory", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
@@ -146,7 +144,8 @@ namespace Persistence.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)");
+                                .HasPrecision(4, 2)
+                                .HasColumnType("decimal(4,2)");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()

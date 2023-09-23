@@ -1,32 +1,30 @@
-﻿using Domain.Entities;
-using Domain.Entities.TypedIds;
+﻿using Domain.Adapters.Models;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistence.Configurations
 {
-    public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Product>
+    public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<ProductModel>
     {
-        public void Configure(EntityTypeBuilder<Product> builder)
+        public void Configure(EntityTypeBuilder<ProductModel> builder)
         {
             builder.ToTable("product");
 
             builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.Id).HasConversion(
-                productId => productId.Value,
-                value => new ProductId(value));
 
             builder
                 .Property(x => x.Description)
                 .IsRequired()
                 .HasMaxLength(250);
 
-            builder.OwnsOne(x => x.Price, priceBuilder =>
-            {
-                priceBuilder.Property(y => y.Currency).HasMaxLength(3);
-            });
+            builder
+                .Property(y => y.Amount)
+                .HasPrecision(4, 2);
+
+            builder
+                .Property(y => y.Currency)
+                .HasMaxLength(3);
 
             builder
                 .Property(x => x.ImageUrl)

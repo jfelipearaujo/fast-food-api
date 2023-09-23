@@ -1,4 +1,5 @@
-﻿using Domain.Enums;
+﻿using Domain.Abstract;
+using Domain.Enums;
 using Domain.Errors.ValueObjects.CPF;
 using Domain.Validators;
 
@@ -6,7 +7,7 @@ using FluentResults;
 
 namespace Domain.ValueObjects
 {
-    public class Cpf
+    public class Cpf : ValueObject
     {
         public string? DocumentId { get; private set; }
 
@@ -29,6 +30,12 @@ namespace Domain.ValueObjects
                 string.IsNullOrEmpty(documentId)
                 ? DocumentType.None
                 : DocumentType.CPF);
+        }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return DocumentId;
+            yield return DocumentType;
         }
     }
 

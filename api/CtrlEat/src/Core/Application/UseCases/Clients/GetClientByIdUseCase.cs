@@ -1,5 +1,4 @@
 ﻿using Domain.Adapters;
-using Domain.Entities.TypedIds;
 using Domain.Errors.Clients;
 using Domain.UseCases.Clients;
 using Domain.UseCases.Clients.Requests;
@@ -22,7 +21,7 @@ namespace Application.UseCases.Clients
             GetClientByIdRequest request,
             CancellationToken cancellationToken)
         {
-            var client = await repository.GetByIdAsync(new ClientId(request.Id), cancellationToken);
+            var client = await repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (client is null)
             {

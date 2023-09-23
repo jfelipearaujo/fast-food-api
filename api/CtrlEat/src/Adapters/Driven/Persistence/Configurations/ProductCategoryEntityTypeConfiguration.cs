@@ -1,22 +1,17 @@
-﻿using Domain.Entities;
-using Domain.Entities.TypedIds;
+﻿using Domain.Adapters.Models;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistence.Configurations
 {
-    public class ProductCategoryEntityTypeConfiguration : IEntityTypeConfiguration<ProductCategory>
+    public class ProductCategoryEntityTypeConfiguration : IEntityTypeConfiguration<ProductCategoryModel>
     {
-        public void Configure(EntityTypeBuilder<ProductCategory> builder)
+        public void Configure(EntityTypeBuilder<ProductCategoryModel> builder)
         {
             builder.ToTable("product_category");
 
             builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.Id).HasConversion(
-                productCategoryId => productCategoryId.Value,
-                value => new ProductCategoryId(value));
 
             builder
                 .Property(x => x.Description)

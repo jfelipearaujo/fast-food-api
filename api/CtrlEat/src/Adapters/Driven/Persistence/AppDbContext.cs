@@ -1,5 +1,4 @@
-﻿using Domain.Abstract;
-using Domain.Entities;
+﻿using Domain.Adapters.Models;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -17,11 +16,11 @@ namespace Persistence
         {
         }
 
-        public DbSet<ProductCategory> ProductCategory { get; set; }
+        public DbSet<ProductCategoryModel> ProductCategory { get; set; }
 
-        public DbSet<Product> Product { get; set; }
+        public DbSet<ProductModel> Product { get; set; }
 
-        public DbSet<Client> Client { get; set; }
+        public DbSet<ClientModel> Client { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,7 +29,7 @@ namespace Persistence
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var entities = ChangeTracker.Entries<IEntity>()
+            var entities = ChangeTracker.Entries<IBaseModel>()
                 .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
 
             foreach (var entity in entities)

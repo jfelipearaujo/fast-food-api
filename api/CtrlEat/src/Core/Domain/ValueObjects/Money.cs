@@ -1,10 +1,11 @@
-﻿using Domain.Errors.ValueObjects.Money;
+﻿using Domain.Abstract;
+using Domain.Errors.ValueObjects.Money;
 
 using FluentResults;
 
 namespace Domain.ValueObjects
 {
-    public class Money
+    public class Money : ValueObject
     {
         private const int MAX_LENGTH_CURRENCY = 3;
 
@@ -31,6 +32,12 @@ namespace Domain.ValueObjects
             }
 
             return new Money(currency, amount);
+        }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return Currency;
+            yield return Amount;
         }
     }
 }
