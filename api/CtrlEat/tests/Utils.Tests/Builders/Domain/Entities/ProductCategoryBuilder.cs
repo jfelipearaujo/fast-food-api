@@ -1,59 +1,53 @@
-using Domain.Entities.TypedIds;
+using Domain.Entities.ProductCategoryAggregate;
+using Domain.Entities.ProductCategoryAggregate.ValueObjects;
 
-using System.Collections.ObjectModel;
+namespace Utils.Tests.Builders.Domain.Entities;
 
-namespace Domain.Entities
+public class ProductCategoryBuilder
 {
-    public class ProductCategoryBuilder
+    private ProductCategoryId id;
+    private string description;
+
+    public ProductCategoryBuilder()
     {
-        private ProductCategoryId id;
-        private string description;
-        private ICollection<Product> products;
+        Reset();
+    }
 
-        public ProductCategoryBuilder()
-        {
-            Reset();
-        }
+    public ProductCategoryBuilder Reset()
+    {
+        id = default;
+        description = default;
 
-        public ProductCategoryBuilder Reset()
-        {
-            id = default;
-            description = default;
-            products = new Collection<Product>();
+        return this;
+    }
 
-            return this;
-        }
+    public ProductCategoryBuilder WithSample()
+    {
+        id = ProductCategoryId.CreateUnique();
+        description = "Product Category";
 
-        public ProductCategoryBuilder WithSample()
-        {
-            id = new ProductCategoryId(Guid.NewGuid());
-            description = "Product Category";
+        return this;
+    }
 
-            return this;
-        }
+    public ProductCategoryBuilder WithId(Guid id)
+    {
+        this.id = ProductCategoryId.Create(id);
 
-        public ProductCategoryBuilder WithId(Guid id)
-        {
-            this.id = new ProductCategoryId(id);
+        return this;
+    }
 
-            return this;
-        }
+    public ProductCategoryBuilder WithDescription(string description)
+    {
+        this.description = description;
 
-        public ProductCategoryBuilder WithDescription(string description)
-        {
-            this.description = description;
+        return this;
+    }
 
-            return this;
-        }
-
-        public ProductCategory Build()
-        {
-            return new ProductCategory
-            {
-                Id = id,
-                Description = description,
-                Products = products,
-            };
-        }
+    public ProductCategory Build()
+    {
+        return ProductCategory.Create(
+            description,
+            id
+        ).ValueOrDefault;
     }
 }

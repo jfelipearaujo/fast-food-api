@@ -1,69 +1,70 @@
-﻿using Application.UseCases.ProductCategories;
+﻿using Application.UseCases.ProductCategories.GetAllProductCategories;
 
 using Domain.Adapters;
-using Domain.Entities;
+using Domain.Entities.ProductCategoryAggregate;
 using Domain.UseCases.ProductCategories.Responses;
 
-namespace Application.Tests.UseCases.ProductCategories
+using Utils.Tests.Builders.Domain.Entities;
+
+namespace Application.Tests.UseCases.ProductCategories;
+
+public class GetAllProductCategoryUseCaseTests
 {
-    public class GetAllProductCategoryUseCaseTests
+    private readonly GetAllProductCategoriesUseCase sut;
+
+    private readonly IProductCategoryRepository repository;
+
+    public GetAllProductCategoryUseCaseTests()
     {
-        private readonly GetAllProductCategoriesUseCase sut;
+        repository = Substitute.For<IProductCategoryRepository>();
 
-        private readonly IProductCategoryRepository repository;
+        sut = new GetAllProductCategoriesUseCase(repository);
+    }
 
-        public GetAllProductCategoryUseCaseTests()
-        {
-            repository = Substitute.For<IProductCategoryRepository>();
+    [Fact]
+    public async Task ShouldGetAllProductCategorySuccessfully()
+    {
+        // Arrange
+        var productCategoryOne = new ProductCategoryBuilder().WithSample().Build();
+        var productCategoryTwo = new ProductCategoryBuilder().WithSample().Build();
 
-            sut = new GetAllProductCategoriesUseCase(repository);
-        }
-
-        [Fact]
-        public async Task ShouldGetAllProductCategorySuccessfully()
-        {
-            // Arrange
-            var productCategoryOne = new ProductCategoryBuilder().WithSample().Build();
-            var productCategoryTwo = new ProductCategoryBuilder().WithSample().Build();
-
-            repository
-                .GetAllAsync(Arg.Any<CancellationToken>())
-                .Returns(new List<ProductCategory>
-                {
-                    productCategoryOne,
-                    productCategoryTwo
-                });
-
-            // Act
-            var response = await sut.ExecuteAsync(cancellationToken: default);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
+        repository
+            .GetAllAsync(Arg.Any<CancellationToken>())
+            .Returns(new List<ProductCategory>
             {
-                result.Value.Should().BeEquivalentTo(new List<ProductCategoryResponse>
-                {
-                    ProductCategoryResponse.MapFromDomain(productCategoryOne),
-                    ProductCategoryResponse.MapFromDomain(productCategoryTwo),
-                });
+                productCategoryOne,
+                productCategoryTwo
             });
-        }
 
-        [Fact]
-        public async Task ShouldReturnNothingIfNothingWasFound()
+        // Act
+        var response = await sut.ExecuteAsync(cancellationToken: default);
+
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            repository
-                .GetAllAsync(Arg.Any<CancellationToken>())
-                .Returns(new List<ProductCategory>());
-
-            // Act
-            var response = await sut.ExecuteAsync(cancellationToken: default);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
+            result.Value.Should().BeEquivalentTo(new List<ProductCategoryResponse>
             {
-                result.Value.Should().BeEquivalentTo(Enumerable.Empty<ProductCategoryResponse>());
+                ProductCategoryResponse.MapFromDomain(productCategoryOne),
+                ProductCategoryResponse.MapFromDomain(productCategoryTwo),
             });
-        }
+        });
+    }
+
+    [Fact]
+    public async Task ShouldReturnNothingIfNothingWasFound()
+    {
+        // Arrange
+        repository
+            .GetAllAsync(Arg.Any<CancellationToken>())
+            .Returns(new List<ProductCategory>());
+
+        // Act
+        var response = await sut.ExecuteAsync(cancellationToken: default);
+
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
+        {
+            result.Value.Should().BeEquivalentTo(Enumerable.Empty<ProductCategoryResponse>());
+        });
     }
 }

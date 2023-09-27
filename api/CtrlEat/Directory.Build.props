@@ -5,7 +5,10 @@
 		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 		<CodeAnalysisTreadWarningsAsErrors>false</CodeAnalysisTreadWarningsAsErrors>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
+	
 	<ItemGroup>
 		<PackageReference
 			Include="SonarAnalyzer.CSharp"

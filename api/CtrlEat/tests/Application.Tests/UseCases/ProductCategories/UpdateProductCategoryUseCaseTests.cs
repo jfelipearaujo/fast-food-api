@@ -1,87 +1,88 @@
-﻿using Application.UseCases.ProductCategories;
+﻿using Application.UseCases.Common.Errors;
+using Application.UseCases.ProductCategories.UpdateProductCategory;
 
 using Domain.Adapters;
-using Domain.Entities;
-using Domain.Entities.TypedIds;
-using Domain.Errors.ProductCategories;
+using Domain.Entities.ProductCategoryAggregate;
+using Domain.Entities.ProductCategoryAggregate.ValueObjects;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
-namespace Application.Tests.UseCases.ProductCategories
+using Utils.Tests.Builders.Domain.Entities;
+
+namespace Application.Tests.UseCases.ProductCategories;
+
+public class UpdateProductCategoryUseCaseTests
 {
-    public class UpdateProductCategoryUseCaseTests
+    private readonly UpdateProductCategoryUseCase sut;
+
+    private readonly IProductCategoryRepository repository;
+
+    public UpdateProductCategoryUseCaseTests()
     {
-        private readonly UpdateProductCategoryUseCase sut;
+        repository = Substitute.For<IProductCategoryRepository>();
 
-        private readonly IProductCategoryRepository repository;
+        sut = new UpdateProductCategoryUseCase(repository);
+    }
 
-        public UpdateProductCategoryUseCaseTests()
+    [Fact]
+    public async Task ShouldUpdateProductCategorySuccessfully()
+    {
+        // Arrange
+        var request = new UpdateProductCategoryRequest
         {
-            repository = Substitute.For<IProductCategoryRepository>();
+            Id = Guid.NewGuid(),
+            Description = "New Product Description"
+        };
 
-            sut = new UpdateProductCategoryUseCase(repository);
-        }
+        var productCategory = new ProductCategoryBuilder()
+            .WithId(request.Id)
+            .WithDescription(request.Description)
+            .Build();
 
-        [Fact]
-        public async Task ShouldUpdateProductCategorySuccessfully()
+        repository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(productCategory);
+
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
+
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            var request = new UpdateProductCategoryRequest
-            {
-                Id = Guid.NewGuid(),
-                Description = "New Product Description"
-            };
+            result.Value.Should().BeEquivalentTo(ProductCategoryResponse.MapFromDomain(productCategory));
+        });
 
-            var productCategory = new ProductCategoryBuilder()
-                .WithId(request.Id)
-                .WithDescription(request.Description)
-                .Build();
+        await repository
+            .Received(1)
+            .UpdateAsync(
+                Arg.Is<ProductCategory>(x => x.Description == request.Description),
+                Arg.Any<CancellationToken>());
+    }
 
-            repository
-                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
-                .Returns(productCategory);
-
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(ProductCategoryResponse.MapFromDomain(productCategory));
-            });
-
-            await repository
-                .Received(1)
-                .UpdateAsync(
-                    Arg.Is<ProductCategory>(x => x.Description == request.Description),
-                    Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldHandleWhenNothingWasFound()
+    [Fact]
+    public async Task ShouldHandleWhenNothingWasFound()
+    {
+        // Arrange
+        var request = new UpdateProductCategoryRequest
         {
-            // Arrange
-            var request = new UpdateProductCategoryRequest
-            {
-                Id = Guid.NewGuid(),
-                Description = "New Product Description"
-            };
+            Id = Guid.NewGuid(),
+            Description = "New Product Description"
+        };
 
-            repository
-                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
-                .Returns(default(ProductCategory));
+        repository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(default(ProductCategory));
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.Id));
+        // Assert
+        response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.Id));
 
-            await repository
-                .DidNotReceive()
-                .UpdateAsync(
-                    Arg.Any<ProductCategory>(),
-                    Arg.Any<CancellationToken>());
-        }
+        await repository
+            .DidNotReceive()
+            .UpdateAsync(
+                Arg.Any<ProductCategory>(),
+                Arg.Any<CancellationToken>());
     }
 }

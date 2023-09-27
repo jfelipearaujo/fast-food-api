@@ -1,77 +1,78 @@
-﻿using Application.UseCases.ProductCategories;
+﻿using Application.UseCases.Common.Errors;
+using Application.UseCases.ProductCategories.GetProductCategoryById;
 
 using Domain.Adapters;
-using Domain.Entities;
-using Domain.Entities.TypedIds;
-using Domain.Errors.ProductCategories;
+using Domain.Entities.ProductCategoryAggregate;
+using Domain.Entities.ProductCategoryAggregate.ValueObjects;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
-namespace Application.Tests.UseCases.ProductCategories
+using Utils.Tests.Builders.Domain.Entities;
+
+namespace Application.Tests.UseCases.ProductCategories;
+
+public class GetProductCategoryByIdUseCaseTests
 {
-    public class GetProductCategoryByIdUseCaseTests
+    private readonly GetProductCategoryByIdUseCase sut;
+
+    private readonly IProductCategoryRepository repository;
+
+    public GetProductCategoryByIdUseCaseTests()
     {
-        private readonly GetProductCategoryByIdUseCase sut;
+        repository = Substitute.For<IProductCategoryRepository>();
 
-        private readonly IProductCategoryRepository repository;
+        sut = new GetProductCategoryByIdUseCase(repository);
+    }
 
-        public GetProductCategoryByIdUseCaseTests()
+    [Fact]
+    public async Task ShouldGetProductCategorySuccessfully()
+    {
+        // Arrange
+        var request = new GetProductCategoryByIdRequest
         {
-            repository = Substitute.For<IProductCategoryRepository>();
+            Id = Guid.NewGuid()
+        };
 
-            sut = new GetProductCategoryByIdUseCase(repository);
-        }
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .WithId(request.Id)
+            .Build();
 
-        [Fact]
-        public async Task ShouldGetProductCategorySuccessfully()
+        repository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(productCategory);
+
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
+
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            var request = new GetProductCategoryByIdRequest
+            result.Value.Should().BeEquivalentTo(new ProductCategoryResponse
             {
-                Id = Guid.NewGuid()
-            };
-
-            var productCategory = new ProductCategoryBuilder()
-                .WithSample()
-                .WithId(request.Id)
-                .Build();
-
-            repository
-                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
-                .Returns(productCategory);
-
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(new ProductCategoryResponse
-                {
-                    Id = request.Id,
-                    Description = "Product Category"
-                });
+                Id = request.Id,
+                Description = "Product Category"
             });
-        }
+        });
+    }
 
-        [Fact]
-        public async Task ShouldHandleWhenNothingWasFound()
+    [Fact]
+    public async Task ShouldHandleWhenNothingWasFound()
+    {
+        // Arrange
+        var request = new GetProductCategoryByIdRequest
         {
-            // Arrange
-            var request = new GetProductCategoryByIdRequest
-            {
-                Id = Guid.NewGuid()
-            };
+            Id = Guid.NewGuid()
+        };
 
-            repository
-                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
-                .Returns(default(ProductCategory));
+        repository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(default(ProductCategory));
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.Id));
-        }
+        // Assert
+        response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.Id));
     }
 }

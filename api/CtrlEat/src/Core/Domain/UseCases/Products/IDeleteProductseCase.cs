@@ -2,12 +2,11 @@
 
 using FluentResults;
 
-namespace Domain.UseCases.Products
+namespace Domain.UseCases.Products;
+
+public interface IDeleteProductUseCase
 {
-    public interface IDeleteProductUseCase
-    {
-        Task<Result<int>> ExecuteAsync(
-            DeleteProductRequest request,
-            CancellationToken cancellationToken);
-    }
+    Task<Result<int>> ExecuteAsync(
+        DeleteProductRequest request,
+        CancellationToken cancellationToken);
 }

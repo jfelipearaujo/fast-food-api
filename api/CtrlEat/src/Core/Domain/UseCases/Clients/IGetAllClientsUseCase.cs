@@ -2,11 +2,10 @@
 
 using FluentResults;
 
-namespace Domain.UseCases.Clients
+namespace Domain.UseCases.Clients;
+
+public interface IGetAllClientsUseCase
 {
-    public interface IGetAllClientsUseCase
-    {
-        Task<Result<List<ClientResponse>>> ExecuteAsync(
-            CancellationToken cancellationToken);
-    }
+    Task<Result<List<ClientResponse>>> ExecuteAsync(
+        CancellationToken cancellationToken);
 }

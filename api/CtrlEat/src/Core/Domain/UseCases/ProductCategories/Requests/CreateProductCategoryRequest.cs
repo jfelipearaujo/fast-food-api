@@ -1,7 +1,6 @@
-﻿namespace Domain.UseCases.ProductCategories.Requests
+﻿namespace Domain.UseCases.ProductCategories.Requests;
+
+public class CreateProductCategoryRequest
 {
-    public class CreateProductCategoryRequest
-    {
-        public string Description { get; set; }
-    }
+    public string Description { get; set; }
 }

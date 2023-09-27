@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.ProductAggregate;
+using Domain.Entities.ProductCategoryAggregate;
 
 using Infrastructure.Repositories;
 
@@ -9,224 +10,225 @@ using Persistence;
 
 using System.Data.Common;
 
-namespace Infrastructure.Tests.Repositories
+using Utils.Tests.Builders.Domain.Entities;
+
+namespace Infrastructure.Tests.Repositories;
+
+public class ProductRepositoryTests : IDisposable
 {
-    public class ProductRepositoryTests : IDisposable
+    private readonly ProductRepository sut;
+
+    private readonly AppDbContext dbContext;
+
+    private readonly DbConnection dbConnection;
+
+    private readonly DbContextOptions<AppDbContext> dbContextOptions;
+
+    private readonly ProductCategory productCategory;
+
+    public ProductRepositoryTests()
     {
-        private readonly ProductRepository sut;
+        dbConnection = new SqliteConnection("Filename=:memory:");
+        dbConnection.Open();
 
-        private readonly AppDbContext dbContext;
+        dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite(dbConnection)
+            .Options;
 
-        private readonly DbConnection dbConnection;
+        dbContext = new AppDbContext(dbContextOptions);
 
-        private readonly DbContextOptions<AppDbContext> dbContextOptions;
+        dbContext.Database.Migrate();
 
-        private readonly ProductCategory productCategory;
+        productCategory = new ProductCategoryBuilder().WithSample().Build();
 
-        public ProductRepositoryTests()
+        dbContext.ProductCategory.Add(productCategory);
+        dbContext.SaveChanges();
+
+        sut = new ProductRepository(dbContext);
+    }
+
+    [Fact]
+    public async Task ShouldCreateProductSuccessfully()
+    {
+        // Arrange
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithProductCategoryId(productCategory.Id)
+            .Build();
+
+        // Act
+        var response = await sut.CreateAsync(product, cancellationToken: default);
+
+        // Assert
+        response.Should().Be(1);
+        dbContext.Product.Should().NotBeNullOrEmpty();
+
+        var productOnDb = await dbContext.Product.FindAsync(product.Id);
+
+        productOnDb.Should().NotBeNull().And.BeEquivalentTo(product);
+    }
+
+    [Fact]
+    public async Task ShouldDeleteProductSuccessfully()
+    {
+        // Arrange
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithProductCategoryId(productCategory.Id)
+            .Build();
+
+        await sut.CreateAsync(product, cancellationToken: default);
+
+        // Act
+        var response = await sut.DeleteAsync(product, cancellationToken: default);
+
+        // Assert
+        response.Should().Be(1);
+        dbContext.Product.Should().BeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task ShouldGetAllProductSuccessfully()
+    {
+        // Arrange
+        var firstProduct = new ProductBuilder()
+            .WithSample()
+            .WithProductCategoryId(productCategory.Id)
+            .Build();
+
+        var secondProduct = new ProductBuilder()
+            .WithSample()
+            .WithProductCategoryId(productCategory.Id)
+            .Build();
+
+        await sut.CreateAsync(firstProduct, cancellationToken: default);
+        await sut.CreateAsync(secondProduct, cancellationToken: default);
+
+        // Act
+        var response = await sut.GetAllAsync(cancellationToken: default);
+
+        // Assert
+        response.Should().NotBeNullOrEmpty().And.BeEquivalentTo(new List<Product>
         {
-            dbConnection = new SqliteConnection("Filename=:memory:");
-            dbConnection.Open();
+            firstProduct,
+            secondProduct
+        });
 
-            dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
-                .UseSqlite(dbConnection)
-                .Options;
+        dbContext.Product.Count().Should().Be(2);
+    }
 
-            dbContext = new AppDbContext(dbContextOptions);
+    [Fact]
+    public async Task ShouldGetAllProductByCategorySuccessfully()
+    {
+        // Arrange
+        var firstProduct = new ProductBuilder()
+            .WithSample()
+            .WithProductCategoryId(productCategory.Id)
+            .Build();
 
-            dbContext.Database.Migrate();
+        var secondProduct = new ProductBuilder()
+            .WithSample()
+            .WithProductCategoryId(productCategory.Id)
+            .Build();
 
-            productCategory = new ProductCategoryBuilder().WithSample().Build();
+        await sut.CreateAsync(firstProduct, cancellationToken: default);
+        await sut.CreateAsync(secondProduct, cancellationToken: default);
 
-            dbContext.ProductCategory.Add(productCategory);
-            dbContext.SaveChanges();
+        // Act
+        var response = await sut.GetAllByCategoryAsync(productCategory.Description, cancellationToken: default);
 
-            sut = new ProductRepository(dbContext);
-        }
-
-        [Fact]
-        public async Task ShouldCreateProductSuccessfully()
+        // Assert
+        response.Should().NotBeNullOrEmpty().And.BeEquivalentTo(new List<Product>
         {
-            // Arrange
-            var product = new ProductBuilder()
-                .WithSample()
-                .WithProductCategoryId(productCategory.Id)
-                .Build();
+            firstProduct,
+            secondProduct
+        });
 
-            // Act
-            var response = await sut.CreateAsync(product, cancellationToken: default);
+        dbContext.Product.Count().Should().Be(2);
+    }
 
-            // Assert
-            response.Should().Be(1);
-            dbContext.Product.Should().NotBeNullOrEmpty();
+    [Fact]
+    public async Task ShouldGetAllProductSuccessfullyWhenThereIsNoData()
+    {
+        // Arrange
 
-            var productOnDb = await dbContext.Product.FindAsync(product.Id);
+        // Act
+        var response = await sut.GetAllAsync(cancellationToken: default);
 
-            productOnDb.Should().NotBeNull().And.BeEquivalentTo(product);
-        }
+        // Assert
+        response.Should().BeNullOrEmpty();
+    }
 
-        [Fact]
-        public async Task ShouldDeleteProductSuccessfully()
+    [Fact]
+    public async Task ShouldGetByIdProductSuccessfully()
+    {
+        // Arrange
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithProductCategoryId(productCategory.Id)
+            .Build();
+
+        await sut.CreateAsync(product, cancellationToken: default);
+
+        // Act
+        var response = await sut.GetByIdAsync(product.Id, cancellationToken: default);
+
+        // Assert
+        response.Should().BeEquivalentTo(product);
+    }
+
+    [Fact]
+    public async Task ShouldGetByIdProductSuccessfullyWhenThereIsNoData()
+    {
+        // Arrange
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithProductCategoryId(productCategory.Id)
+            .Build();
+
+        // Act
+        var response = await sut.GetByIdAsync(product.Id, cancellationToken: default);
+
+        // Assert
+        response.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ShouldUpdateProductSuccessfully()
+    {
+        // Arrange
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithProductCategoryId(productCategory.Id)
+            .Build();
+
+        await sut.CreateAsync(product, cancellationToken: default);
+
+        product.Update("New Description", product.Price, product.ImageUrl);
+
+        // Act
+        var response = await sut.UpdateAsync(product, cancellationToken: default);
+
+        // Assert
+        response.Should().Be(1);
+
+        var productOnDb = await dbContext.Product.FindAsync(product.Id);
+
+        productOnDb.Should().NotBeNull().And.BeEquivalentTo(product);
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            // Arrange
-            var product = new ProductBuilder()
-                .WithSample()
-                .WithProductCategoryId(productCategory.Id)
-                .Build();
-
-            await sut.CreateAsync(product, cancellationToken: default);
-
-            // Act
-            var response = await sut.DeleteAsync(product, cancellationToken: default);
-
-            // Assert
-            response.Should().Be(1);
-            dbContext.Product.Should().BeNullOrEmpty();
-        }
-
-        [Fact]
-        public async Task ShouldGetAllProductSuccessfully()
-        {
-            // Arrange
-            var firstProduct = new ProductBuilder()
-                .WithSample()
-                .WithProductCategoryId(productCategory.Id)
-                .Build();
-
-            var secondProduct = new ProductBuilder()
-                .WithSample()
-                .WithProductCategoryId(productCategory.Id)
-                .Build();
-
-            await sut.CreateAsync(firstProduct, cancellationToken: default);
-            await sut.CreateAsync(secondProduct, cancellationToken: default);
-
-            // Act
-            var response = await sut.GetAllAsync(cancellationToken: default);
-
-            // Assert
-            response.Should().NotBeNullOrEmpty().And.BeEquivalentTo(new List<Product>
-            {
-                firstProduct,
-                secondProduct
-            });
-
-            dbContext.Product.Count().Should().Be(2);
-        }
-
-        [Fact]
-        public async Task ShouldGetAllProductByCategorySuccessfully()
-        {
-            // Arrange
-            var firstProduct = new ProductBuilder()
-                .WithSample()
-                .WithProductCategoryId(productCategory.Id)
-                .Build();
-
-            var secondProduct = new ProductBuilder()
-                .WithSample()
-                .WithProductCategoryId(productCategory.Id)
-                .Build();
-
-            await sut.CreateAsync(firstProduct, cancellationToken: default);
-            await sut.CreateAsync(secondProduct, cancellationToken: default);
-
-            // Act
-            var response = await sut.GetAllByCategoryAsync(productCategory.Description, cancellationToken: default);
-
-            // Assert
-            response.Should().NotBeNullOrEmpty().And.BeEquivalentTo(new List<Product>
-            {
-                firstProduct,
-                secondProduct
-            });
-
-            dbContext.Product.Count().Should().Be(2);
-        }
-
-        [Fact]
-        public async Task ShouldGetAllProductSuccessfullyWhenThereIsNoData()
-        {
-            // Arrange
-
-            // Act
-            var response = await sut.GetAllAsync(cancellationToken: default);
-
-            // Assert
-            response.Should().BeNullOrEmpty();
-        }
-
-        [Fact]
-        public async Task ShouldGetByIdProductSuccessfully()
-        {
-            // Arrange
-            var product = new ProductBuilder()
-                .WithSample()
-                .WithProductCategoryId(productCategory.Id)
-                .Build();
-
-            await sut.CreateAsync(product, cancellationToken: default);
-
-            // Act
-            var response = await sut.GetByIdAsync(product.Id, cancellationToken: default);
-
-            // Assert
-            response.Should().BeEquivalentTo(product);
-        }
-
-        [Fact]
-        public async Task ShouldGetByIdProductSuccessfullyWhenThereIsNoData()
-        {
-            // Arrange
-            var product = new ProductBuilder()
-                .WithSample()
-                .WithProductCategoryId(productCategory.Id)
-                .Build();
-
-            // Act
-            var response = await sut.GetByIdAsync(product.Id, cancellationToken: default);
-
-            // Assert
-            response.Should().BeNull();
-        }
-
-        [Fact]
-        public async Task ShouldUpdateProductSuccessfully()
-        {
-            // Arrange
-            var product = new ProductBuilder()
-                .WithSample()
-                .WithProductCategoryId(productCategory.Id)
-                .Build();
-
-            await sut.CreateAsync(product, cancellationToken: default);
-
-            product.Description = "New Description";
-
-            // Act
-            var response = await sut.UpdateAsync(product, cancellationToken: default);
-
-            // Assert
-            response.Should().Be(1);
-
-            var productOnDb = await dbContext.Product.FindAsync(product.Id);
-
-            productOnDb.Should().NotBeNull().And.BeEquivalentTo(product);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                dbConnection.Dispose();
-                dbContext.Dispose();
-            }
+            dbConnection.Dispose();
+            dbContext.Dispose();
         }
     }
 }

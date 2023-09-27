@@ -2,12 +2,12 @@
 using Domain.UseCases.Products.Responses;
 
 using FluentResults;
-namespace Domain.UseCases.Products
+
+namespace Domain.UseCases.Products;
+
+public interface IUpdateProductUseCase
 {
-    public interface IUpdateProductUseCase
-    {
-        Task<Result<ProductResponse>> ExecuteAsync(
-            UpdateProductRequest request,
-            CancellationToken cancellationToken);
-    }
+    Task<Result<ProductResponse>> ExecuteAsync(
+        UpdateProductRequest request,
+        CancellationToken cancellationToken);
 }

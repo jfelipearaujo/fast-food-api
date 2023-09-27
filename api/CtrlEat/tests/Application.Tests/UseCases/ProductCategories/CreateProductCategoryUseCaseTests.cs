@@ -1,54 +1,53 @@
-﻿using Application.UseCases.ProductCategories;
+﻿using Application.UseCases.ProductCategories.CreateProductCategory;
 
 using Domain.Adapters;
-using Domain.Entities;
+using Domain.Entities.ProductCategoryAggregate;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;
 
-namespace Application.Tests.UseCases.ProductCategories
+namespace Application.Tests.UseCases.ProductCategories;
+
+public class CreateProductCategoryUseCaseTests
 {
-    public class CreateProductCategoryUseCaseTests
+    private readonly CreateProductCategoryUseCase sut;
+
+    private readonly IProductCategoryRepository repository;
+
+    public CreateProductCategoryUseCaseTests()
     {
-        private readonly CreateProductCategoryUseCase sut;
+        repository = Substitute.For<IProductCategoryRepository>();
 
-        private readonly IProductCategoryRepository repository;
+        sut = new CreateProductCategoryUseCase(repository);
+    }
 
-        public CreateProductCategoryUseCaseTests()
+    [Fact]
+    public async Task ShouldCreateProductCategorySuccessfully()
+    {
+        // Arrange
+        var request = new CreateProductCategoryRequest
         {
-            repository = Substitute.For<IProductCategoryRepository>();
+            Description = "Product Category Description",
+        };
 
-            sut = new CreateProductCategoryUseCase(repository);
-        }
-
-        [Fact]
-        public async Task ShouldCreateProductCategorySuccessfully()
+        var expectedResponse = new ProductCategoryResponse
         {
-            // Arrange
-            var request = new CreateProductCategoryRequest
-            {
-                Description = "Product Category Description",
-            };
+            Description = "Product Category Description",
+        };
 
-            var expectedResponse = new ProductCategoryResponse
-            {
-                Description = "Product Category Description",
-            };
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
+        {
+            result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
+            result.Value.Id.Should().NotBeEmpty();
+        });
 
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
-                result.Value.Id.Should().NotBeEmpty();
-            });
-
-            await repository
-                .Received(1)
-                .CreateAsync(
-                    Arg.Any<ProductCategory>(),
-                    Arg.Any<CancellationToken>());
-        }
+        await repository
+            .Received(1)
+            .CreateAsync(
+                Arg.Any<ProductCategory>(),
+                Arg.Any<CancellationToken>());
     }
 }

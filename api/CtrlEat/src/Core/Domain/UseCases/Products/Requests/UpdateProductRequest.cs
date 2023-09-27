@@ -1,17 +1,16 @@
-﻿namespace Domain.UseCases.Products.Requests
+﻿namespace Domain.UseCases.Products.Requests;
+
+public class UpdateProductRequest
 {
-    public class UpdateProductRequest
-    {
-        public Guid Guid { get; set; }
+    public Guid ProductId { get; set; }
 
-        public Guid ProductCategoryId { get; set; }
+    public Guid ProductCategoryId { get; set; }
 
-        public string Description { get; set; }
+    public string Description { get; set; }
 
-        public decimal Amount { get; set; }
+    public decimal Amount { get; set; }
 
-        public string Currency { get; set; }
+    public string Currency { get; set; }
 
-        public string ImageUrl { get; set; }
-    }
+    public string ImageUrl { get; set; }
 }

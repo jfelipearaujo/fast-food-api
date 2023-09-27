@@ -1,118 +1,120 @@
-﻿using Application.UseCases.Products;
+﻿using Application.UseCases.Common.Errors;
+using Application.UseCases.Products.CreateProduct;
 
 using Domain.Adapters;
-using Domain.Entities;
-using Domain.Entities.TypedIds;
-using Domain.Errors.ProductCategories;
+using Domain.Entities.ProductAggregate;
+using Domain.Entities.ProductCategoryAggregate;
+using Domain.Entities.ProductCategoryAggregate.ValueObjects;
 using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
 
-namespace Application.Tests.UseCases.Products
+using Utils.Tests.Builders.Domain.Entities;
+
+namespace Application.Tests.UseCases.Products;
+
+public class CreateProductUseCaseTests
 {
-    public class CreateProductUseCaseTests
+    private readonly CreateProductUseCase sut;
+
+    private readonly IProductRepository productRepository;
+    private readonly IProductCategoryRepository productCategoryRepository;
+
+    public CreateProductUseCaseTests()
     {
-        private readonly CreateProductUseCase sut;
+        productRepository = Substitute.For<IProductRepository>();
+        productCategoryRepository = Substitute.For<IProductCategoryRepository>();
 
-        private readonly IProductRepository productRepository;
-        private readonly IProductCategoryRepository productCategoryRepository;
 
-        public CreateProductUseCaseTests()
+        sut = new CreateProductUseCase(productRepository, productCategoryRepository);
+    }
+
+    [Fact]
+    public async Task ShouldCreateProductSuccessfully()
+    {
+        // Arrange
+        var request = new CreateProductRequest
         {
-            productRepository = Substitute.For<IProductRepository>();
-            productCategoryRepository = Substitute.For<IProductCategoryRepository>();
+            ProductCategoryId = Guid.NewGuid(),
+            Description = "Product",
+            Amount = 1.0m,
+            Currency = "BRL",
+            ImageUrl = "http://image.com/123.png"
+        };
 
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .WithId(request.ProductCategoryId)
+            .Build();
 
-            sut = new CreateProductUseCase(productRepository, productCategoryRepository);
-        }
+        var product = new ProductBuilder()
+            .WithDescription(request.Description)
+            .WithProductCategoryId(request.ProductCategoryId)
+            .WithPrice(request.Currency, request.Amount)
+            .WithImageUrl(request.ImageUrl)
+            .Build();
 
-        [Fact]
-        public async Task ShouldCreateProductSuccessfully()
+        productCategoryRepository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(productCategory);
+
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
+
+        var expectedResponse = ProductResponse.MapFromDomain(product);
+
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            var request = new CreateProductRequest
-            {
-                ProductCategoryId = Guid.NewGuid(),
-                Description = "Product",
-                Amount = 1.0m,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
+            result.Value.Id.Should().NotBeEmpty();
+        });
 
-            var productCategory = new ProductCategoryBuilder()
-                .WithSample()
-                .WithId(request.ProductCategoryId)
-                .Build();
+        await productCategoryRepository
+            .Received(1)
+            .GetByIdAsync(
+                Arg.Is<ProductCategoryId>(x => x.Value == request.ProductCategoryId),
+                Arg.Any<CancellationToken>());
 
-            var product = new ProductBuilder()
-                .WithDescription(request.Description)
-                .WithProductCategoryId(request.ProductCategoryId)
-                .WithPrice(request.Currency, request.Amount)
-                .WithImageUrl(request.ImageUrl)
-                .Build();
+        await productRepository
+            .Received(1)
+            .CreateAsync(
+                Arg.Any<Product>(),
+                Arg.Any<CancellationToken>());
+    }
 
-            productCategoryRepository
-                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
-                .Returns(productCategory);
-
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
-
-            var expectedResponse = ProductResponse.MapFromDomain(product);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
-                result.Value.Id.Should().NotBeEmpty();
-            });
-
-            await productCategoryRepository
-                .Received(1)
-                .GetByIdAsync(
-                    Arg.Is<ProductCategoryId>(x => x.Value == request.ProductCategoryId),
-                    Arg.Any<CancellationToken>());
-
-            await productRepository
-                .Received(1)
-                .CreateAsync(
-                    Arg.Any<Product>(),
-                    Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldHandleIfProductCategoryWasNotFound()
+    [Fact]
+    public async Task ShouldHandleIfProductCategoryWasNotFound()
+    {
+        // Arrange
+        var request = new CreateProductRequest
         {
-            // Arrange
-            var request = new CreateProductRequest
-            {
-                ProductCategoryId = Guid.NewGuid(),
-                Description = "Product",
-                Amount = 1.0m,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            ProductCategoryId = Guid.NewGuid(),
+            Description = "Product",
+            Amount = 1.0m,
+            Currency = "BRL",
+            ImageUrl = "http://image.com/123.png"
+        };
 
-            productCategoryRepository
-                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
-                .Returns(default(ProductCategory));
+        productCategoryRepository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(default(ProductCategory));
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.ProductCategoryId));
+        // Assert
+        response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.ProductCategoryId));
 
-            await productCategoryRepository
-                .Received(1)
-                .GetByIdAsync(
-                    Arg.Is<ProductCategoryId>(x => x.Value == request.ProductCategoryId),
-                    Arg.Any<CancellationToken>());
+        await productCategoryRepository
+            .Received(1)
+            .GetByIdAsync(
+                Arg.Is<ProductCategoryId>(x => x.Value == request.ProductCategoryId),
+                Arg.Any<CancellationToken>());
 
-            await productRepository
-                .DidNotReceive()
-                .CreateAsync(
-                    Arg.Any<Product>(),
-                    Arg.Any<CancellationToken>());
-        }
+        await productRepository
+            .DidNotReceive()
+            .CreateAsync(
+                Arg.Any<Product>(),
+                Arg.Any<CancellationToken>());
     }
 }

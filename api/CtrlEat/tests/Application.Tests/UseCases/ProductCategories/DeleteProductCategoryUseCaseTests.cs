@@ -1,80 +1,81 @@
-﻿using Application.UseCases.ProductCategories;
+﻿using Application.UseCases.Common.Errors;
+using Application.UseCases.ProductCategories.DeleteProductCategory;
 
 using Domain.Adapters;
-using Domain.Entities;
-using Domain.Entities.TypedIds;
-using Domain.Errors.ProductCategories;
+using Domain.Entities.ProductCategoryAggregate;
+using Domain.Entities.ProductCategoryAggregate.ValueObjects;
 using Domain.UseCases.ProductCategories.Requests;
 
-namespace Application.Tests.UseCases.ProductCategories
+using Utils.Tests.Builders.Domain.Entities;
+
+namespace Application.Tests.UseCases.ProductCategories;
+
+public class DeleteProductCategoryUseCaseTests
 {
-    public class DeleteProductCategoryUseCaseTests
+    private readonly DeleteProductCategoryUseCase sut;
+
+    private readonly IProductCategoryRepository repository;
+
+    public DeleteProductCategoryUseCaseTests()
     {
-        private readonly DeleteProductCategoryUseCase sut;
+        repository = Substitute.For<IProductCategoryRepository>();
 
-        private readonly IProductCategoryRepository repository;
+        sut = new DeleteProductCategoryUseCase(repository);
+    }
 
-        public DeleteProductCategoryUseCaseTests()
+    [Fact]
+    public async Task ShouldDeleteProductCategorySuccessfully()
+    {
+        // Arrange
+        var request = new DeleteProductCategoryRequest
         {
-            repository = Substitute.For<IProductCategoryRepository>();
+            Id = Guid.NewGuid(),
+        };
 
-            sut = new DeleteProductCategoryUseCase(repository);
-        }
+        repository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(new ProductCategoryBuilder().WithSample().Build());
 
-        [Fact]
-        public async Task ShouldDeleteProductCategorySuccessfully()
+        repository
+            .DeleteAsync(Arg.Any<ProductCategory>(), Arg.Any<CancellationToken>())
+            .Returns(1);
+
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
+
+        // Assert
+        response.Should().BeSuccess().And.HaveValue(1);
+
+        await repository
+            .Received(1)
+            .DeleteAsync(
+                Arg.Any<ProductCategory>(),
+                Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task ShouldReturnNullIfNothingWasFound()
+    {
+        // Arrange
+        var request = new DeleteProductCategoryRequest
         {
-            // Arrange
-            var request = new DeleteProductCategoryRequest
-            {
-                Id = Guid.NewGuid(),
-            };
+            Id = Guid.NewGuid(),
+        };
 
-            repository
-                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
-                .Returns(new ProductCategory());
+        repository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(default(ProductCategory));
 
-            repository
-                .DeleteAsync(Arg.Any<ProductCategory>(), Arg.Any<CancellationToken>())
-                .Returns(1);
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        // Assert
+        response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.Id));
 
-            // Assert
-            response.Should().BeSuccess().And.HaveValue(1);
-
-            await repository
-                .Received(1)
-                .DeleteAsync(
-                    Arg.Any<ProductCategory>(),
-                    Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldReturnNullIfNothingWasFound()
-        {
-            // Arrange
-            var request = new DeleteProductCategoryRequest
-            {
-                Id = Guid.NewGuid(),
-            };
-
-            repository
-                .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
-                .Returns(default(ProductCategory));
-
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
-
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.Id));
-
-            await repository
-                .DidNotReceive()
-                .DeleteAsync(
-                    Arg.Any<ProductCategory>(),
-                    Arg.Any<CancellationToken>());
-        }
+        await repository
+            .DidNotReceive()
+            .DeleteAsync(
+                Arg.Any<ProductCategory>(),
+                Arg.Any<CancellationToken>());
     }
 }
