@@ -2,11 +2,10 @@
 
 using FluentResults;
 
-namespace Domain.UseCases.ProductCategories
+namespace Domain.UseCases.ProductCategories;
+
+public interface IGetAllProductCategoriesUseCase
 {
-    public interface IGetAllProductCategoriesUseCase
-    {
-        Task<Result<IEnumerable<ProductCategoryResponse>>> ExecuteAsync(
-            CancellationToken cancellationToken);
-    }
+    Task<Result<List<ProductCategoryResponse>>> ExecuteAsync(
+        CancellationToken cancellationToken);
 }

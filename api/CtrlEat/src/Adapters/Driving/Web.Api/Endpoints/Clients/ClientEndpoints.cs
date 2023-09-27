@@ -1,10 +1,9 @@
 ﻿using Domain.UseCases.Clients;
 using Domain.UseCases.Clients.Requests;
 
-using Mapster;
-
 using Microsoft.AspNetCore.Http.HttpResults;
 
+using Web.Api.Endpoints.Clients.Mapping;
 using Web.Api.Endpoints.Clients.Requests;
 using Web.Api.Endpoints.Clients.Responses;
 using Web.Api.Extensions;
@@ -22,6 +21,10 @@ namespace Web.Api.Endpoints.Clients
 
             group.MapGet("{id}", GetClientById)
                 .WithName(nameof(GetClientById))
+                .WithOpenApi();
+
+            group.MapGet("/", GetAllClients)
+                .WithName(nameof(GetAllClients))
                 .WithOpenApi();
 
             group.MapPost("/", CreateClient)
@@ -46,7 +49,18 @@ namespace Web.Api.Endpoints.Clients
                 return TypedResults.NotFound(result.ToApiError());
             }
 
-            var response = result.Value.Adapt<ClientEndpointResponse>();
+            var response = result.Value.MapToResponse();
+
+            return TypedResults.Ok(response);
+        }
+
+        public static async Task<Ok<List<ClientEndpointResponse>>> GetAllClients(
+            IGetAllClientsUseCase useCase,
+            CancellationToken cancellationToken)
+        {
+            var result = await useCase.ExecuteAsync(cancellationToken);
+
+            var response = result.Value.MapToResponse();
 
             return TypedResults.Ok(response);
         }
@@ -56,7 +70,7 @@ namespace Web.Api.Endpoints.Clients
             ICreateClientUseCase useCase,
             CancellationToken cancellationToken)
         {
-            var request = endpointRequest.Adapt<CreateClientRequest>();
+            var request = endpointRequest.MapToRequest();
 
             var result = await useCase.ExecuteAsync(request, cancellationToken);
 
@@ -65,7 +79,7 @@ namespace Web.Api.Endpoints.Clients
                 return TypedResults.BadRequest(result.ToApiError());
             }
 
-            var response = result.Value.Adapt<ClientEndpointResponse>();
+            var response = result.Value.MapToResponse();
 
             return TypedResults.CreatedAtRoute(
                 response,

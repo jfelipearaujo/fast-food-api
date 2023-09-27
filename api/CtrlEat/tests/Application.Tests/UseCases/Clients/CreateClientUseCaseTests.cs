@@ -1,248 +1,183 @@
-﻿using Application.UseCases.Clients;
+﻿using Application.UseCases.Clients.CreateClient;
+using Application.UseCases.Clients.CreateClient.Errors;
 
 using Domain.Adapters;
-using Domain.Entities;
-using Domain.Enums;
-using Domain.Errors.Clients;
+using Domain.Entities.ClientAggregate;
+using Domain.Entities.ClientAggregate.Enums;
+using Domain.Entities.ClientAggregate.ValueObjects;
 using Domain.UseCases.Clients.Requests;
 using Domain.UseCases.Clients.Responses;
 
-namespace Application.Tests.UseCases.Clients
+using Utils.Tests.Builders.Domain.Entities;
+
+namespace Application.Tests.UseCases.Clients;
+
+public class CreateClientUseCaseTests
 {
-    public class CreateClientUseCaseTests
+    private readonly CreateClientUseCase sut;
+
+    private readonly IClientRepository repository;
+
+    public CreateClientUseCaseTests()
     {
-        private readonly CreateClientUseCase sut;
+        repository = Substitute.For<IClientRepository>();
 
-        private readonly IClientRepository repository;
+        sut = new CreateClientUseCase(repository);
+    }
 
-        public CreateClientUseCaseTests()
+    [Fact]
+    public async Task ShouldCreateClientWithPersonalDataSuccessfully()
+    {
+        // Arrange
+        var request = new CreateClientRequest
         {
-            repository = Substitute.For<IClientRepository>();
+            FirstName = "João",
+            LastName = "Silva",
+            Email = "joao.silva@email.com",
+            DocumentId = "46808459029",
+        };
 
-            sut = new CreateClientUseCase(repository);
-        }
-
-        [Fact]
-        public async Task ShouldCreateClientWithPersonalDataSuccessfully()
+        var expectedResponse = new ClientResponse
         {
-            // Arrange
-            var request = new CreateClientRequest
-            {
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentId = "46808459029",
-            };
+            FirstName = "João",
+            LastName = "Silva",
+            Email = "joao.silva@email.com",
+            DocumentType = DocumentType.CPF,
+            DocumentId = "46808459029",
+            IsAnonymous = false,
+        };
 
-            var expectedResponse = new ClientResponse
-            {
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentType = DocumentType.CPF,
-                DocumentId = "46808459029",
-                IsAnonymous = false,
-            };
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
-                result.Value.Id.Should().NotBeEmpty();
-            });
-
-            await repository
-                .Received(1)
-                .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldCreateClientWithOnlyDocumentIdSuccessfully()
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            var request = new CreateClientRequest
-            {
-                DocumentId = "46808459029",
-            };
+            result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
+            result.Value.Id.Should().NotBeEmpty();
+        });
 
-            var expectedResponse = new ClientResponse
-            {
-                FirstName = null,
-                LastName = null,
-                Email = null,
-                DocumentType = DocumentType.CPF,
-                DocumentId = "46808459029",
-                IsAnonymous = false,
-            };
+        await repository
+            .Received(1)
+            .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
+    }
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
-                result.Value.Id.Should().NotBeEmpty();
-            });
-
-            await repository
-                .Received(1)
-                .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldCreateClientWithoutAnyPersonalDataSuccessfully()
+    [Fact]
+    public async Task ShouldCreateClientWithOnlyDocumentIdSuccessfully()
+    {
+        // Arrange
+        var request = new CreateClientRequest
         {
-            // Arrange
-            var request = new CreateClientRequest();
+            DocumentId = "46808459029",
+        };
 
-            var expectedResponse = new ClientResponse
-            {
-                FirstName = null,
-                LastName = null,
-                Email = null,
-                DocumentType = DocumentType.None,
-                DocumentId = null,
-                IsAnonymous = true,
-            };
-
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
-                result.Value.Id.Should().NotBeEmpty();
-            });
-
-            await repository
-                .Received(1)
-                .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldHandleMissingFirstName()
+        var expectedResponse = new ClientResponse
         {
-            // Arrange
-            var request = new CreateClientRequest
-            {
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentId = "46808459029",
-            };
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            Email = string.Empty,
+            DocumentType = DocumentType.CPF,
+            DocumentId = "46808459029",
+            IsAnonymous = false,
+        };
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ClientRegistrationWithoutFirstNameError());
-
-            await repository
-                .DidNotReceive()
-                .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldHandleMissingEmail()
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            var request = new CreateClientRequest
-            {
-                FirstName = "João",
-                LastName = "Silva",
-                DocumentId = "46808459029",
-            };
+            result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
+            result.Value.Id.Should().NotBeEmpty();
+        });
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        await repository
+            .Received(1)
+            .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
+    }
 
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ClientRegistrationWithoutEmailError());
+    [Fact]
+    public async Task ShouldCreateClientWithoutAnyPersonalDataSuccessfully()
+    {
+        // Arrange
+        var request = new CreateClientRequest();
 
-            await repository
-                .DidNotReceive()
-                .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldHandleInvalidDocumentId()
+        var expectedResponse = new ClientResponse
         {
-            // Arrange
-            var request = new CreateClientRequest
-            {
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentId = "1234",
-            };
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            Email = string.Empty,
+            DocumentType = DocumentType.None,
+            DocumentId = string.Empty,
+            IsAnonymous = true,
+        };
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ClientRegistrationInvalidDocumentIdError());
-
-            await repository
-                .DidNotReceive()
-                .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldHandleAlreadyExistEmail()
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            var request = new CreateClientRequest
-            {
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentId = "46808459029",
-            };
+            result.Value.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
+            result.Value.Id.Should().NotBeEmpty();
+        });
 
-            repository
-                .GetByEmailAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-                .Returns(new Client());
+        await repository
+            .Received(1)
+            .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
+    }
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
-
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ClientRegistrationEmailAlreadyExistsError());
-
-            await repository
-                .DidNotReceive()
-                .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldHandleAlreadyExistDocumentId()
+    [Fact]
+    public async Task ShouldHandleAlreadyExistEmail()
+    {
+        // Arrange
+        var request = new CreateClientRequest
         {
-            // Arrange
-            var request = new CreateClientRequest
-            {
-                FirstName = "João",
-                LastName = "Silva",
-                Email = "joao.silva@email.com",
-                DocumentId = "46808459029",
-            };
+            FirstName = "João",
+            LastName = "Silva",
+            Email = "joao.silva@email.com",
+            DocumentId = "46808459029",
+        };
 
-            repository
-                .GetByDocumentIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-                .Returns(new Client());
+        repository
+            .GetByEmailAsync(Arg.Any<Email>(), Arg.Any<CancellationToken>())
+            .Returns(new ClientBuilder().WithSample().Build());
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ClientRegistrationDocumentIdAlreadyExistsError());
+        // Assert
+        response.Should().BeFailure().And.HaveReason(new ClientRegistrationEmailAlreadyExistsError());
 
-            await repository
-                .DidNotReceive()
-                .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
-        }
+        await repository
+            .DidNotReceive()
+            .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task ShouldHandleAlreadyExistDocumentId()
+    {
+        // Arrange
+        var request = new CreateClientRequest
+        {
+            FirstName = "João",
+            LastName = "Silva",
+            Email = "joao.silva@email.com",
+            DocumentId = "46808459029",
+        };
+
+        repository
+            .GetByDocumentIdAsync(Arg.Any<DocumentId>(), Arg.Any<CancellationToken>())
+            .Returns(new ClientBuilder().WithSample().Build());
+
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
+
+        // Assert
+        response.Should().BeFailure().And.HaveReason(new ClientRegistrationDocumentIdAlreadyExistsError());
+
+        await repository
+            .DidNotReceive()
+            .CreateAsync(Arg.Any<Client>(), Arg.Any<CancellationToken>());
     }
 }

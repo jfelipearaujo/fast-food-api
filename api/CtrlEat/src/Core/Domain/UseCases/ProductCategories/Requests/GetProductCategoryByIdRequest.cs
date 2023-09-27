@@ -1,7 +1,6 @@
-﻿namespace Domain.UseCases.ProductCategories.Requests
+﻿namespace Domain.UseCases.ProductCategories.Requests;
+
+public class GetProductCategoryByIdRequest
 {
-    public class GetProductCategoryByIdRequest
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

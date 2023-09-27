@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Adapters\Driven\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Utils.Tests\Utils.Tests.csproj" />
   </ItemGroup>
 
 </Project>

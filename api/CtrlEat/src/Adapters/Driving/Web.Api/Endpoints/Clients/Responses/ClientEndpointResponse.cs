@@ -1,5 +1,4 @@
-﻿using Domain.Enums;
-
+﻿using Domain.Entities.ClientAggregate.Enums;
 using System.Text.Json.Serialization;
 
 namespace Web.Api.Endpoints.Clients.Responses

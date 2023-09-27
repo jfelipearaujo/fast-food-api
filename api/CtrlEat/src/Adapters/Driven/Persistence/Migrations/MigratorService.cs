@@ -18,7 +18,7 @@ namespace Persistence.Migrations
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var isDevelopment = environment == Environments.Development;
 
-            if (!isDevelopment)
+            if (isDevelopment)
                 return;
 
             using var scope = _serviceProvider.CreateScope();

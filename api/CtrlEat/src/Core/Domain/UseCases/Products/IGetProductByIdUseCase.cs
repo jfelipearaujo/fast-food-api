@@ -3,12 +3,11 @@ using Domain.UseCases.Products.Responses;
 
 using FluentResults;
 
-namespace Domain.UseCases.Products
+namespace Domain.UseCases.Products;
+
+public interface IGetProductByIdUseCase
 {
-    public interface IGetProductByIdUseCase
-    {
-        Task<Result<ProductResponse>> ExecuteAsync(
-            GetProductByIdRequest request,
-            CancellationToken cancellationToken);
-    }
+    Task<Result<ProductResponse>> ExecuteAsync(
+        GetProductByIdRequest request,
+        CancellationToken cancellationToken);
 }

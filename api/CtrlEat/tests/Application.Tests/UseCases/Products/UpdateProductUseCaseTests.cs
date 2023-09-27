@@ -1,286 +1,267 @@
-﻿using Application.UseCases.Products;
+﻿using Application.UseCases.Common.Errors;
+using Application.UseCases.Products.Common.Errors;
+using Application.UseCases.Products.UpdateProduct;
 
 using Domain.Adapters;
-using Domain.Entities;
-using Domain.Errors.ProductCategories;
-using Domain.Errors.Products;
-using Domain.UseCases.ProductCategories.Responses;
+using Domain.Entities.ProductAggregate;
+using Domain.Entities.ProductAggregate.ValueObjects;
+using Domain.Entities.ProductCategoryAggregate;
+using Domain.Entities.ProductCategoryAggregate.ValueObjects;
 using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
 
-namespace Application.Tests.UseCases.Products
+using Utils.Tests.Builders.Domain.Entities;
+
+namespace Application.Tests.UseCases.Products;
+
+public class UpdateProductUseCaseTests
 {
-    public class UpdateProductUseCaseTests
+    private readonly UpdateProductUseCase sut;
+
+    private readonly IProductRepository productRepository;
+    private readonly IProductCategoryRepository productCategoryRepository;
+
+    public UpdateProductUseCaseTests()
     {
-        private readonly UpdateProductUseCase sut;
+        productRepository = Substitute.For<IProductRepository>();
+        productCategoryRepository = Substitute.For<IProductCategoryRepository>();
 
-        private readonly IProductRepository productRepository;
-        private readonly IProductCategoryRepository productCategoryRepository;
 
-        public UpdateProductUseCaseTests()
+        sut = new UpdateProductUseCase(productRepository, productCategoryRepository);
+    }
+
+    [Fact]
+    public async Task ShouldUpdateProductDescriptionSuccessfully()
+    {
+        // Arrange
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
+
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithDescription("Old Product Description")
+            .WithProductCategory(productCategory)
+            .Build();
+
+        var request = new UpdateProductRequest
         {
-            productRepository = Substitute.For<IProductRepository>();
-            productCategoryRepository = Substitute.For<IProductCategoryRepository>();
+            ProductId = product.Id.Value,
+            ProductCategoryId = productCategory.Id.Value,
+            Description = "New Product Description",
+            Amount = 10,
+            Currency = "BRL",
+            ImageUrl = "http://image.com/123.png"
+        };
 
+        productRepository
+            .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
+            .Returns(product);
 
-            sut = new UpdateProductUseCase(productRepository, productCategoryRepository);
-        }
+        productCategoryRepository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(productCategory);
 
-        [Fact]
-        public async Task ShouldUpdateProductDescriptionSuccessfully()
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
+
+        // Assert
+        var expectedResponse = ProductResponse.MapFromDomain(product);
+        expectedResponse.Description = "New Product Description";
+
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            var request = new UpdateProductRequest
-            {
-                ProductId = Guid.NewGuid(),
-                ProductCategoryId = Guid.NewGuid(),
-                Description = "New Product Description",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            result.Value.Should().BeEquivalentTo(expectedResponse);
+        });
 
-            productRepository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(new Product
-                {
-                    Id = request.ProductId,
-                    ProductCategoryId = request.ProductCategoryId,
-                    ProductCategory = new ProductCategory
-                    {
-                        Id = request.ProductCategoryId,
-                        Description = "Product Category"
-                    },
-                    Description = "Old Product Description",
-                    UnitPrice = 10,
-                    Currency = "BRL",
-                    ImageUrl = "http://image.com/123.png"
-                });
+        await productRepository
+            .Received(1)
+            .GetByIdAsync(
+                Arg.Any<ProductId>(),
+                Arg.Any<CancellationToken>());
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        await productCategoryRepository
+            .DidNotReceive()
+            .GetByIdAsync(
+                Arg.Any<ProductCategoryId>(),
+                Arg.Any<CancellationToken>());
 
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(new ProductResponse
-                {
-                    Id = request.ProductId,
-                    ProductCategory = new ProductCategoryResponse
-                    {
-                        Id = request.ProductCategoryId,
-                        Description = "Product Category"
-                    },
-                    Description = "New Product Description",
-                    UnitPrice = 10,
-                    Currency = "BRL",
-                    ImageUrl = "http://image.com/123.png"
-                });
-            });
+        await productRepository
+            .Received(1)
+            .UpdateAsync(
+                Arg.Any<Product>(),
+                Arg.Any<CancellationToken>());
+    }
 
-            await productRepository
-                .Received(1)
-                .GetByIdAsync(
-                    Arg.Is<Guid>(x => x == request.ProductId),
-                    Arg.Any<CancellationToken>());
+    [Fact]
+    public async Task ShouldUpdateProductCategorySuccessfully()
+    {
+        // Arrange
+        var newProductCategoryId = Guid.NewGuid();
 
-            await productCategoryRepository
-                .DidNotReceive()
-                .GetByIdAsync(
-                    Arg.Any<Guid>(),
-                    Arg.Any<CancellationToken>());
-
-            await productRepository
-                .Received(1)
-                .UpdateAsync(
-                    Arg.Is<Product>(x => x.Description == request.Description),
-                    Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldUpdateProductCategorySuccessfully()
+        var request = new UpdateProductRequest
         {
-            // Arrange
-            var newProductCategoryId = Guid.NewGuid();
+            ProductId = Guid.NewGuid(),
+            ProductCategoryId = newProductCategoryId,
+            Description = "Product Description",
+            Amount = 10,
+            Currency = "BRL",
+            ImageUrl = "http://image.com/123.png"
+        };
 
-            var request = new UpdateProductRequest
-            {
-                ProductId = Guid.NewGuid(),
-                ProductCategoryId = newProductCategoryId,
-                Description = "Product Description",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+        var oldProductCategory = new ProductCategoryBuilder()
+            .WithDescription("Old Product Category")
+            .Build();
 
-            productRepository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(new Product
-                {
-                    Id = request.ProductId,
-                    ProductCategoryId = Guid.NewGuid(),
-                    ProductCategory = new ProductCategory
-                    {
-                        Id = Guid.NewGuid(),
-                        Description = "Old Product Category"
-                    },
-                    Description = "Product Description",
-                    UnitPrice = 10,
-                    Currency = "BRL",
-                    ImageUrl = "http://image.com/123.png"
-                });
+        var newProductCategory = new ProductCategoryBuilder()
+            .WithId(newProductCategoryId)
+            .WithDescription("New Product Category")
+            .Build();
 
-            productCategoryRepository
-                .GetByIdAsync(Arg.Is<Guid>(x => x == newProductCategoryId), Arg.Any<CancellationToken>())
-                .Returns(new ProductCategory
-                {
-                    Id = newProductCategoryId,
-                    Description = "New Product Category"
-                });
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithId(request.ProductId)
+            .WithProductCategory(oldProductCategory)
+            .Build();
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        productRepository
+            .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
+            .Returns(product);
 
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(new ProductResponse
-                {
-                    Id = request.ProductId,
-                    ProductCategory = new ProductCategoryResponse
-                    {
-                        Id = newProductCategoryId,
-                        Description = "New Product Category"
-                    },
-                    Description = "Product Description",
-                    UnitPrice = 10,
-                    Currency = "BRL",
-                    ImageUrl = "http://image.com/123.png"
-                });
-            });
+        productCategoryRepository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(newProductCategory);
 
-            await productRepository
-                .Received(1)
-                .GetByIdAsync(
-                    Arg.Is<Guid>(x => x == request.ProductId),
-                    Arg.Any<CancellationToken>());
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            await productCategoryRepository
-                .Received(1)
-                .GetByIdAsync(
-                    Arg.Is<Guid>(x => x == newProductCategoryId),
-                    Arg.Any<CancellationToken>());
+        // Assert
+        var expectedResponse = ProductResponse.MapFromDomain(product);
+        expectedResponse.ProductCategory.Description = "New Product Category";
 
-            await productRepository
-                .Received(1)
-                .UpdateAsync(
-                    Arg.Is<Product>(x => x.Description == request.Description),
-                    Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldHandleWhenProductWasNotFound()
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            var request = new UpdateProductRequest
-            {
-                ProductId = Guid.NewGuid(),
-                ProductCategoryId = Guid.NewGuid(),
-                Description = "New Product Description",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+            result.Value.Should().BeEquivalentTo(expectedResponse);
+        });
 
-            productRepository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(default(Product));
+        await productRepository
+            .Received(1)
+            .GetByIdAsync(
+                Arg.Any<ProductId>(),
+                Arg.Any<CancellationToken>());
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        await productCategoryRepository
+            .Received(1)
+            .GetByIdAsync(
+                Arg.Any<ProductCategoryId>(),
+                Arg.Any<CancellationToken>());
 
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ProductNotFoundError(request.ProductId));
+        await productRepository
+            .Received(1)
+            .UpdateAsync(
+                Arg.Any<Product>(),
+                Arg.Any<CancellationToken>());
+    }
 
-            await productRepository
-                .Received(1)
-                .GetByIdAsync(
-                    Arg.Is<Guid>(x => x == request.ProductId),
-                    Arg.Any<CancellationToken>());
-
-            await productCategoryRepository
-                .DidNotReceive()
-                .GetByIdAsync(
-                    Arg.Any<Guid>(),
-                    Arg.Any<CancellationToken>());
-
-            await productRepository
-                .DidNotReceive()
-                .UpdateAsync(
-                    Arg.Any<Product>(),
-                    Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldHandleWhenProductCategoryWasNotFound()
+    [Fact]
+    public async Task ShouldHandleWhenProductWasNotFound()
+    {
+        // Arrange
+        var request = new UpdateProductRequest
         {
-            // Arrange
-            var newProductCategoryId = Guid.NewGuid();
+            ProductId = Guid.NewGuid(),
+            ProductCategoryId = Guid.NewGuid(),
+            Description = "New Product Description",
+            Amount = 10,
+            Currency = "BRL",
+            ImageUrl = "http://image.com/123.png"
+        };
 
-            var request = new UpdateProductRequest
-            {
-                ProductId = Guid.NewGuid(),
-                ProductCategoryId = newProductCategoryId,
-                Description = "Product Description",
-                UnitPrice = 10,
-                Currency = "BRL",
-                ImageUrl = "http://image.com/123.png"
-            };
+        productRepository
+            .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
+            .Returns(default(Product));
 
-            productRepository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(new Product
-                {
-                    Id = request.ProductId,
-                    ProductCategoryId = Guid.NewGuid(),
-                    ProductCategory = new ProductCategory
-                    {
-                        Id = Guid.NewGuid(),
-                        Description = "Old Product Category"
-                    },
-                    Description = "Product Description",
-                    UnitPrice = 10,
-                    Currency = "BRL",
-                    ImageUrl = "http://image.com/123.png"
-                });
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            productCategoryRepository
-                .GetByIdAsync(Arg.Is<Guid>(x => x == newProductCategoryId), Arg.Any<CancellationToken>())
-                .Returns(default(ProductCategory));
+        // Assert
+        response.Should().BeFailure().And.HaveReason(new ProductNotFoundError(request.ProductId));
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        await productRepository
+            .Received(1)
+            .GetByIdAsync(
+                Arg.Any<ProductId>(),
+                Arg.Any<CancellationToken>());
 
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.ProductCategoryId));
+        await productCategoryRepository
+            .DidNotReceive()
+            .GetByIdAsync(
+                Arg.Any<ProductCategoryId>(),
+                Arg.Any<CancellationToken>());
 
-            await productRepository
-                .Received(1)
-                .GetByIdAsync(
-                    Arg.Is<Guid>(x => x == request.ProductId),
-                    Arg.Any<CancellationToken>());
+        await productRepository
+            .DidNotReceive()
+            .UpdateAsync(
+                Arg.Any<Product>(),
+                Arg.Any<CancellationToken>());
+    }
 
-            await productCategoryRepository
-                .Received(1)
-                .GetByIdAsync(
-                    Arg.Is<Guid>(x => x == newProductCategoryId),
-                    Arg.Any<CancellationToken>());
+    [Fact]
+    public async Task ShouldHandleWhenProductCategoryWasNotFound()
+    {
+        // Arrange
+        var newProductCategoryId = ProductCategoryId.CreateUnique();
 
-            await productRepository
-                .DidNotReceive()
-                .UpdateAsync(
-                    Arg.Any<Product>(),
-                    Arg.Any<CancellationToken>());
-        }
+        var request = new UpdateProductRequest
+        {
+            ProductId = Guid.NewGuid(),
+            ProductCategoryId = newProductCategoryId.Value,
+            Description = "Product Description",
+            Amount = 10,
+            Currency = "BRL",
+            ImageUrl = "http://image.com/123.png"
+        };
+
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
+
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithId(request.ProductId)
+            .WithProductCategory(productCategory)
+            .Build();
+
+        productRepository
+            .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
+            .Returns(product);
+
+        productCategoryRepository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(default(ProductCategory));
+
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
+
+        // Assert
+        response.Should().BeFailure().And.HaveReason(new ProductCategoryNotFoundError(request.ProductCategoryId));
+
+        await productRepository
+            .Received(1)
+            .GetByIdAsync(
+                Arg.Any<ProductId>(),
+                Arg.Any<CancellationToken>());
+
+        await productCategoryRepository
+            .Received(1)
+            .GetByIdAsync(
+                Arg.Any<ProductCategoryId>(),
+                Arg.Any<CancellationToken>());
+
+        await productRepository
+            .DidNotReceive()
+            .UpdateAsync(
+                Arg.Any<Product>(),
+                Arg.Any<CancellationToken>());
     }
 }

@@ -1,83 +1,87 @@
-﻿using Application.UseCases.Products;
+﻿using Application.UseCases.Products.Common.Errors;
+using Application.UseCases.Products.GetProductById;
 
 using Domain.Adapters;
-using Domain.Entities;
-using Domain.Errors.Products;
+using Domain.Entities.ProductAggregate;
+using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
 
-namespace Application.Tests.UseCases.Products
+using Utils.Tests.Builders.Domain.Entities;
+
+namespace Application.Tests.UseCases.Products;
+
+public class GetProductByIdUseCaseTests
 {
-    public class GetProductByIdUseCaseTests
+    private readonly GetProductByIdUseCase sut;
+
+    private readonly IProductRepository repository;
+
+    public GetProductByIdUseCaseTests()
     {
-        private readonly GetProductByIdUseCase sut;
+        repository = Substitute.For<IProductRepository>();
 
-        private readonly IProductRepository repository;
+        sut = new GetProductByIdUseCase(repository);
+    }
 
-        public GetProductByIdUseCaseTests()
+    [Fact]
+    public async Task ShouldGetProductByIdSuccessfully()
+    {
+        // Arrange
+        var request = new GetProductByIdRequest
         {
-            repository = Substitute.For<IProductRepository>();
+            Id = Guid.NewGuid(),
+        };
 
-            sut = new GetProductByIdUseCase(repository);
-        }
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
 
-        [Fact]
-        public async Task ShouldGetProductByIdSuccessfully()
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithId(request.Id)
+            .WithProductCategory(productCategory)
+            .Build();
+
+        repository
+            .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
+            .Returns(product);
+
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
+
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            var request = new GetProductByIdRequest
-            {
-                Id = Guid.NewGuid(),
-            };
+            result.Value.Should().BeEquivalentTo(ProductResponse.MapFromDomain(product));
+        });
 
-            repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(new Product
-                {
-                    Id = request.Id,
-                    Description = "Product"
-                });
+        await repository
+            .Received(1)
+            .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>());
+    }
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(new ProductResponse
-                {
-                    Id = request.Id,
-                    Description = "Product"
-                });
-            });
-
-            await repository
-                .Received(1)
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task ShouldHandleWhenProductWasNotFound()
+    [Fact]
+    public async Task ShouldHandleWhenProductWasNotFound()
+    {
+        // Arrange
+        var request = new GetProductByIdRequest
         {
-            // Arrange
-            var request = new GetProductByIdRequest
-            {
-                Id = Guid.NewGuid(),
-            };
+            Id = Guid.NewGuid(),
+        };
 
-            repository
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-                .Returns(default(Product));
+        repository
+            .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
+            .Returns(default(Product));
 
-            // Act
-            var response = await sut.ExecuteAsync(request, cancellationToken: default);
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
 
-            // Assert
-            response.Should().BeFailure().And.HaveReason(new ProductNotFoundError(request.Id));
+        // Assert
+        response.Should().BeFailure().And.HaveReason(new ProductNotFoundError(request.Id));
 
-            await repository
-                .Received(1)
-                .GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>());
-        }
+        await repository
+            .Received(1)
+            .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>());
     }
 }

@@ -3,12 +3,11 @@ using Domain.UseCases.Clients.Responses;
 
 using FluentResults;
 
-namespace Domain.UseCases.Clients
+namespace Domain.UseCases.Clients;
+
+public interface IGetClientByIdUseCase
 {
-    public interface IGetClientByIdUseCase
-    {
-        Task<Result<ClientResponse>> ExecuteAsync(
-            GetClientByIdRequest request,
-            CancellationToken cancellationToken);
-    }
+    Task<Result<ClientResponse>> ExecuteAsync(
+        GetClientByIdRequest request,
+        CancellationToken cancellationToken);
 }

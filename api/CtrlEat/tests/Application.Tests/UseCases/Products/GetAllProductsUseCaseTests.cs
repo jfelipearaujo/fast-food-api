@@ -1,86 +1,81 @@
-﻿using Application.UseCases.Products;
+﻿using Application.UseCases.Products.GetAllProducts;
 
 using Domain.Adapters;
-using Domain.Entities;
+using Domain.Entities.ProductAggregate;
 using Domain.UseCases.Products.Responses;
 
-namespace Application.Tests.UseCases.Products
+using Utils.Tests.Builders.Domain.Entities;
+
+namespace Application.Tests.UseCases.Products;
+
+public class GetAllProductsUseCaseTests
 {
-    public class GetAllProductsUseCaseTests
+    private readonly GetAllProductsUseCase sut;
+
+    private readonly IProductRepository repository;
+
+    public GetAllProductsUseCaseTests()
     {
-        private readonly GetAllProductsUseCase sut;
+        repository = Substitute.For<IProductRepository>();
 
-        private readonly IProductRepository repository;
+        sut = new GetAllProductsUseCase(repository);
+    }
 
-        public GetAllProductsUseCaseTests()
-        {
-            repository = Substitute.For<IProductRepository>();
+    [Fact]
+    public async Task ShouldGetAllProductsSuccessfully()
+    {
+        // Arrange
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
 
-            sut = new GetAllProductsUseCase(repository);
-        }
+        var productOne = new ProductBuilder()
+            .WithSample()
+            .WithProductCategory(productCategory)
+            .Build();
 
-        [Fact]
-        public async Task ShouldGetAllProductsSuccessfully()
-        {
-            // Arrange
-            var productOne = new Product
+        var productTwo = new ProductBuilder()
+            .WithSample()
+            .WithProductCategory(productCategory)
+            .Build();
+
+        repository
+            .GetAllAsync(Arg.Any<CancellationToken>())
+            .Returns(new List<Product>
             {
-                Id = Guid.NewGuid(),
-                Description = "Product 1"
-            };
-
-            var productTwo = new Product
-            {
-                Id = Guid.NewGuid(),
-                Description = "Product 2"
-            };
-
-            repository
-                .GetAllAsync(Arg.Any<CancellationToken>())
-                .Returns(new List<Product>
-                {
-                    productOne,
-                    productTwo
-                });
-
-            // Act
-            var response = await sut.ExecuteAsync(cancellationToken: default);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
-            {
-                result.Value.Should().BeEquivalentTo(new List<ProductResponse>
-                {
-                    new ProductResponse
-                    {
-                        Id = productOne.Id,
-                        Description = productOne.Description
-                    },
-                    new ProductResponse
-                    {
-                        Id = productTwo.Id,
-                        Description = productTwo.Description
-                    }
-                });
+                productOne,
+                productTwo
             });
-        }
 
-        [Fact]
-        public async Task ShouldReturnNothingIfNothingWasFound()
+        // Act
+        var response = await sut.ExecuteAsync(cancellationToken: default);
+
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
         {
-            // Arrange
-            repository
-                .GetAllAsync(Arg.Any<CancellationToken>())
-                .Returns(new List<Product>());
-
-            // Act
-            var response = await sut.ExecuteAsync(cancellationToken: default);
-
-            // Assert
-            response.Should().BeSuccess().And.Satisfy(result =>
+            result.Value.Should().BeEquivalentTo(new List<ProductResponse>
             {
-                result.Value.Should().BeEquivalentTo(Enumerable.Empty<ProductResponse>());
+                ProductResponse.MapFromDomain(productOne),
+                ProductResponse.MapFromDomain(productTwo),
             });
-        }
+        });
+    }
+
+    [Fact]
+    public async Task ShouldReturnNothingIfNothingWasFound()
+    {
+        // Arrange
+        repository
+            .GetAllAsync(Arg.Any<CancellationToken>())
+            .Returns(new List<Product>());
+
+        // Act
+        var response = await sut.ExecuteAsync(cancellationToken: default);
+
+        // Assert
+        response.Should().BeSuccess().And.Satisfy(result =>
+        {
+            result.Value.Should().BeEquivalentTo(Enumerable.Empty<ProductResponse>());
+        });
     }
 }

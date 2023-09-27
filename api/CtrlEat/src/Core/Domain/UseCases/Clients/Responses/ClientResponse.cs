@@ -1,25 +1,43 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities.ClientAggregate;
+using Domain.Entities.ClientAggregate.Enums;
 
-namespace Domain.UseCases.Clients.Responses
+namespace Domain.UseCases.Clients.Responses;
+
+public class ClientResponse
 {
-    public class ClientResponse
+    public Guid Id { get; set; }
+
+    public string? FirstName { get; set; }
+
+    public string? LastName { get; set; }
+
+    public string? Email { get; set; }
+
+    public string? DocumentId { get; set; }
+
+    public DocumentType DocumentType { get; set; } = DocumentType.None;
+
+    public bool IsAnonymous { get; set; }
+
+    public DateTime CreatedAtUtc { get; set; }
+
+    public DateTime UpdatedAtUtc { get; set; }
+
+    // ---
+
+    public static ClientResponse MapFromDomain(Client client)
     {
-        public Guid Id { get; set; }
-
-        public string? FirstName { get; set; }
-
-        public string? LastName { get; set; }
-
-        public string? Email { get; set; }
-
-        public string? DocumentId { get; set; }
-
-        public DocumentType DocumentType { get; set; } = DocumentType.None;
-
-        public bool IsAnonymous { get; set; }
-
-        public DateTime CreatedAtUtc { get; set; }
-
-        public DateTime UpdatedAtUtc { get; set; }
+        return new ClientResponse
+        {
+            Id = client.Id.Value,
+            FirstName = client.FullName.FirstName,
+            LastName = client.FullName.LastName,
+            Email = client.Email.Value,
+            DocumentId = client.DocumentId.Value,
+            DocumentType = client.DocumentType,
+            IsAnonymous = client.IsAnonymous,
+            CreatedAtUtc = client.CreatedAtUtc,
+            UpdatedAtUtc = client.UpdatedAtUtc,
+        };
     }
 }

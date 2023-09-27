@@ -1,7 +1,6 @@
-﻿namespace Domain.UseCases.Products.Requests
+﻿namespace Domain.UseCases.Products.Requests;
+
+public class DeleteProductRequest
 {
-    public class DeleteProductRequest
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

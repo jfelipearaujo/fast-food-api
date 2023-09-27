@@ -4,16 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Persistence.Migrations;
 
-namespace Persistence
-{
-    public static class PersistenceDependency
-    {
-        public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AppDbCtrlEat")));
-            services.AddHostedService<MigratorService>();
+namespace Persistence;
 
-            return services;
-        }
+public static class PersistenceDependency
+{
+    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AppDbCtrlEat")));
+        services.AddHostedService<MigratorService>();
+
+        return services;
     }
 }

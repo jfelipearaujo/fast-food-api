@@ -1,57 +1,62 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.ClientAggregate;
+using Domain.Entities.ClientAggregate.ValueObjects;
+using Domain.Entities.ProductAggregate.ValueObjects;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.Configurations
+namespace Persistence.Configurations;
+
+public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
 {
-    public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
+    public void Configure(EntityTypeBuilder<Client> builder)
     {
-        public void Configure(EntityTypeBuilder<Client> builder)
+        builder.ToTable("clients");
+
+        builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever()
+            .HasConversion(
+                id => id.Value,
+                value => ClientId.Create(value));
+
+        builder.OwnsOne(x => x.FullName, propBuilder =>
         {
-            builder.ToTable("client");
+            propBuilder.Property(y => y.FirstName).HasMaxLength(250);
+            propBuilder.Property(y => y.LastName).HasMaxLength(250);
+        });
 
-            builder.HasKey(x => x.Id);
+        builder.Property(y => y.Email)
+            .HasConversion(
+                email => email.Value,
+                value => Email.Create(value))
+            .HasMaxLength(250);
 
-            builder
-                .Property(x => x.FirstName)
-                .HasMaxLength(250);
+        builder
+            .HasIndex(x => x.Email)
+            .IsUnique();
 
-            builder
-                .Property(x => x.LastName)
-                .HasMaxLength(250);
+        builder.Property(x => x.DocumentId)
+            .HasConversion(
+                documentId => documentId.Value,
+                value => DocumentId.Create(value))
+            .HasMaxLength(14);
 
-            builder
-                .Property(x => x.Email)
-                .HasMaxLength(250);
+        builder
+            .HasIndex(x => x.DocumentId)
+            .IsUnique();
 
-            builder
-                .HasIndex(x => x.Email)
-                .IsUnique();
+        builder.Property(y => y.DocumentType);
 
-            builder
-                .Property(x => x.DocumentId)
-                .HasMaxLength(14);
+        builder.Property(x => x.IsAnonymous);
 
-            builder
-                .HasIndex(x => x.DocumentId)
-                .IsUnique();
+        builder.Property(x => x.CreatedAtUtc)
+            .IsRequired()
+            .HasPrecision(7);
 
-            builder
-                .Property(x => x.DocumentType);
-
-            builder
-                .Property(x => x.IsAnonymous);
-
-            builder
-                .Property(x => x.CreatedAtUtc)
-                .IsRequired()
-                .HasPrecision(7);
-
-            builder
-                .Property(x => x.UpdatedAtUtc)
-                .IsRequired()
-                .HasPrecision(7);
-        }
+        builder.Property(x => x.UpdatedAtUtc)
+            .IsRequired()
+            .HasPrecision(7);
     }
 }

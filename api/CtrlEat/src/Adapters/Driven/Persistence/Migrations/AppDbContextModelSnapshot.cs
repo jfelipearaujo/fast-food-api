@@ -22,10 +22,9 @@ namespace Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Client", b =>
+            modelBuilder.Entity("Domain.Entities.ClientAggregate.Client", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
@@ -33,6 +32,7 @@ namespace Persistence.Migrations
                         .HasColumnType("datetime2(7)");
 
                     b.Property<string>("DocumentId")
+                        .IsRequired()
                         .HasMaxLength(14)
                         .HasColumnType("nvarchar(14)");
 
@@ -40,19 +40,12 @@ namespace Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<bool>("IsAnonymous")
                         .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime>("UpdatedAtUtc")
                         .HasPrecision(7)
@@ -61,30 +54,22 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DocumentId")
-                        .IsUnique()
-                        .HasFilter("[DocumentId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
+                        .IsUnique();
 
-                    b.ToTable("client", (string)null);
+                    b.ToTable("clients", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Product", b =>
+            modelBuilder.Entity("Domain.Entities.ProductAggregate.Product", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasPrecision(7)
                         .HasColumnType("datetime2(7)");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -99,10 +84,6 @@ namespace Persistence.Migrations
                     b.Property<Guid>("ProductCategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("UnitPrice")
-                        .HasPrecision(4, 2)
-                        .HasColumnType("decimal(4,2)");
-
                     b.Property<DateTime>("UpdatedAtUtc")
                         .HasPrecision(7)
                         .HasColumnType("datetime2(7)");
@@ -111,13 +92,12 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ProductCategoryId");
 
-                    b.ToTable("product", (string)null);
+                    b.ToTable("products", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProductCategory", b =>
+            modelBuilder.Entity("Domain.Entities.ProductCategoryAggregate.ProductCategory", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
@@ -135,21 +115,75 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("product_category", (string)null);
+                    b.ToTable("product_categories", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Product", b =>
+            modelBuilder.Entity("Domain.Entities.ClientAggregate.Client", b =>
                 {
-                    b.HasOne("Domain.Entities.ProductCategory", "ProductCategory")
+                    b.OwnsOne("Domain.Entities.ClientAggregate.ValueObjects.FullName", "FullName", b1 =>
+                        {
+                            b1.Property<Guid>("ClientId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasMaxLength(250)
+                                .HasColumnType("nvarchar(250)");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasMaxLength(250)
+                                .HasColumnType("nvarchar(250)");
+
+                            b1.HasKey("ClientId");
+
+                            b1.ToTable("clients");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClientId");
+                        });
+
+                    b.Navigation("FullName")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProductAggregate.Product", b =>
+                {
+                    b.HasOne("Domain.Entities.ProductCategoryAggregate.ProductCategory", "ProductCategory")
                         .WithMany("Products")
                         .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("Domain.Entities.ProductAggregate.ValueObjects.Money", "Price", b1 =>
+                        {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<decimal>("Amount")
+                                .HasPrecision(4, 2)
+                                .HasColumnType("decimal(4,2)");
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasMaxLength(3)
+                                .HasColumnType("nvarchar(3)");
+
+                            b1.HasKey("ProductId");
+
+                            b1.ToTable("products");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
+                        });
+
+                    b.Navigation("Price")
+                        .IsRequired();
+
                     b.Navigation("ProductCategory");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProductCategory", b =>
+            modelBuilder.Entity("Domain.Entities.ProductCategoryAggregate.ProductCategory", b =>
                 {
                     b.Navigation("Products");
                 });

@@ -1,7 +1,6 @@
-﻿namespace Domain.UseCases.Clients.Requests
+﻿namespace Domain.UseCases.Clients.Requests;
+
+public class GetClientByIdRequest
 {
-    public class GetClientByIdRequest
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

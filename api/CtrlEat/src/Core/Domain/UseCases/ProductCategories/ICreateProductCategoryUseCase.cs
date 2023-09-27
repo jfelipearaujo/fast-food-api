@@ -3,12 +3,11 @@ using Domain.UseCases.ProductCategories.Responses;
 
 using FluentResults;
 
-namespace Domain.UseCases.ProductCategories
+namespace Domain.UseCases.ProductCategories;
+
+public interface ICreateProductCategoryUseCase
 {
-    public interface ICreateProductCategoryUseCase
-    {
-        Task<Result<ProductCategoryResponse>> ExecuteAsync(
-            CreateProductCategoryRequest request,
-            CancellationToken cancellationToken);
-    }
+    Task<Result<ProductCategoryResponse>> ExecuteAsync(
+        CreateProductCategoryRequest request,
+        CancellationToken cancellationToken);
 }
