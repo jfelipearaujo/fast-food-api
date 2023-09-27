@@ -1,4 +1,3 @@
-using Domain.Entities;
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.Entities.ProductCategoryAggregate;
@@ -40,8 +39,6 @@ public class ProductBuilder
         description = "Product Description";
         price = new MoneyBuilder().WithSample().Build();
         imageUrl = "http://image.com/123123.png";
-        productCategoryId = ProductCategoryId.CreateUnique();
-        productCategory = new ProductCategoryBuilder().Build();
 
         return this;
     }
@@ -60,9 +57,9 @@ public class ProductBuilder
         return this;
     }
 
-    public ProductBuilder WithProductCategoryId(ProductCategoryId productCategoryId)
+    public ProductBuilder WithProductCategory(ProductCategory productCategory)
     {
-        this.productCategoryId = productCategoryId;
+        this.productCategory = productCategory;
 
         return this;
     }
@@ -99,6 +96,6 @@ public class ProductBuilder
             imageUrl,
             productCategory,
             id
-        ).ValueOrDefault;
+        ).Value;
     }
 }

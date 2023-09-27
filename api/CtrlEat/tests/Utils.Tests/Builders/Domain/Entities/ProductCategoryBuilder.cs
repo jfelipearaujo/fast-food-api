@@ -48,6 +48,6 @@ public class ProductCategoryBuilder
         return ProductCategory.Create(
             description,
             id
-        ).ValueOrDefault;
+        ).Value;
     }
 }

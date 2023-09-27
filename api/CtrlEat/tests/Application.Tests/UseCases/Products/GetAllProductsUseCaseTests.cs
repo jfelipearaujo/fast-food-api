@@ -25,8 +25,19 @@ public class GetAllProductsUseCaseTests
     public async Task ShouldGetAllProductsSuccessfully()
     {
         // Arrange
-        var productOne = new ProductBuilder().WithSample().Build();
-        var productTwo = new ProductBuilder().WithSample().Build();
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
+
+        var productOne = new ProductBuilder()
+            .WithSample()
+            .WithProductCategory(productCategory)
+            .Build();
+
+        var productTwo = new ProductBuilder()
+            .WithSample()
+            .WithProductCategory(productCategory)
+            .Build();
 
         repository
             .GetAllAsync(Arg.Any<CancellationToken>())

@@ -32,9 +32,19 @@ public class DeleteProductUseCaseTests
             Id = Guid.NewGuid(),
         };
 
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
+
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithId(request.Id)
+            .WithProductCategory(productCategory)
+            .Build();
+
         repository
             .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
-            .Returns(new ProductBuilder().WithSample().WithId(request.Id).Build());
+            .Returns(product);
 
         repository
             .DeleteAsync(Arg.Any<Product>(), Arg.Any<CancellationToken>())

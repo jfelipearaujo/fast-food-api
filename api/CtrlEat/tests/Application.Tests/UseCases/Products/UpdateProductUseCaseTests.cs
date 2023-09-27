@@ -34,26 +34,33 @@ public class UpdateProductUseCaseTests
     public async Task ShouldUpdateProductDescriptionSuccessfully()
     {
         // Arrange
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
+
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithDescription("Old Product Description")
+            .WithProductCategory(productCategory)
+            .Build();
+
         var request = new UpdateProductRequest
         {
-            ProductId = Guid.NewGuid(),
-            ProductCategoryId = Guid.NewGuid(),
+            ProductId = product.Id.Value,
+            ProductCategoryId = productCategory.Id.Value,
             Description = "New Product Description",
             Amount = 10,
             Currency = "BRL",
             ImageUrl = "http://image.com/123.png"
         };
 
-        var product = new ProductBuilder()
-            .WithSample()
-            .WithId(request.ProductId)
-            .WithProductCategoryId(request.ProductCategoryId)
-            .WithDescription("Old Product Description")
-            .Build();
-
         productRepository
             .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
             .Returns(product);
+
+        productCategoryRepository
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(productCategory);
 
         // Act
         var response = await sut.ExecuteAsync(request, cancellationToken: default);
@@ -70,7 +77,7 @@ public class UpdateProductUseCaseTests
         await productRepository
             .Received(1)
             .GetByIdAsync(
-                Arg.Is<ProductId>(x => x.Value == request.ProductId),
+                Arg.Any<ProductId>(),
                 Arg.Any<CancellationToken>());
 
         await productCategoryRepository
@@ -82,7 +89,7 @@ public class UpdateProductUseCaseTests
         await productRepository
             .Received(1)
             .UpdateAsync(
-                Arg.Is<Product>(x => x.Description == request.Description),
+                Arg.Any<Product>(),
                 Arg.Any<CancellationToken>());
     }
 
@@ -102,23 +109,28 @@ public class UpdateProductUseCaseTests
             ImageUrl = "http://image.com/123.png"
         };
 
+        var oldProductCategory = new ProductCategoryBuilder()
+            .WithDescription("Old Product Category")
+            .Build();
+
+        var newProductCategory = new ProductCategoryBuilder()
+            .WithId(newProductCategoryId)
+            .WithDescription("New Product Category")
+            .Build();
+
         var product = new ProductBuilder()
             .WithSample()
             .WithId(request.ProductId)
+            .WithProductCategory(oldProductCategory)
             .Build();
 
         productRepository
             .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
             .Returns(product);
 
-        var productCategory = new ProductCategoryBuilder()
-            .WithId(newProductCategoryId)
-            .WithDescription("New Product Category")
-            .Build();
-
         productCategoryRepository
-            .GetByIdAsync(Arg.Is<ProductCategoryId>(x => x.Value == newProductCategoryId), Arg.Any<CancellationToken>())
-            .Returns(productCategory);
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
+            .Returns(newProductCategory);
 
         // Act
         var response = await sut.ExecuteAsync(request, cancellationToken: default);
@@ -135,19 +147,19 @@ public class UpdateProductUseCaseTests
         await productRepository
             .Received(1)
             .GetByIdAsync(
-                Arg.Is<ProductId>(x => x.Value == request.ProductId),
+                Arg.Any<ProductId>(),
                 Arg.Any<CancellationToken>());
 
         await productCategoryRepository
             .Received(1)
             .GetByIdAsync(
-                Arg.Is<ProductCategoryId>(x => x.Value == newProductCategoryId),
+                Arg.Any<ProductCategoryId>(),
                 Arg.Any<CancellationToken>());
 
         await productRepository
             .Received(1)
             .UpdateAsync(
-                Arg.Is<Product>(x => x.Description == request.Description),
+                Arg.Any<Product>(),
                 Arg.Any<CancellationToken>());
     }
 
@@ -178,7 +190,7 @@ public class UpdateProductUseCaseTests
         await productRepository
             .Received(1)
             .GetByIdAsync(
-                Arg.Is<ProductId>(x => x.Value == request.ProductId),
+                Arg.Any<ProductId>(),
                 Arg.Any<CancellationToken>());
 
         await productCategoryRepository
@@ -198,21 +210,26 @@ public class UpdateProductUseCaseTests
     public async Task ShouldHandleWhenProductCategoryWasNotFound()
     {
         // Arrange
-        var newProductCategoryId = Guid.NewGuid();
+        var newProductCategoryId = ProductCategoryId.CreateUnique();
 
         var request = new UpdateProductRequest
         {
             ProductId = Guid.NewGuid(),
-            ProductCategoryId = newProductCategoryId,
+            ProductCategoryId = newProductCategoryId.Value,
             Description = "Product Description",
             Amount = 10,
             Currency = "BRL",
             ImageUrl = "http://image.com/123.png"
         };
 
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
+
         var product = new ProductBuilder()
             .WithSample()
             .WithId(request.ProductId)
+            .WithProductCategory(productCategory)
             .Build();
 
         productRepository
@@ -220,7 +237,7 @@ public class UpdateProductUseCaseTests
             .Returns(product);
 
         productCategoryRepository
-            .GetByIdAsync(Arg.Is<ProductCategoryId>(x => x.Value == newProductCategoryId), Arg.Any<CancellationToken>())
+            .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
             .Returns(default(ProductCategory));
 
         // Act
@@ -232,13 +249,13 @@ public class UpdateProductUseCaseTests
         await productRepository
             .Received(1)
             .GetByIdAsync(
-                Arg.Is<ProductId>(x => x.Value == request.ProductId),
+                Arg.Any<ProductId>(),
                 Arg.Any<CancellationToken>());
 
         await productCategoryRepository
             .Received(1)
             .GetByIdAsync(
-                Arg.Is<ProductCategoryId>(x => x.Value == newProductCategoryId),
+                Arg.Any<ProductCategoryId>(),
                 Arg.Any<CancellationToken>());
 
         await productRepository

@@ -48,7 +48,7 @@ public class CreateProductUseCaseTests
 
         var product = new ProductBuilder()
             .WithDescription(request.Description)
-            .WithProductCategoryId(request.ProductCategoryId)
+            .WithProductCategory(productCategory)
             .WithPrice(request.Currency, request.Amount)
             .WithImageUrl(request.ImageUrl)
             .Build();

@@ -53,7 +53,7 @@ public class ProductRepositoryTests : IDisposable
         // Arrange
         var product = new ProductBuilder()
             .WithSample()
-            .WithProductCategoryId(productCategory.Id)
+            .WithProductCategory(productCategory)
             .Build();
 
         // Act
@@ -74,7 +74,7 @@ public class ProductRepositoryTests : IDisposable
         // Arrange
         var product = new ProductBuilder()
             .WithSample()
-            .WithProductCategoryId(productCategory.Id)
+            .WithProductCategory(productCategory)
             .Build();
 
         await sut.CreateAsync(product, cancellationToken: default);
@@ -93,12 +93,12 @@ public class ProductRepositoryTests : IDisposable
         // Arrange
         var firstProduct = new ProductBuilder()
             .WithSample()
-            .WithProductCategoryId(productCategory.Id)
+            .WithProductCategory(productCategory)
             .Build();
 
         var secondProduct = new ProductBuilder()
             .WithSample()
-            .WithProductCategoryId(productCategory.Id)
+            .WithProductCategory(productCategory)
             .Build();
 
         await sut.CreateAsync(firstProduct, cancellationToken: default);
@@ -123,12 +123,12 @@ public class ProductRepositoryTests : IDisposable
         // Arrange
         var firstProduct = new ProductBuilder()
             .WithSample()
-            .WithProductCategoryId(productCategory.Id)
+            .WithProductCategory(productCategory)
             .Build();
 
         var secondProduct = new ProductBuilder()
             .WithSample()
-            .WithProductCategoryId(productCategory.Id)
+            .WithProductCategory(productCategory)
             .Build();
 
         await sut.CreateAsync(firstProduct, cancellationToken: default);
@@ -165,7 +165,7 @@ public class ProductRepositoryTests : IDisposable
         // Arrange
         var product = new ProductBuilder()
             .WithSample()
-            .WithProductCategoryId(productCategory.Id)
+            .WithProductCategory(productCategory)
             .Build();
 
         await sut.CreateAsync(product, cancellationToken: default);
@@ -183,7 +183,7 @@ public class ProductRepositoryTests : IDisposable
         // Arrange
         var product = new ProductBuilder()
             .WithSample()
-            .WithProductCategoryId(productCategory.Id)
+            .WithProductCategory(productCategory)
             .Build();
 
         // Act
@@ -199,7 +199,7 @@ public class ProductRepositoryTests : IDisposable
         // Arrange
         var product = new ProductBuilder()
             .WithSample()
-            .WithProductCategoryId(productCategory.Id)
+            .WithProductCategory(productCategory)
             .Build();
 
         await sut.CreateAsync(product, cancellationToken: default);

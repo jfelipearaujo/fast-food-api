@@ -82,8 +82,17 @@ public class ClientRepositoryTests : IDisposable
     public async Task ShouldGetAllClientsSuccessfully()
     {
         // Arrange
-        var clientOne = new ClientBuilder().WithSample().Build();
-        var clientTwo = new ClientBuilder().WithSample().Build();
+        var clientOne = new ClientBuilder()
+            .WithSample()
+            .WithEmail("client_01@email.com")
+            .WithDocumentId("25106801028")
+            .Build();
+
+        var clientTwo = new ClientBuilder()
+            .WithSample()
+            .WithEmail("client_02@email.com")
+            .WithDocumentId("39954655018")
+            .Build();
 
         await sut.CreateAsync(clientOne, cancellationToken: default);
         await sut.CreateAsync(clientTwo, cancellationToken: default);

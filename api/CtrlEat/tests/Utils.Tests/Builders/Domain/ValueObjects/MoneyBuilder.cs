@@ -44,6 +44,6 @@ public class MoneyBuilder
 
     public Money Build()
     {
-        return Money.Create(amount, currency).ValueOrDefault;
+        return Money.Create(amount, currency).Value;
     }
 }

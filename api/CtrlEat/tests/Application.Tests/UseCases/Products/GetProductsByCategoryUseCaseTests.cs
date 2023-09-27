@@ -31,8 +31,19 @@ public class GetProductsByCategoryUseCaseTests
             Category = "category"
         };
 
-        var productOne = new ProductBuilder().WithSample().Build();
-        var productTwo = new ProductBuilder().WithSample().Build();
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
+
+        var productOne = new ProductBuilder()
+            .WithSample()
+            .WithProductCategory(productCategory)
+            .Build();
+
+        var productTwo = new ProductBuilder()
+            .WithSample()
+            .WithProductCategory(productCategory)
+            .Build();
 
         repository
             .GetAllByCategoryAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())

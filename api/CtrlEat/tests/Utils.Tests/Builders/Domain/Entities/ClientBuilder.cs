@@ -10,7 +10,6 @@ public class ClientBuilder
     private string lastName;
     private string email;
     private string documentId;
-    private bool isAnonymous;
 
     public ClientBuilder()
     {
@@ -24,7 +23,6 @@ public class ClientBuilder
         lastName = default;
         email = default;
         documentId = default;
-        isAnonymous = default;
 
         return this;
     }
@@ -36,7 +34,6 @@ public class ClientBuilder
         lastName = "Silva";
         email = "joao.silva@email.com";
         documentId = "46808459029";
-        isAnonymous = false;
 
         return this;
     }
@@ -48,6 +45,20 @@ public class ClientBuilder
         return this;
     }
 
+    public ClientBuilder WithEmail(string email)
+    {
+        this.email = email;
+
+        return this;
+    }
+
+    public ClientBuilder WithDocumentId(string documentId)
+    {
+        this.documentId = documentId;
+
+        return this;
+    }
+
     public Client Build()
     {
         return Client.Create(
@@ -55,6 +66,6 @@ public class ClientBuilder
             lastName,
             email,
             documentId,
-            id).ValueOrDefault;
+            id).Value;
     }
 }

@@ -33,9 +33,14 @@ public class GetProductByIdUseCaseTests
             Id = Guid.NewGuid(),
         };
 
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
+
         var product = new ProductBuilder()
             .WithSample()
             .WithId(request.Id)
+            .WithProductCategory(productCategory)
             .Build();
 
         repository

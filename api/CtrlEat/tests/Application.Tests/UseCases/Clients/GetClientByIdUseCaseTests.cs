@@ -5,6 +5,7 @@ using Domain.Adapters;
 using Domain.Entities.ClientAggregate;
 using Domain.Entities.ClientAggregate.ValueObjects;
 using Domain.UseCases.Clients.Requests;
+using Domain.UseCases.Clients.Responses;
 
 using Utils.Tests.Builders.Domain.Entities;
 
@@ -47,7 +48,7 @@ public class GetClientByIdUseCaseTests
         // Assert
         response.Should().BeSuccess().And.Satisfy(result =>
         {
-            result.Value.Should().BeEquivalentTo(client);
+            result.Value.Should().BeEquivalentTo(ClientResponse.MapFromDomain(client));
         });
     }
 

@@ -73,9 +73,9 @@ public class CreateClientUseCaseTests
 
         var expectedResponse = new ClientResponse
         {
-            FirstName = null,
-            LastName = null,
-            Email = null,
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            Email = string.Empty,
             DocumentType = DocumentType.CPF,
             DocumentId = "46808459029",
             IsAnonymous = false,
@@ -104,11 +104,11 @@ public class CreateClientUseCaseTests
 
         var expectedResponse = new ClientResponse
         {
-            FirstName = null,
-            LastName = null,
-            Email = null,
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            Email = string.Empty,
             DocumentType = DocumentType.None,
-            DocumentId = null,
+            DocumentId = string.Empty,
             IsAnonymous = true,
         };
 
