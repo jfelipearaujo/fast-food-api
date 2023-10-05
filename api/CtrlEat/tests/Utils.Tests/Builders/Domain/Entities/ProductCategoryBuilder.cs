@@ -1,5 +1,5 @@
-using Domain.Entities.ProductCategoryAggregate;
-using Domain.Entities.ProductCategoryAggregate.ValueObjects;
+using Domain.Entities.ProductAggregate;
+using Domain.Entities.ProductAggregate.ValueObjects;
 
 namespace Utils.Tests.Builders.Domain.Entities;
 

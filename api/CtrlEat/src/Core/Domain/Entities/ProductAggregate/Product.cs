@@ -1,7 +1,5 @@
 ﻿using Domain.Common.Models;
 using Domain.Entities.ProductAggregate.ValueObjects;
-using Domain.Entities.ProductCategoryAggregate;
-using Domain.Entities.ProductCategoryAggregate.ValueObjects;
 
 using FluentResults;
 

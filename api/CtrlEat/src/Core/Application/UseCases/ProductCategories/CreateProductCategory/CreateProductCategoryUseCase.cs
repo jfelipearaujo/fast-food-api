@@ -1,5 +1,5 @@
 ﻿using Domain.Adapters;
-using Domain.Entities.ProductCategoryAggregate;
+using Domain.Entities.ProductAggregate;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.ProductCategories.Requests;
 using Domain.UseCases.ProductCategories.Responses;

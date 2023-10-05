@@ -1,5 +1,5 @@
-﻿using Domain.Entities.ProductCategoryAggregate;
-using Domain.Entities.ProductCategoryAggregate.ValueObjects;
+﻿using Domain.Entities.ProductAggregate;
+using Domain.Entities.ProductAggregate.ValueObjects;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

@@ -1,6 +1,6 @@
 ﻿using Domain.Common.Models;
 
-namespace Domain.Entities.ProductCategoryAggregate.ValueObjects;
+namespace Domain.Entities.ProductAggregate.ValueObjects;
 
 public sealed class ProductCategoryId : ValueObject
 {

@@ -16,7 +16,6 @@ public sealed class Money : ValueObject
 
     private Money()
     {
-
     }
 
     private Money(decimal amount, string currency)

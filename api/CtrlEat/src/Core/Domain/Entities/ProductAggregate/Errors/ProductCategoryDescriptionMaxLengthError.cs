@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 
-namespace Domain.Entities.ProductCategoryAggregate.Errors;
+namespace Domain.Entities.ProductAggregate.Errors;
 
 public class ProductCategoryDescriptionMaxLengthError : Error
 {

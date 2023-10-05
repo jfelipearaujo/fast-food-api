@@ -1,4 +1,4 @@
-﻿using Domain.Entities.ProductCategoryAggregate;
+﻿using Domain.Entities.ProductAggregate;
 
 namespace Domain.UseCases.ProductCategories.Responses;
 

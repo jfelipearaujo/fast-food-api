@@ -1,6 +1,5 @@
 ﻿using Domain.Entities.ClientAggregate;
 using Domain.Entities.ClientAggregate.ValueObjects;
-using Domain.Entities.ProductAggregate.ValueObjects;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -30,7 +29,7 @@ public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
         builder.Property(y => y.Email)
             .HasConversion(
                 email => email.Value,
-                value => Email.Create(value))
+                value => Email.Create(value).Value)
             .HasMaxLength(250);
 
         builder
@@ -40,7 +39,7 @@ public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
         builder.Property(x => x.DocumentId)
             .HasConversion(
                 documentId => documentId.Value,
-                value => DocumentId.Create(value))
+                value => DocumentId.Create(value).Value)
             .HasMaxLength(14);
 
         builder

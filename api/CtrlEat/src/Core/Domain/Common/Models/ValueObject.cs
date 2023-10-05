@@ -1,11 +1,4 @@
-using FluentResults;
-
 namespace Domain.Common.Models;
-
-public interface IValidateValueObject<T> where T : ValueObject
-{
-    Result<T> Validate();
-}
 
 public abstract class ValueObject : IEquatable<ValueObject>
 {

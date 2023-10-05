@@ -1,7 +1,6 @@
 ﻿using Domain.Common.Models;
 using Domain.Entities.ClientAggregate;
 using Domain.Entities.ProductAggregate;
-using Domain.Entities.ProductCategoryAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence;
