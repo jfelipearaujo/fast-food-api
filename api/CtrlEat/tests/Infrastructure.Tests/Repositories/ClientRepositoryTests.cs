@@ -163,7 +163,7 @@ public class ClientRepositoryTests : IDisposable
 
         await sut.CreateAsync(client, cancellationToken: default);
 
-        client.Update(Email.Create("joao.silva@email.com.br"));
+        client.Update(Email.Create("joao.silva@email.com.br").Value);
 
         // Act
         var response = await sut.UpdateAsync(client, cancellationToken: default);

@@ -1,7 +1,7 @@
 ﻿using Application.UseCases.ProductCategories.GetAllProductCategories;
 
 using Domain.Adapters;
-using Domain.Entities.ProductCategoryAggregate;
+using Domain.Entities.ProductAggregate;
 using Domain.UseCases.ProductCategories.Responses;
 
 using Utils.Tests.Builders.Domain.Entities;

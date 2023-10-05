@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Domain.Entities.ClientAggregate.ValueObjects;
 
-public partial class Email : ValueObject, IValidateValueObject<Email>
+public partial class Email : ValueObject
 {
     public string Value { get; private set; }
 
@@ -20,21 +20,16 @@ public partial class Email : ValueObject, IValidateValueObject<Email>
         Value = string.IsNullOrEmpty(address) ? string.Empty : address;
     }
 
-    public static Email Create(string address)
-    {
-        return new Email(address);
-    }
-
-    public Result<Email> Validate()
+    public static Result<Email> Create(string address)
     {
         var regex = new Regex("^\\S+@\\S+\\.\\S+$");
 
-        if (!string.IsNullOrEmpty(Value) && !regex.IsMatch(Value))
+        if (!string.IsNullOrEmpty(address) && !regex.IsMatch(address))
         {
             return Result.Fail(new EmailInvalidAddressError());
         }
 
-        return Result.Ok();
+        return new Email(address);
     }
 
     public override IEnumerable<object> GetEqualityComponents()
@@ -48,5 +43,10 @@ public static class EmailExtensions
     public static bool HasData(this Email valueObject)
     {
         return !string.IsNullOrEmpty(valueObject?.Value);
+    }
+
+    public static bool HasData(this Result<Email> valueObject)
+    {
+        return !string.IsNullOrEmpty(valueObject?.Value.Value);
     }
 }

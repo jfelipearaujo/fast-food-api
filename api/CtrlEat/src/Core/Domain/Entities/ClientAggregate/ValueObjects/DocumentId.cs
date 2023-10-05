@@ -6,7 +6,7 @@ using FluentResults;
 
 namespace Domain.Entities.ClientAggregate.ValueObjects;
 
-public sealed class DocumentId : ValueObject, IValidateValueObject<DocumentId>
+public sealed class DocumentId : ValueObject
 {
     public string Value { get; private set; }
 
@@ -19,21 +19,16 @@ public sealed class DocumentId : ValueObject, IValidateValueObject<DocumentId>
         Value = string.IsNullOrEmpty(documentId) ? string.Empty : documentId;
     }
 
-    public static DocumentId Create(string documentId)
+    public static Result<DocumentId> Create(string documentId)
     {
-        return new DocumentId(documentId);
-    }
-
-    public Result<DocumentId> Validate()
-    {
-        if (!string.IsNullOrEmpty(Value)
-            && Value.Length > 0
-            && !CpfValidator.Check(Value))
+        if (!string.IsNullOrEmpty(documentId)
+            && documentId.Length > 0
+            && !CpfValidator.Check(documentId))
         {
             return Result.Fail(new InvalidDocumentIdError());
         }
 
-        return Result.Ok();
+        return new DocumentId(documentId);
     }
 
     public override IEnumerable<object> GetEqualityComponents()
@@ -47,5 +42,10 @@ public static class DocumentIdExtensions
     public static bool HasData(this DocumentId valueObject)
     {
         return !string.IsNullOrEmpty(valueObject?.Value);
+    }
+
+    public static bool HasData(this Result<DocumentId> valueObject)
+    {
+        return !string.IsNullOrEmpty(valueObject?.Value.Value);
     }
 }

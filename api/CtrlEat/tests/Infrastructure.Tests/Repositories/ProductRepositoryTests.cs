@@ -1,5 +1,4 @@
 ﻿using Domain.Entities.ProductAggregate;
-using Domain.Entities.ProductCategoryAggregate;
 
 using Infrastructure.Repositories;
 

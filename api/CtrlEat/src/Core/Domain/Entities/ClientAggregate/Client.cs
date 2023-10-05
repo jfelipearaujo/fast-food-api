@@ -46,41 +46,37 @@ public sealed class Client : AggregateRoot<ClientId>
     public static Result<Client> Create(
         string firstName,
         string lastName,
-        string email,
-        string documentId,
+        string emailAddress,
+        string documentIdNumber,
         ClientId? clientId = null)
     {
-        var fullNameValueObject = FullName.Create(firstName, lastName);
-        var documentIdValueObject = DocumentId.Create(documentId);
-        var emailValueObject = Email.Create(email);
+        var fullName = FullName.Create(firstName, lastName);
+        var documentId = DocumentId.Create(documentIdNumber);
+        var email = Email.Create(emailAddress);
 
-        var fullNameValidation = fullNameValueObject.Validate();
-        var documentIdValidation = documentIdValueObject.Validate();
-        var emailValidation = emailValueObject.Validate();
-
-        if (fullNameValidation.IsFailed)
+        if (fullName.IsFailed)
         {
-            return Result.Fail(fullNameValidation.Errors);
+            return Result.Fail(fullName.Errors);
         }
 
-        if (documentIdValidation.IsFailed)
+        if (documentId.IsFailed)
         {
-            return Result.Fail(documentIdValidation.Errors);
+            return Result.Fail(documentId.Errors);
         }
 
-        if (emailValidation.IsFailed)
+        if (email.IsFailed)
         {
-            return Result.Fail(emailValidation.Errors);
+            return Result.Fail(email.Errors);
         }
 
-        var isAnonymous = !fullNameValueObject.HasData()
-            && !emailValueObject.HasData()
-            && !documentIdValueObject.HasData();
+        var isAnonymous = !fullName.HasData()
+            && !email.HasData()
+            && !documentId.HasData();
 
         return new Client(
-            fullNameValueObject,
-            emailValueObject,
-            documentIdValueObject,
+            fullName.Value,
+            email.Value,
+            documentId.Value,
             isAnonymous,
             isAnonymous ? DocumentType.None : DocumentType.CPF,
             clientId

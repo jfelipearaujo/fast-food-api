@@ -1,7 +1,5 @@
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
-using Domain.Entities.ProductCategoryAggregate;
-using Domain.Entities.ProductCategoryAggregate.ValueObjects;
 
 using Utils.Tests.Builders.Domain.ValueObjects;
 

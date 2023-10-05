@@ -1,11 +1,10 @@
 ﻿using Domain.Common.Models;
-using Domain.Entities.ProductAggregate;
-using Domain.Entities.ProductCategoryAggregate.Errors;
-using Domain.Entities.ProductCategoryAggregate.ValueObjects;
+using Domain.Entities.ProductAggregate.Errors;
+using Domain.Entities.ProductAggregate.ValueObjects;
 
 using FluentResults;
 
-namespace Domain.Entities.ProductCategoryAggregate;
+namespace Domain.Entities.ProductAggregate;
 
 public class ProductCategory : AggregateRoot<ProductCategoryId>
 {

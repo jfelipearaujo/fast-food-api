@@ -5,8 +5,6 @@ using Application.UseCases.Products.UpdateProduct;
 using Domain.Adapters;
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
-using Domain.Entities.ProductCategoryAggregate;
-using Domain.Entities.ProductCategoryAggregate.ValueObjects;
 using Domain.UseCases.Products.Requests;
 using Domain.UseCases.Products.Responses;
 

@@ -1,5 +1,4 @@
-using Domain.Entities.ProductCategoryAggregate;
-
+using Domain.Entities.ProductAggregate;
 using Infrastructure.Repositories;
 
 using Microsoft.Data.Sqlite;
