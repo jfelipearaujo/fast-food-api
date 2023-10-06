@@ -42,7 +42,7 @@ entity "Product" as product {
     UpdatedAtUtc: DateTime
 }
 
-entity "Warehouse" as warehouse {
+entity "Stock" as stock {
     *Id: Guid <<PK>>
     ---
     ProductId: Guid <<FK>>
@@ -52,7 +52,7 @@ entity "Warehouse" as warehouse {
     UpdatedAtUtc: DateTime
 }
 
-entity "Order's Product" as orderProduct {
+entity "Order Item" as orderItem {
     *Id: Guid <<PK>>
     ---
     OrderId: Guid <<FK>>
@@ -116,9 +116,9 @@ end note
 ' a category has One or More products
 product ||--|{ productCategory
 
-' a product has Exactly One warehouse
-' a warehouse has One or More products
-product ||--|{ warehouse
+' a product has Exactly One stock
+' a stock has One or More products
+product ||--|{ stock
 
 ' a payment has Exactly One order
 ' a order has Exactly One payment
@@ -128,12 +128,12 @@ payment ||--|| order
 ' a client has One or More order
 order ||--|{ client
 
-' a product has Exactly One orderProduct
-' a orderProduct has One or More products
-product ||--|| orderProduct
+' a product has Exactly One orderItem
+' a orderItem has One or More products
+product ||--|| orderItem
 
-' a order has One or Mode orderProduct
-' a orderProduct has Exactly One order
-order }|--|| orderProduct
+' a order has One or Mode orderItem
+' a orderItem has Exactly One order
+order }|--|| orderItem
 
 @enduml
