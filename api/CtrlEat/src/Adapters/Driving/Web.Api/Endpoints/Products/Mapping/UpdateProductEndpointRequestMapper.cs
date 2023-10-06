@@ -2,21 +2,20 @@
 
 using Web.Api.Endpoints.Products.Requests;
 
-namespace Web.Api.Endpoints.Products.Mapping
+namespace Web.Api.Endpoints.Products.Mapping;
+
+public static class UpdateProductEndpointRequestMapper
 {
-    public static class UpdateProductEndpointRequestMapper
+    public static UpdateProductRequest MapToRequest(this UpdateProductEndpointRequest request, Guid productId)
     {
-        public static UpdateProductRequest MapToRequest(this UpdateProductEndpointRequest request, Guid productId)
+        return new UpdateProductRequest
         {
-            return new UpdateProductRequest
-            {
-                ProductId = productId,
-                ProductCategoryId = request.ProductCategoryId,
-                Description = request.Description,
-                Currency = request.Currency,
-                Amount = request.Amount,
-                ImageUrl = request.ImageUrl
-            };
-        }
+            ProductId = productId,
+            ProductCategoryId = request.ProductCategoryId,
+            Description = request.Description,
+            Currency = request.Currency,
+            Amount = request.Amount,
+            ImageUrl = request.ImageUrl
+        };
     }
 }

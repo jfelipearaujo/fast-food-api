@@ -2,19 +2,18 @@
 
 using Web.Api.Endpoints.Clients.Requests;
 
-namespace Web.Api.Endpoints.Clients.Mapping
+namespace Web.Api.Endpoints.Clients.Mapping;
+
+public static class CreateClientEndpointRequestMapper
 {
-    public static class CreateClientEndpointRequestMapper
+    public static CreateClientRequest MapToRequest(this CreateClientEndpointRequest request)
     {
-        public static CreateClientRequest MapToRequest(this CreateClientEndpointRequest request)
+        return new CreateClientRequest
         {
-            return new CreateClientRequest
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                DocumentId = request.DocumentId,
-                Email = request.Email
-            };
-        }
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            DocumentId = request.DocumentId,
+            Email = request.Email
+        };
     }
 }

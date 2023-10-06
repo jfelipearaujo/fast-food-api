@@ -13,6 +13,7 @@ public static class InfrastructureDependency
         services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IClientRepository, ClientRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
 
         return services;
     }

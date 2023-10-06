@@ -1,0 +1,62 @@
+@rootUrl=https://localhost:5001
+
+### Create a client
+POST {{rootUrl}}/clients
+Content-Type: application/json
+
+{
+  "firstName": "Francisco",
+  "lastName": "Luiz Freitas",
+  "email": "francisco_luiz_freitas@zyb.com.br",
+  "documentId": "63545117057"
+}
+
+### Get all clients
+GET {{rootUrl}}/clients
+
+### Create a product category
+POST {{rootUrl}}/products/categories
+Content-Type: application/json
+
+{
+  "description": "Hamburguer"
+}
+
+### Get all products categories
+GET {{rootUrl}}/products/categories
+
+### Create a product
+POST {{rootUrl}}/products
+Content-Type: application/json
+
+{
+  "productCategoryId": "29cbc5ab-fb01-441a-ba6d-e25c30b7b94d",
+  "description": "Hamburguer Especial do Chef",
+  "amount": 25.99,
+  "currency": "BRL",
+  "imageUrl": "http://images-products.com/123456.png"
+}
+
+### Get all product
+GET {{rootUrl}}/products
+
+### Create an order
+POST {{rootUrl}}/orders
+Content-Type: application/json
+
+{
+  "clientId": "d13cf399-41c4-40b0-9b88-da12fc3001e9"
+}
+
+### Get an order
+GET {{rootUrl}}/orders/51855a78-9093-47c2-a4a2-33ab8aef9e70
+
+### Add a product to the order
+POST {{rootUrl}}/orders/51855a78-9093-47c2-a4a2-33ab8aef9e70/items
+Content-Type: application/json
+
+{
+  "productId": "4639bb39-be20-49be-82ef-ccb7674096fe",
+  "quantity": 1,
+  "observation": null
+}

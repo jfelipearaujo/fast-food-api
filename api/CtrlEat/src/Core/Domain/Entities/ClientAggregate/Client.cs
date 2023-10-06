@@ -1,6 +1,7 @@
 ﻿using Domain.Common.Models;
 using Domain.Entities.ClientAggregate.Enums;
 using Domain.Entities.ClientAggregate.ValueObjects;
+using Domain.Entities.OrderAggregate;
 
 using FluentResults;
 
@@ -17,6 +18,8 @@ public sealed class Client : AggregateRoot<ClientId>
     public DocumentType DocumentType { get; private set; }
 
     public bool IsAnonymous { get; private set; }
+
+    public ICollection<Order> Orders { get; set; }
 
     private Client()
     {

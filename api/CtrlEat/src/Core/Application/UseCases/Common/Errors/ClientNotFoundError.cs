@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 
-namespace Application.UseCases.Clients.GetClientById.Errors;
+namespace Application.UseCases.Common.Errors;
 
 public class ClientNotFoundError : Error
 {

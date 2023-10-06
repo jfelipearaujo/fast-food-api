@@ -1,6 +1,9 @@
 ﻿using Application.UseCases.Clients.CreateClient;
 using Application.UseCases.Clients.GetAllClients;
 using Application.UseCases.Clients.GetClientById;
+using Application.UseCases.Orders.AddOrderItem;
+using Application.UseCases.Orders.CreateOrder;
+using Application.UseCases.Orders.GetOrderById;
 using Application.UseCases.ProductCategories.CreateProductCategory;
 using Application.UseCases.ProductCategories.DeleteProductCategory;
 using Application.UseCases.ProductCategories.GetAllProductCategories;
@@ -12,7 +15,9 @@ using Application.UseCases.Products.GetAllProducts;
 using Application.UseCases.Products.GetProductById;
 using Application.UseCases.Products.GetProductsByCategory;
 using Application.UseCases.Products.UpdateProduct;
+
 using Domain.UseCases.Clients;
+using Domain.UseCases.Orders;
 using Domain.UseCases.ProductCategories;
 using Domain.UseCases.Products;
 
@@ -40,6 +45,10 @@ public static class ApplicationDependency
         services.AddScoped<ICreateClientUseCase, CreateClientUseCase>();
         services.AddScoped<IGetClientByIdUseCase, GetClientByIdUseCase>();
         services.AddScoped<IGetAllClientsUseCase, GetAllClientsUseCase>();
+
+        services.AddScoped<ICreateOrderUseCase, CreateOrderUseCase>();
+        services.AddScoped<IGetOrderByIdUseCase, GetOrderByIdUseCase>();
+        services.AddScoped<IAddOrderItemUseCase, AddOrderItemUseCase>();
 
         return services;
     }

@@ -9,6 +9,7 @@ using Persistence;
 using System.Text.Json.Serialization;
 
 using Web.Api.Endpoints.Clients;
+using Web.Api.Endpoints.Orders;
 using Web.Api.Endpoints.ProductCategories;
 using Web.Api.Endpoints.Products;
 
@@ -45,5 +46,6 @@ app.UseHttpsRedirection();
 app.MapProductCategoryEndpoints();
 app.MapProductEndpoints();
 app.MapClientEndpoints();
+app.MapOrderEndpoints();
 
 app.Run();

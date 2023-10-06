@@ -6,7 +6,7 @@ using FluentResults;
 
 namespace Domain.Entities.ProductAggregate;
 
-public class ProductCategory : AggregateRoot<ProductCategoryId>
+public sealed class ProductCategory : AggregateRoot<ProductCategoryId>
 {
     private const int MAX_DESCRIPTION_LENGTH = 250;
 
