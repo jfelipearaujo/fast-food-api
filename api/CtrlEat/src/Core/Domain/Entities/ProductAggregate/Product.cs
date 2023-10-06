@@ -1,4 +1,5 @@
 ﻿using Domain.Common.Models;
+using Domain.Entities.OrderAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
 
 using FluentResults;
@@ -16,9 +17,11 @@ public sealed class Product : AggregateRoot<ProductId>
     public ProductCategoryId ProductCategoryId { get; set; }
     public ProductCategory ProductCategory { get; set; }
 
+    public Stock Stock { get; set; }
+    public ICollection<OrderItem> OrderItems { get; set; }
+
     private Product()
     {
-
     }
 
     private Product(

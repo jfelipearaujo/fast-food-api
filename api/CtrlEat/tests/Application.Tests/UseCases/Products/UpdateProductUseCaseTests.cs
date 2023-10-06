@@ -1,5 +1,4 @@
 ﻿using Application.UseCases.Common.Errors;
-using Application.UseCases.Products.Common.Errors;
 using Application.UseCases.Products.UpdateProduct;
 
 using Domain.Adapters;

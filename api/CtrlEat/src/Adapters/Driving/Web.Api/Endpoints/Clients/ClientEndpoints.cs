@@ -8,86 +8,85 @@ using Web.Api.Endpoints.Clients.Requests;
 using Web.Api.Endpoints.Clients.Responses;
 using Web.Api.Extensions;
 
-namespace Web.Api.Endpoints.Clients
+namespace Web.Api.Endpoints.Clients;
+
+public static class ClientEndpoints
 {
-    public static class ClientEndpoints
+    private const string EndpointTag = "Client";
+
+    public static void MapClientEndpoints(this IEndpointRouteBuilder app)
     {
-        private const string EndpointTag = "Client";
+        var group = app.MapGroup("/clients")
+            .WithTags(EndpointTag);
 
-        public static void MapClientEndpoints(this IEndpointRouteBuilder app)
+        group.MapGet("{id}", GetClientById)
+            .WithName(nameof(GetClientById))
+            .WithOpenApi();
+
+        group.MapGet("/", GetAllClients)
+            .WithName(nameof(GetAllClients))
+            .WithOpenApi();
+
+        group.MapPost("/", CreateClient)
+            .WithName(nameof(CreateClient))
+            .WithOpenApi();
+    }
+
+    public static async Task<Results<Ok<ClientEndpointResponse>, NotFound<ApiError>>> GetClientById(
+        Guid id,
+        IGetClientByIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var request = new GetClientByIdRequest
         {
-            var group = app.MapGroup("/clients")
-                .WithTags(EndpointTag);
+            Id = id,
+        };
 
-            group.MapGet("{id}", GetClientById)
-                .WithName(nameof(GetClientById))
-                .WithOpenApi();
+        var result = await useCase.ExecuteAsync(request, cancellationToken);
 
-            group.MapGet("/", GetAllClients)
-                .WithName(nameof(GetAllClients))
-                .WithOpenApi();
-
-            group.MapPost("/", CreateClient)
-                .WithName(nameof(CreateClient))
-                .WithOpenApi();
+        if (result.IsFailed)
+        {
+            return TypedResults.NotFound(result.ToApiError());
         }
 
-        public static async Task<Results<Ok<ClientEndpointResponse>, NotFound<ApiError>>> GetClientById(
-            Guid id,
-            IGetClientByIdUseCase useCase,
-            CancellationToken cancellationToken)
+        var response = result.Value.MapToResponse();
+
+        return TypedResults.Ok(response);
+    }
+
+    public static async Task<Ok<List<ClientEndpointResponse>>> GetAllClients(
+        IGetAllClientsUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var result = await useCase.ExecuteAsync(cancellationToken);
+
+        var response = result.Value.MapToResponse();
+
+        return TypedResults.Ok(response);
+    }
+
+    public static async Task<Results<CreatedAtRoute<ClientEndpointResponse>, BadRequest<ApiError>>> CreateClient(
+        CreateClientEndpointRequest endpointRequest,
+        ICreateClientUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var request = endpointRequest.MapToRequest();
+
+        var result = await useCase.ExecuteAsync(request, cancellationToken);
+
+        if (result.IsFailed)
         {
-            var request = new GetClientByIdRequest
+            return TypedResults.BadRequest(result.ToApiError());
+        }
+
+        var response = result.Value.MapToResponse();
+
+        return TypedResults.CreatedAtRoute(
+            response,
+            nameof(GetClientById),
+            new
             {
-                Id = id,
-            };
-
-            var result = await useCase.ExecuteAsync(request, cancellationToken);
-
-            if (result.IsFailed)
-            {
-                return TypedResults.NotFound(result.ToApiError());
-            }
-
-            var response = result.Value.MapToResponse();
-
-            return TypedResults.Ok(response);
-        }
-
-        public static async Task<Ok<List<ClientEndpointResponse>>> GetAllClients(
-            IGetAllClientsUseCase useCase,
-            CancellationToken cancellationToken)
-        {
-            var result = await useCase.ExecuteAsync(cancellationToken);
-
-            var response = result.Value.MapToResponse();
-
-            return TypedResults.Ok(response);
-        }
-
-        public static async Task<Results<CreatedAtRoute<ClientEndpointResponse>, BadRequest<ApiError>>> CreateClient(
-            CreateClientEndpointRequest endpointRequest,
-            ICreateClientUseCase useCase,
-            CancellationToken cancellationToken)
-        {
-            var request = endpointRequest.MapToRequest();
-
-            var result = await useCase.ExecuteAsync(request, cancellationToken);
-
-            if (result.IsFailed)
-            {
-                return TypedResults.BadRequest(result.ToApiError());
-            }
-
-            var response = result.Value.MapToResponse();
-
-            return TypedResults.CreatedAtRoute(
-                response,
-                nameof(GetClientById),
-                new
-                {
-                    id = response.Id,
-                });
-        }
+                id = response.Id,
+            });
     }
 }

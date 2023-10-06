@@ -9,3 +9,11 @@ public class MoneyInvalidAmountError : Error
     {
     }
 }
+
+public class StockInvalidQuantityError : Error
+{
+    public StockInvalidQuantityError()
+        : base("O valor do estoque do produto deve ser maior ou igual a 1")
+    {
+    }
+}

@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Web.Api.Endpoints.ProductCategories.Requests
+namespace Web.Api.Endpoints.ProductCategories.Requests;
+
+public class CreateProductCategoryEndpointRequest
 {
-    public class CreateProductCategoryEndpointRequest
-    {
-        [Required]
-        public string Description { get; set; }
-    }
+    [Required]
+    public string Description { get; set; }
 }

@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 
-namespace Application.UseCases.Products.Common.Errors;
+namespace Application.UseCases.Common.Errors;
 
 public class ProductNotFoundError : Error
 {

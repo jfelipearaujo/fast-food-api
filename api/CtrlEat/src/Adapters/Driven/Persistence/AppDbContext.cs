@@ -1,6 +1,8 @@
 ﻿using Domain.Common.Models;
 using Domain.Entities.ClientAggregate;
+using Domain.Entities.OrderAggregate;
 using Domain.Entities.ProductAggregate;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence;
@@ -21,7 +23,13 @@ public class AppDbContext : DbContext
 
     public DbSet<Product> Product { get; set; }
 
+    public DbSet<Stock> Stock { get; set; }
+
     public DbSet<Client> Client { get; set; }
+
+    public DbSet<Order> Order { get; set; }
+
+    public DbSet<OrderItem> OrderItem { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

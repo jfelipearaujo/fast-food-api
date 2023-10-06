@@ -1,5 +1,5 @@
 ﻿using Application.UseCases.Clients.GetClientById;
-using Application.UseCases.Clients.GetClientById.Errors;
+using Application.UseCases.Common.Errors;
 
 using Domain.Adapters;
 using Domain.Entities.ClientAggregate;
