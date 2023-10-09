@@ -12,6 +12,8 @@ public sealed class Order : AggregateRoot<OrderId>
 {
     public OrderStatus Status { get; private set; }
 
+    public DateTime StatusUpdatedAt { get; set; }
+
     public ClientId ClientId { get; set; }
 
     public Client Client { get; set; }
@@ -24,10 +26,13 @@ public sealed class Order : AggregateRoot<OrderId>
 
     private Order(
         Client client,
+        OrderStatus? status = null,
+        DateTime? statusUpdatedAt = null,
         OrderId? orderId = null)
         : base(orderId ?? OrderId.CreateUnique())
     {
-        Status = OrderStatus.Created;
+        Status = status ?? OrderStatus.Created;
+        StatusUpdatedAt = statusUpdatedAt ?? DateTime.UtcNow;
         Client = client;
     }
 
@@ -40,8 +45,10 @@ public sealed class Order : AggregateRoot<OrderId>
 
     public static Result<Order> Create(
         Client client,
+        OrderStatus? status = null,
+        DateTime? statusUpdatedAt = null,
         OrderId? orderId = null)
     {
-        return new Order(client, orderId);
+        return new Order(client, status, statusUpdatedAt, orderId);
     }
 }

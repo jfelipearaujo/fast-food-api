@@ -1,5 +1,7 @@
-﻿using Domain.UseCases.Clients;
-using Domain.UseCases.Clients.Requests;
+﻿using Domain.UseCases.Clients.CreateClient;
+using Domain.UseCases.Clients.GetAllClients;
+using Domain.UseCases.Clients.GetClientById;
+using Domain.UseCases.Clients.GetClientById.Requests;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 

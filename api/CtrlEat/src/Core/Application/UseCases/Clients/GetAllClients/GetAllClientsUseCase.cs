@@ -1,7 +1,6 @@
 ﻿using Domain.Adapters;
-using Domain.UseCases.Clients;
-using Domain.UseCases.Clients.Responses;
-
+using Domain.UseCases.Clients.Common.Responses;
+using Domain.UseCases.Clients.GetAllClients;
 using FluentResults;
 
 namespace Application.UseCases.Clients.GetAllClients;

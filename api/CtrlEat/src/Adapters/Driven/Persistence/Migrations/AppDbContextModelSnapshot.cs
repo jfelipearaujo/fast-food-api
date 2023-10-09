@@ -77,6 +77,10 @@ namespace Persistence.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("StatusUpdatedAt")
+                        .HasPrecision(7)
+                        .HasColumnType("datetime2(7)");
+
                     b.Property<DateTime>("UpdatedAtUtc")
                         .HasPrecision(7)
                         .HasColumnType("datetime2(7)");

@@ -1,5 +1,4 @@
-﻿using Domain.UseCases.Products.Responses;
-
+﻿using Domain.UseCases.Products.Common.Responses;
 using Web.Api.Endpoints.ProductCategories.Mapping;
 using Web.Api.Endpoints.Products.Responses;
 

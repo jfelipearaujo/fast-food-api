@@ -1,5 +1,4 @@
-﻿using Domain.UseCases.Products.Requests;
-
+﻿using Domain.UseCases.Products.UpdateProduct.Requests;
 using Web.Api.Endpoints.Products.Requests;
 
 namespace Web.Api.Endpoints.Products.Mapping;

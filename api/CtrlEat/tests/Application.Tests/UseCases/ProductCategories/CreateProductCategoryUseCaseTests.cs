@@ -2,8 +2,8 @@
 
 using Domain.Adapters;
 using Domain.Entities.ProductAggregate;
-using Domain.UseCases.ProductCategories.Requests;
-using Domain.UseCases.ProductCategories.Responses;
+using Domain.UseCases.ProductCategories.Common.Responses;
+using Domain.UseCases.ProductCategories.CreateProductCategory.Request;
 
 namespace Application.Tests.UseCases.ProductCategories;
 

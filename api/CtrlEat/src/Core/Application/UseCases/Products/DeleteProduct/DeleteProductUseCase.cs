@@ -2,8 +2,8 @@
 
 using Domain.Adapters;
 using Domain.Entities.ProductAggregate.ValueObjects;
-using Domain.UseCases.Products;
-using Domain.UseCases.Products.Requests;
+using Domain.UseCases.Products.DeleteProduct;
+using Domain.UseCases.Products.DeleteProduct.Requests;
 
 using FluentResults;
 

@@ -1,5 +1,4 @@
-﻿using Domain.UseCases.Clients.Responses;
-
+﻿using Domain.UseCases.Clients.Common.Responses;
 using Web.Api.Endpoints.Clients.Responses;
 
 namespace Web.Api.Endpoints.Clients.Mapping;

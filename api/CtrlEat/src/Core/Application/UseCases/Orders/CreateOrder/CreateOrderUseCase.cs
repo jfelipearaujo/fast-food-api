@@ -3,9 +3,9 @@
 using Domain.Adapters;
 using Domain.Entities.ClientAggregate.ValueObjects;
 using Domain.Entities.OrderAggregate;
-using Domain.UseCases.Orders;
-using Domain.UseCases.Orders.Requests;
-using Domain.UseCases.Orders.Responses;
+using Domain.UseCases.Orders.Common.Responses;
+using Domain.UseCases.Orders.CreateOrder;
+using Domain.UseCases.Orders.CreateOrder.Requests;
 
 using FluentResults;
 

@@ -2,9 +2,9 @@
 
 using Domain.Adapters;
 using Domain.Entities.OrderAggregate.ValueObjects;
-using Domain.UseCases.Orders;
-using Domain.UseCases.Orders.Requests;
-using Domain.UseCases.Orders.Responses;
+using Domain.UseCases.Orders.Common.Responses;
+using Domain.UseCases.Orders.GetOrderById;
+using Domain.UseCases.Orders.GetOrderById.Requests;
 
 using FluentResults;
 

@@ -1,4 +1,5 @@
-﻿using Domain.UseCases.Orders.Requests;
+﻿using Domain.UseCases.Orders.AddOrderItem.Requests;
+using Domain.UseCases.Orders.CreateOrder.Requests;
 
 using Web.Api.Endpoints.Orders.Requests;
 

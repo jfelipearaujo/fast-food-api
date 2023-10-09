@@ -1,5 +1,4 @@
-﻿using Domain.UseCases.Clients.Requests;
-
+﻿using Domain.UseCases.Clients.CreateClient.Requests;
 using Web.Api.Endpoints.Clients.Requests;
 
 namespace Web.Api.Endpoints.Clients.Mapping;

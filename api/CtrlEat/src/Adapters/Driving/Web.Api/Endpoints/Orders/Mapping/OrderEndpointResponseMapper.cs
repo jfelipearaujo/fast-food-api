@@ -1,5 +1,4 @@
-﻿using Domain.UseCases.Orders.Responses;
-
+﻿using Domain.UseCases.Orders.Common.Responses;
 using Web.Api.Endpoints.Orders.Responses;
 
 namespace Web.Api.Endpoints.Orders.Mapping;

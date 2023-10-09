@@ -22,6 +22,10 @@ public class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
 
         builder.Property(x => x.Status);
 
+        builder.Property(x => x.StatusUpdatedAt)
+            .IsRequired()
+            .HasPrecision(7);
+
         builder.Property(x => x.CreatedAtUtc)
             .IsRequired()
             .HasPrecision(7);

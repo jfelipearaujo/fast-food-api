@@ -1,5 +1,7 @@
-﻿using Domain.UseCases.Orders;
-using Domain.UseCases.Orders.Requests;
+﻿using Domain.UseCases.Orders.AddOrderItem;
+using Domain.UseCases.Orders.CreateOrder;
+using Domain.UseCases.Orders.GetOrderById;
+using Domain.UseCases.Orders.GetOrderById.Requests;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 

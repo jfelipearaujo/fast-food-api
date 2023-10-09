@@ -15,12 +15,23 @@ using Application.UseCases.Products.GetAllProducts;
 using Application.UseCases.Products.GetProductById;
 using Application.UseCases.Products.GetProductsByCategory;
 using Application.UseCases.Products.UpdateProduct;
-
-using Domain.UseCases.Clients;
-using Domain.UseCases.Orders;
-using Domain.UseCases.ProductCategories;
-using Domain.UseCases.Products;
-
+using Domain.UseCases.Clients.CreateClient;
+using Domain.UseCases.Clients.GetAllClients;
+using Domain.UseCases.Clients.GetClientById;
+using Domain.UseCases.Orders.AddOrderItem;
+using Domain.UseCases.Orders.CreateOrder;
+using Domain.UseCases.Orders.GetOrderById;
+using Domain.UseCases.ProductCategories.CreateProductCategory;
+using Domain.UseCases.ProductCategories.DeleteProductCategory;
+using Domain.UseCases.ProductCategories.GetAllProductCategories;
+using Domain.UseCases.ProductCategories.GetProductCategoryById;
+using Domain.UseCases.ProductCategories.UpdateProductCategory;
+using Domain.UseCases.Products.CreateProduct;
+using Domain.UseCases.Products.DeleteProduct;
+using Domain.UseCases.Products.GetAllProducts;
+using Domain.UseCases.Products.GetProductById;
+using Domain.UseCases.Products.GetProductsByCategory;
+using Domain.UseCases.Products.UpdateProduct;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
