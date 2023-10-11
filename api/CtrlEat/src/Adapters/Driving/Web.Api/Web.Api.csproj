@@ -26,4 +26,8 @@
     <ProjectReference Include="..\..\Driven\Persistence\Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Endpoints\ProductCategories\Requests\Mapping\" />
+  </ItemGroup>
+
 </Project>

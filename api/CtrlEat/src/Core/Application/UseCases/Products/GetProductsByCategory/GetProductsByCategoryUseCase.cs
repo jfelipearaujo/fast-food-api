@@ -1,7 +1,7 @@
 ﻿using Domain.Adapters;
-using Domain.UseCases.Products;
-using Domain.UseCases.Products.Requests;
-using Domain.UseCases.Products.Responses;
+using Domain.UseCases.Products.Common.Responses;
+using Domain.UseCases.Products.GetProductsByCategory;
+using Domain.UseCases.Products.GetProductsByCategory.Requests;
 
 using FluentResults;
 

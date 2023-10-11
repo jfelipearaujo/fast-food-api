@@ -2,7 +2,7 @@
 
 using Domain.Adapters;
 using Domain.Entities.ProductAggregate;
-using Domain.UseCases.ProductCategories.Responses;
+using Domain.UseCases.ProductCategories.Common.Responses;
 
 using Utils.Tests.Builders.Domain.Entities;
 

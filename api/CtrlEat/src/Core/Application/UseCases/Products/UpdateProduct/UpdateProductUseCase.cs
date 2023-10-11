@@ -2,10 +2,9 @@
 
 using Domain.Adapters;
 using Domain.Entities.ProductAggregate.ValueObjects;
-using Domain.UseCases.Products;
-using Domain.UseCases.Products.Requests;
-using Domain.UseCases.Products.Responses;
-
+using Domain.UseCases.Products.Common.Responses;
+using Domain.UseCases.Products.UpdateProduct;
+using Domain.UseCases.Products.UpdateProduct.Requests;
 using FluentResults;
 
 namespace Application.UseCases.Products.UpdateProduct;

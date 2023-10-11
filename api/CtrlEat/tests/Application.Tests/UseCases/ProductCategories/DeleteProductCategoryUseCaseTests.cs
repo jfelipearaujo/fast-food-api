@@ -4,7 +4,7 @@ using Application.UseCases.ProductCategories.DeleteProductCategory;
 using Domain.Adapters;
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
-using Domain.UseCases.ProductCategories.Requests;
+using Domain.UseCases.ProductCategories.DeleteProductCategory.Request;
 
 using Utils.Tests.Builders.Domain.Entities;
 

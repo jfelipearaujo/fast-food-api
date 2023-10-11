@@ -1,6 +1,9 @@
 ﻿using Domain.Adapters;
 using Domain.Entities.OrderAggregate;
+using Domain.Entities.OrderAggregate.Enums;
 using Domain.Entities.OrderAggregate.ValueObjects;
+
+using Infrastructure.Common.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +35,18 @@ public class OrderRepository : IOrderRepository
     public async Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await context.Order.ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Order>> GetAllByStatusAsync(OrderStatus status, CancellationToken cancellationToken)
+    {
+        var filterTime = DateTime.UtcNow.AddMinutes(-5);
+
+        return await context.Order
+            .WhereIfElse(
+                status != OrderStatus.None,
+                x => x.Status == status,
+                x => x.Status != OrderStatus.Completed || (x.Status == OrderStatus.Completed && x.StatusUpdatedAt >= filterTime))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Order?> GetByIdAsync(OrderId id, CancellationToken cancellationToken)

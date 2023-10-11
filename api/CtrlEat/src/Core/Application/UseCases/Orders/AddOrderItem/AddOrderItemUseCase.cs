@@ -6,9 +6,9 @@ using Domain.Adapters;
 using Domain.Entities.OrderAggregate;
 using Domain.Entities.OrderAggregate.ValueObjects;
 using Domain.Entities.ProductAggregate.ValueObjects;
-using Domain.UseCases.Orders;
-using Domain.UseCases.Orders.Requests;
-using Domain.UseCases.Orders.Responses;
+using Domain.UseCases.Orders.AddOrderItem;
+using Domain.UseCases.Orders.AddOrderItem.Requests;
+using Domain.UseCases.Orders.Common.Responses;
 
 using FluentResults;
 

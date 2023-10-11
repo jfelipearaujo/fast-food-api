@@ -8,6 +8,8 @@ public class OrderEndpointResponse
 {
     public Guid Id { get; set; }
 
+    public string TrackId { get; set; }
+
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public OrderStatus Status { get; set; }
 

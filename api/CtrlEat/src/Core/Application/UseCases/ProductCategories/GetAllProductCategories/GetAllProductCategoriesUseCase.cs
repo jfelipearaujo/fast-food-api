@@ -1,7 +1,6 @@
 ﻿using Domain.Adapters;
-using Domain.UseCases.ProductCategories;
-using Domain.UseCases.ProductCategories.Responses;
-
+using Domain.UseCases.ProductCategories.Common.Responses;
+using Domain.UseCases.ProductCategories.GetAllProductCategories;
 using FluentResults;
 
 namespace Application.UseCases.ProductCategories.GetAllProductCategories;

@@ -1,11 +1,19 @@
-﻿using Domain.UseCases.Products;
-using Domain.UseCases.Products.Requests;
+﻿using Domain.UseCases.Products.CreateProduct;
+using Domain.UseCases.Products.DeleteProduct;
+using Domain.UseCases.Products.DeleteProduct.Requests;
+using Domain.UseCases.Products.GetAllProducts;
+using Domain.UseCases.Products.GetProductById;
+using Domain.UseCases.Products.GetProductById.Requests;
+using Domain.UseCases.Products.GetProductsByCategory;
+using Domain.UseCases.Products.GetProductsByCategory.Requests;
+using Domain.UseCases.Products.UpdateProduct;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
-using Web.Api.Endpoints.Products.Mapping;
 using Web.Api.Endpoints.Products.Requests;
+using Web.Api.Endpoints.Products.Requests.Mapping;
 using Web.Api.Endpoints.Products.Responses;
+using Web.Api.Endpoints.Products.Responses.Mapping;
 using Web.Api.Extensions;
 
 namespace Web.Api.Endpoints.Products;

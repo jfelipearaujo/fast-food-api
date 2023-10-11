@@ -4,8 +4,8 @@ using Application.UseCases.Products.GetProductById;
 using Domain.Adapters;
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
-using Domain.UseCases.Products.Requests;
-using Domain.UseCases.Products.Responses;
+using Domain.UseCases.Products.Common.Responses;
+using Domain.UseCases.Products.GetProductById.Requests;
 
 using Utils.Tests.Builders.Domain.Entities;
 

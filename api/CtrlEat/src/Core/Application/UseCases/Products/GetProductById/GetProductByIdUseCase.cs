@@ -2,9 +2,9 @@
 
 using Domain.Adapters;
 using Domain.Entities.ProductAggregate.ValueObjects;
-using Domain.UseCases.Products;
-using Domain.UseCases.Products.Requests;
-using Domain.UseCases.Products.Responses;
+using Domain.UseCases.Products.Common.Responses;
+using Domain.UseCases.Products.GetProductById;
+using Domain.UseCases.Products.GetProductById.Requests;
 
 using FluentResults;
 

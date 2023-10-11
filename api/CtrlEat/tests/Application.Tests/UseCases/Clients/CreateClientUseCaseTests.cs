@@ -5,8 +5,8 @@ using Domain.Adapters;
 using Domain.Entities.ClientAggregate;
 using Domain.Entities.ClientAggregate.Enums;
 using Domain.Entities.ClientAggregate.ValueObjects;
-using Domain.UseCases.Clients.Requests;
-using Domain.UseCases.Clients.Responses;
+using Domain.UseCases.Clients.Common.Responses;
+using Domain.UseCases.Clients.CreateClient.Requests;
 
 using Utils.Tests.Builders.Domain.Entities;
 

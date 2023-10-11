@@ -1,8 +1,8 @@
 ﻿using Domain.Adapters;
 using Domain.Entities.ProductAggregate;
-using Domain.UseCases.ProductCategories;
-using Domain.UseCases.ProductCategories.Requests;
-using Domain.UseCases.ProductCategories.Responses;
+using Domain.UseCases.ProductCategories.Common.Responses;
+using Domain.UseCases.ProductCategories.CreateProductCategory;
+using Domain.UseCases.ProductCategories.CreateProductCategory.Request;
 
 using FluentResults;
 

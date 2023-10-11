@@ -8,6 +8,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/Adapters/Driving/Web.Api/Web.Api.csproj", "src/Adapters/Driving/Web.Api/"]
+COPY ["src/Core/Application/Application.csproj", "src/Core/Application/"]
+COPY ["src/Core/Domain/Domain.csproj", "src/Core/Domain/"]
+COPY ["src/Adapters/Driven/Infrastructure/Infrastructure.csproj", "src/Adapters/Driven/Infrastructure/"]
 COPY ["src/Adapters/Driven/Persistence/Persistence.csproj", "src/Adapters/Driven/Persistence/"]
 RUN dotnet restore "src/Adapters/Driving/Web.Api/Web.Api.csproj"
 COPY . .

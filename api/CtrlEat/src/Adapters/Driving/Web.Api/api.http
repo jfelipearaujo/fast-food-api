@@ -49,10 +49,10 @@ Content-Type: application/json
 }
 
 ### Get an order
-GET {{rootUrl}}/orders/51855a78-9093-47c2-a4a2-33ab8aef9e70
+GET {{rootUrl}}/orders/977ce04b-0edd-4f62-86cc-b8afa65af450
 
 ### Add a product to the order
-POST {{rootUrl}}/orders/51855a78-9093-47c2-a4a2-33ab8aef9e70/items
+POST {{rootUrl}}/orders/977ce04b-0edd-4f62-86cc-b8afa65af450/items
 Content-Type: application/json
 
 {

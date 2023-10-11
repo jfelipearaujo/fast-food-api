@@ -1,7 +1,6 @@
 ﻿using Domain.Adapters;
-using Domain.UseCases.Products;
-using Domain.UseCases.Products.Responses;
-
+using Domain.UseCases.Products.Common.Responses;
+using Domain.UseCases.Products.GetAllProducts;
 using FluentResults;
 
 namespace Application.UseCases.Products.GetAllProducts;
