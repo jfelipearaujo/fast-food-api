@@ -2,12 +2,15 @@
 using Domain.UseCases.Orders.CreateOrder;
 using Domain.UseCases.Orders.GetOrderById;
 using Domain.UseCases.Orders.GetOrderById.Requests;
+using Domain.UseCases.Orders.GetOrdersByStatus;
+using Domain.UseCases.Orders.GetOrdersByStatus.Requests;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
-using Web.Api.Endpoints.Orders.Mapping;
 using Web.Api.Endpoints.Orders.Requests;
+using Web.Api.Endpoints.Orders.Requests.Mapping;
 using Web.Api.Endpoints.Orders.Responses;
+using Web.Api.Endpoints.Orders.Responses.Mapping;
 using Web.Api.Extensions;
 
 namespace Web.Api.Endpoints.Orders;
@@ -23,6 +26,10 @@ public static class OrderEndpoints
 
         group.MapGet("{id}", GetOrderById)
             .WithName(nameof(GetOrderById))
+            .WithOpenApi();
+
+        group.MapGet("/tracking", GetOrdersByStatus)
+            .WithName(nameof(GetOrdersByStatus))
             .WithOpenApi();
 
         group.MapPost("/", CreateOrder)
@@ -49,6 +56,28 @@ public static class OrderEndpoints
         if (result.IsFailed)
         {
             return TypedResults.NotFound(result.ToApiError());
+        }
+
+        var response = result.Value.MapToResponse();
+
+        return TypedResults.Ok(response);
+    }
+
+    public static async Task<Results<Ok<List<OrderTrackingEndpointResponse>>, BadRequest<ApiError>>> GetOrdersByStatus(
+        string? status,
+        IGetOrdersByStatusUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var request = new GetOrdersByStatusRequest
+        {
+            Status = status
+        };
+
+        var result = await useCase.ExecuteAsync(request, cancellationToken);
+
+        if (result.IsFailed)
+        {
+            return TypedResults.BadRequest(result.ToApiError());
         }
 
         var response = result.Value.MapToResponse();

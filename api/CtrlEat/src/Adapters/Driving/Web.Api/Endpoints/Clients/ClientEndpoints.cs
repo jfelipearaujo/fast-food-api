@@ -4,10 +4,10 @@ using Domain.UseCases.Clients.GetClientById;
 using Domain.UseCases.Clients.GetClientById.Requests;
 
 using Microsoft.AspNetCore.Http.HttpResults;
-
-using Web.Api.Endpoints.Clients.Mapping;
 using Web.Api.Endpoints.Clients.Requests;
+using Web.Api.Endpoints.Clients.Requests.Mapping;
 using Web.Api.Endpoints.Clients.Responses;
+using Web.Api.Endpoints.Clients.Responses.Mapping;
 using Web.Api.Extensions;
 
 namespace Web.Api.Endpoints.Clients;

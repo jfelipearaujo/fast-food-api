@@ -3,6 +3,8 @@ using Domain.Entities.OrderAggregate;
 using Domain.Entities.OrderAggregate.Enums;
 using Domain.Entities.OrderAggregate.ValueObjects;
 
+using Infrastructure.Common.Extensions;
+
 using Microsoft.EntityFrameworkCore;
 
 using Persistence;
@@ -35,23 +37,16 @@ public class OrderRepository : IOrderRepository
         return await context.Order.ToListAsync(cancellationToken);
     }
 
-    public async Task<Dictionary<OrderStatus, List<Order>>> GetAllByStatusAsync(OrderStatus status, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Order>> GetAllByStatusAsync(OrderStatus status, CancellationToken cancellationToken)
     {
-        var query = context.Order.AsQueryable();
+        var filterTime = DateTime.UtcNow.AddMinutes(-5);
 
-        if (status == OrderStatus.None)
-        {
-            query.Where(x => x.Status != OrderStatus.Completed
-            || (x.Status == OrderStatus.Completed && x.StatusUpdatedAt >= DateTime.UtcNow.AddMinutes(-5)));
-        }
-        else
-        {
-            query.Where(x => x.Status == status);
-        }
-
-        return await query
-            .GroupBy(o => o.Status)
-            .ToDictionaryAsync(x => x.Key, o => o.ToList(), cancellationToken);
+        return await context.Order
+            .WhereIfElse(
+                status != OrderStatus.None,
+                x => x.Status == status,
+                x => x.Status != OrderStatus.Completed || (x.Status == OrderStatus.Completed && x.StatusUpdatedAt >= filterTime))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Order?> GetByIdAsync(OrderId id, CancellationToken cancellationToken)

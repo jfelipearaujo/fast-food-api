@@ -1,7 +1,6 @@
 ﻿using Domain.UseCases.ProductCategories.Common.Responses;
-using Web.Api.Endpoints.ProductCategories.Responses;
 
-namespace Web.Api.Endpoints.ProductCategories.Mapping;
+namespace Web.Api.Endpoints.ProductCategories.Responses.Mapping;
 
 public static class ProductCategoryEndpointResponseMapper
 {
@@ -22,7 +21,7 @@ public static class ProductCategoryEndpointResponseMapper
 
         foreach (var productCategory in productCategories)
         {
-            response.Add(MapToResponse(productCategory));
+            response.Add(productCategory.MapToResponse());
         }
 
         return response;

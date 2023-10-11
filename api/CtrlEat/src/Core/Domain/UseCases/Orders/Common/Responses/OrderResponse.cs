@@ -7,6 +7,8 @@ public class OrderResponse
 {
     public Guid Id { get; set; }
 
+    public string TrackId { get; set; }
+
     public OrderStatus Status { get; set; }
 
     public List<OrderItemResponse> Items { get; set; }
@@ -18,6 +20,7 @@ public class OrderResponse
         return new OrderResponse
         {
             Id = order.Id.Value,
+            TrackId = order.TrackId.Value,
             Status = order.Status,
             Items = OrderItemResponse.MapFromDomain(order.Items),
         };

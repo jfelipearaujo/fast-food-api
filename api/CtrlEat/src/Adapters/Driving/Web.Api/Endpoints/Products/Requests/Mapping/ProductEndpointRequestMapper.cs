@@ -1,9 +1,8 @@
 ﻿using Domain.UseCases.Products.CreateProduct.Requests;
-using Web.Api.Endpoints.Products.Requests;
 
-namespace Web.Api.Endpoints.Products.Mapping;
+namespace Web.Api.Endpoints.Products.Requests.Mapping;
 
-public static class CreateProductEndpointRequestMapper
+public static class ProductEndpointRequestMapper
 {
     public static CreateProductRequest MapToRequest(this CreateProductEndpointRequest request)
     {

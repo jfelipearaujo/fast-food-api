@@ -1,4 +1,6 @@
-﻿using Domain.Adapters;
+﻿using Application.UseCases.Orders.GetOrdersByStatus.Errors;
+
+using Domain.Adapters;
 using Domain.Entities.OrderAggregate.Enums;
 using Domain.UseCases.Orders.Common.Responses;
 using Domain.UseCases.Orders.GetOrdersByStatus;
@@ -17,19 +19,40 @@ public class GetOrdersByStatusUseCase : IGetOrdersByStatusUseCase
         this.repository = repository;
     }
 
-    public async Task<Result<Dictionary<OrderStatus, List<OrderResponse>>>> GetOrdersByStatus(
+    public async Task<Result<List<OrderTrackingResponse>>> ExecuteAsync(
         GetOrdersByStatusRequest request,
         CancellationToken cancellationToken)
     {
-        var searchForStatus = request.Status ?? OrderStatus.None;
+        var statusToSearch = OrderStatus.None;
 
-        var ordersByStatus = await repository.GetAllByStatusAsync(searchForStatus, cancellationToken);
-
-        var response = new Dictionary<OrderStatus, List<OrderResponse>>();
-
-        foreach (var orderStatus in ordersByStatus)
+        if (!string.IsNullOrEmpty(request.Status) && !Enum.TryParse(request.Status, true, out statusToSearch))
         {
-            response.Add(orderStatus.Key, OrderResponse.MapFromDomain(orderStatus.Value));
+            return Result.Fail(new InvalidOrderStatusError(request.Status));
+        }
+
+        var orders = await repository.GetAllByStatusAsync(statusToSearch, cancellationToken);
+
+        var response = new List<OrderTrackingResponse>();
+
+        foreach (var order in orders)
+        {
+            var orderByStatus = response.Find(x => x.Status == order.Status);
+
+            if (orderByStatus is null)
+            {
+                response.Add(new OrderTrackingResponse
+                {
+                    Status = order.Status,
+                    Orders = new List<OrderTrackingDataResponse>
+                    {
+                        OrderTrackingDataResponse.MapFromDomain(order)
+                    }
+                });
+            }
+            else
+            {
+                orderByStatus.Orders.Add(OrderTrackingDataResponse.MapFromDomain(order));
+            }
         }
 
         return response;

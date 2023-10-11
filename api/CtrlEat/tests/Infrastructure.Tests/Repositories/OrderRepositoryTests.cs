@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.ClientAggregate;
 using Domain.Entities.OrderAggregate;
 using Domain.Entities.OrderAggregate.Enums;
+using Domain.Entities.OrderAggregate.ValueObjects;
 
 using Infrastructure.Repositories;
 
@@ -25,7 +26,7 @@ public class OrderRepositoryTests : IDisposable
 
     private readonly DbContextOptions<AppDbContext> dbContextOptions;
 
-    private Client client;
+    private readonly Client client;
 
     public OrderRepositoryTests()
     {
@@ -57,7 +58,7 @@ public class OrderRepositoryTests : IDisposable
 
         for (int i = 0; i < ordersCount; i++)
         {
-            orders.Add(Order.Create(client, OrderStatus.Created).Value);
+            orders.Add(Order.Create(TrackId.CreateUnique(), client, OrderStatus.Created).Value);
         }
 
         dbContext.Order.AddRange(orders);
@@ -67,13 +68,8 @@ public class OrderRepositoryTests : IDisposable
         var result = await sut.GetAllByStatusAsync(OrderStatus.Created, default);
 
         // Assert
-        var expectedResult = new Dictionary<OrderStatus, List<Order>>
-        {
-            { OrderStatus.Created, orders }
-        };
-
         result.Should().NotBeNullOrEmpty()
-            .And.BeEquivalentTo(expectedResult);
+            .And.BeEquivalentTo(orders);
     }
 
     [Fact]
@@ -86,12 +82,12 @@ public class OrderRepositoryTests : IDisposable
 
         for (int i = 0; i < ordersCreatedCount; i++)
         {
-            orders.Add(Order.Create(client, OrderStatus.Created).Value);
+            orders.Add(Order.Create(TrackId.CreateUnique(), client, OrderStatus.Created).Value);
         }
 
         for (int i = 0; i < ordersReceivedCount; i++)
         {
-            orders.Add(Order.Create(client, OrderStatus.Received).Value);
+            orders.Add(Order.Create(TrackId.CreateUnique(), client, OrderStatus.Received).Value);
         }
 
         dbContext.Order.AddRange(orders);
@@ -101,14 +97,37 @@ public class OrderRepositoryTests : IDisposable
         var result = await sut.GetAllByStatusAsync(OrderStatus.None, default);
 
         // Assert
-        var expectedResult = new Dictionary<OrderStatus, List<Order>>
-        {
-            { OrderStatus.Created, orders.Where(x => x.Status == OrderStatus.Created).ToList() },
-            { OrderStatus.Received, orders.Where(x => x.Status == OrderStatus.Received).ToList() },
-        };
-
         result.Should().NotBeNullOrEmpty()
-            .And.BeEquivalentTo(expectedResult);
+            .And.BeEquivalentTo(orders);
+    }
+
+    [Fact]
+    public async Task GetAllByStatusSuccessfullyWhenSearchAnyStatusFilteringTheMostRecent()
+    {
+        // Arrange
+        var ordersCompletedNowCount = 5;
+        var ordersCompletedAgoCount = 5;
+        var orders = new List<Order>();
+
+        for (int i = 0; i < ordersCompletedNowCount; i++)
+        {
+            orders.Add(Order.Create(TrackId.CreateUnique(), client, OrderStatus.Completed).Value);
+        }
+
+        for (int i = 0; i < ordersCompletedAgoCount; i++)
+        {
+            orders.Add(Order.Create(TrackId.CreateUnique(), client, OrderStatus.Completed, DateTime.UtcNow.AddMinutes(-10)).Value);
+        }
+
+        dbContext.Order.AddRange(orders);
+        await dbContext.SaveChangesAsync();
+
+        // Act
+        var result = await sut.GetAllByStatusAsync(OrderStatus.None, default);
+
+        // Assert
+        result.Should().NotBeNullOrEmpty()
+            .And.BeEquivalentTo(orders.Take(5).ToList());
     }
 
     public void Dispose()

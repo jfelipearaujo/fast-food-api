@@ -22,6 +22,13 @@ public class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
 
         builder.Property(x => x.Status);
 
+        builder.Property(y => y.TrackId)
+            .HasConversion(
+                trackId => trackId.Value,
+                value => TrackId.Create(value))
+            .IsRequired()
+            .HasMaxLength(6);
+
         builder.Property(x => x.StatusUpdatedAt)
             .IsRequired()
             .HasPrecision(7);

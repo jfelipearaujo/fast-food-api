@@ -1,7 +1,6 @@
 ﻿using Domain.UseCases.Clients.Common.Responses;
-using Web.Api.Endpoints.Clients.Responses;
 
-namespace Web.Api.Endpoints.Clients.Mapping;
+namespace Web.Api.Endpoints.Clients.Responses.Mapping;
 
 public static class ClientEndpointResponseMapper
 {
@@ -27,7 +26,7 @@ public static class ClientEndpointResponseMapper
 
         foreach (var client in clients)
         {
-            response.Add(MapToResponse(client));
+            response.Add(client.MapToResponse());
         }
 
         return response;

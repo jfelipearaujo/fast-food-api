@@ -9,10 +9,9 @@ using Domain.UseCases.ProductCategories.UpdateProductCategory;
 using Domain.UseCases.ProductCategories.UpdateProductCategory.Request;
 
 using Microsoft.AspNetCore.Http.HttpResults;
-
-using Web.Api.Endpoints.ProductCategories.Mapping;
 using Web.Api.Endpoints.ProductCategories.Requests;
 using Web.Api.Endpoints.ProductCategories.Responses;
+using Web.Api.Endpoints.ProductCategories.Responses.Mapping;
 using Web.Api.Extensions;
 
 namespace Web.Api.Endpoints.ProductCategories;

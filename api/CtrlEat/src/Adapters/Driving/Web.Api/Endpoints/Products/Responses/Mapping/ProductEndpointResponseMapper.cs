@@ -1,8 +1,11 @@
 ﻿using Domain.UseCases.Products.Common.Responses;
-using Web.Api.Endpoints.ProductCategories.Mapping;
-using Web.Api.Endpoints.Products.Responses;
+using Domain.UseCases.Products.UpdateProduct.Requests;
 
-namespace Web.Api.Endpoints.Products.Mapping;
+using Web.Api.Endpoints.ProductCategories.Responses.Mapping;
+using Web.Api.Endpoints.Products.Requests;
+using Web.Api.Endpoints.Products.Responses.Mapping;
+
+namespace Web.Api.Endpoints.Products.Responses.Mapping;
 
 public static class ProductEndpointResponseMapper
 {
@@ -27,9 +30,22 @@ public static class ProductEndpointResponseMapper
 
         foreach (var product in products)
         {
-            response.Add(MapToResponse(product));
+            response.Add(product.MapToResponse());
         }
 
         return response;
+    }
+
+    public static UpdateProductRequest MapToRequest(this UpdateProductEndpointRequest request, Guid productId)
+    {
+        return new UpdateProductRequest
+        {
+            ProductId = productId,
+            ProductCategoryId = request.ProductCategoryId,
+            Description = request.Description,
+            Currency = request.Currency,
+            Amount = request.Amount,
+            ImageUrl = request.ImageUrl
+        };
     }
 }

@@ -1,9 +1,7 @@
 ﻿using Domain.UseCases.Orders.AddOrderItem.Requests;
 using Domain.UseCases.Orders.CreateOrder.Requests;
 
-using Web.Api.Endpoints.Orders.Requests;
-
-namespace Web.Api.Endpoints.Orders.Mapping;
+namespace Web.Api.Endpoints.Orders.Requests.Mapping;
 
 public static class OrderEndpointRequestMapper
 {

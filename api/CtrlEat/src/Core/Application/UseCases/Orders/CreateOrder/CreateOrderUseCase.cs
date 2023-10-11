@@ -3,6 +3,7 @@
 using Domain.Adapters;
 using Domain.Entities.ClientAggregate.ValueObjects;
 using Domain.Entities.OrderAggregate;
+using Domain.Entities.OrderAggregate.ValueObjects;
 using Domain.UseCases.Orders.Common.Responses;
 using Domain.UseCases.Orders.CreateOrder;
 using Domain.UseCases.Orders.CreateOrder.Requests;
@@ -37,7 +38,7 @@ public class CreateOrderUseCase : ICreateOrderUseCase
             return Result.Fail(new ClientNotFoundError(request.ClientId));
         }
 
-        var order = Order.Create(client);
+        var order = Order.Create(TrackId.CreateUnique(), client);
 
         await orderRepository.CreateAsync(order.Value, cancellationToken);
 

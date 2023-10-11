@@ -12,7 +12,7 @@ public interface IOrderRepository
 
     Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken);
 
-    Task<Dictionary<OrderStatus, List<Order>>> GetAllByStatusAsync(OrderStatus status, CancellationToken cancellationToken);
+    Task<IEnumerable<Order>> GetAllByStatusAsync(OrderStatus status, CancellationToken cancellationToken);
 
     Task<int> UpdateAsync(Order order, CancellationToken cancellationToken);
 
