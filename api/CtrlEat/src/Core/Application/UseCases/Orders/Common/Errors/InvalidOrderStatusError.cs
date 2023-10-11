@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 
-namespace Application.UseCases.Orders.GetOrdersByStatus.Errors;
+namespace Application.UseCases.Orders.Common.Errors;
 
 public class InvalidOrderStatusError : Error
 {

@@ -47,6 +47,12 @@ public sealed class Order : AggregateRoot<OrderId>
         Items.Add(item);
     }
 
+    public void UpdateStatus(OrderStatus status)
+    {
+        Status = status;
+        StatusUpdatedAt = DateTime.UtcNow;
+    }
+
     public static Result<Order> Create(
         TrackId trackId,
         Client client,
