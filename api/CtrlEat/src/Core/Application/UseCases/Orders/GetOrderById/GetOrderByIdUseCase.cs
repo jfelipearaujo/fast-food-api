@@ -1,4 +1,4 @@
-﻿using Application.UseCases.Orders.GetOrderById.Errors;
+﻿using Application.UseCases.Orders.Common.Errors;
 
 using Domain.Adapters;
 using Domain.Entities.OrderAggregate.ValueObjects;

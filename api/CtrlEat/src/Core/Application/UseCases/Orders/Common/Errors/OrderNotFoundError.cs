@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 
-namespace Application.UseCases.Orders.GetOrderById.Errors;
+namespace Application.UseCases.Orders.Common.Errors;
 
 public class OrderNotFoundError : Error
 {

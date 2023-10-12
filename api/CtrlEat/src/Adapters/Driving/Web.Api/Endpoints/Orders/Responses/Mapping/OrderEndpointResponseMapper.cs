@@ -16,6 +16,15 @@ public static class OrderEndpointResponseMapper
         };
     }
 
+    public static CreateOrderEndpointResponse MapToCreatedResponse(this OrderResponse order)
+    {
+        return new CreateOrderEndpointResponse
+        {
+            Id = order.Id,
+            TrackId = order.TrackId,
+        };
+    }
+
     public static OrderItemEndpointResponse MapToResponse(this OrderItemResponse order)
     {
         return new OrderItemEndpointResponse

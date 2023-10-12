@@ -4,6 +4,7 @@ using Domain.UseCases.Orders.GetOrderById;
 using Domain.UseCases.Orders.GetOrderById.Requests;
 using Domain.UseCases.Orders.GetOrdersByStatus;
 using Domain.UseCases.Orders.GetOrdersByStatus.Requests;
+using Domain.UseCases.Orders.UpdateOrderStatus;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -34,6 +35,10 @@ public static class OrderEndpoints
 
         group.MapPost("/", CreateOrder)
             .WithName(nameof(CreateOrder))
+            .WithOpenApi();
+
+        group.MapPatch("{id}/status", UpdateOrderStatus)
+            .WithName(nameof(UpdateOrderStatus))
             .WithOpenApi();
 
         group.MapPost("{id}/items", AddOrderItem)
@@ -85,7 +90,7 @@ public static class OrderEndpoints
         return TypedResults.Ok(response);
     }
 
-    public static async Task<Results<CreatedAtRoute<OrderEndpointResponse>, NotFound<ApiError>>> CreateOrder(
+    public static async Task<Results<CreatedAtRoute<CreateOrderEndpointResponse>, NotFound<ApiError>>> CreateOrder(
         CreateOrderEndpointRequest endpointRequest,
         ICreateOrderUseCase useCase,
         CancellationToken cancellationToken)
@@ -99,7 +104,7 @@ public static class OrderEndpoints
             return TypedResults.NotFound(result.ToApiError());
         }
 
-        var response = result.Value.MapToResponse();
+        var response = result.Value.MapToCreatedResponse();
 
         return TypedResults.CreatedAtRoute(
             response,
@@ -108,6 +113,24 @@ public static class OrderEndpoints
             {
                 id = response.Id
             });
+    }
+
+    public static async Task<Results<Ok, BadRequest<ApiError>>> UpdateOrderStatus(
+        Guid id,
+        UpdateOrderStatusEndpointRequest endpointRequest,
+        IUpdateOrderStatusUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var request = endpointRequest.MapToRequest(id);
+
+        var result = await useCase.ExecuteAsync(request, cancellationToken);
+
+        if (result.IsFailed)
+        {
+            return TypedResults.BadRequest(result.ToApiError());
+        }
+
+        return TypedResults.Ok();
     }
 
     public static async Task<Results<Ok<OrderItemEndpointResponse>, BadRequest<ApiError>>> AddOrderItem(

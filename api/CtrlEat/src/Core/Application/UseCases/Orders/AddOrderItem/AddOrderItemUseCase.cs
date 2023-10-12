@@ -1,6 +1,6 @@
 ﻿using Application.UseCases.Common.Errors;
 using Application.UseCases.Orders.AddOrderItem.Errors;
-using Application.UseCases.Orders.GetOrderById.Errors;
+using Application.UseCases.Orders.Common.Errors;
 
 using Domain.Adapters;
 using Domain.Entities.OrderAggregate;
