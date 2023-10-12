@@ -2,6 +2,7 @@
 using Domain.Entities.ClientAggregate;
 using Domain.Entities.ClientAggregate.ValueObjects;
 using Domain.Entities.OrderAggregate.Enums;
+using Domain.Entities.OrderAggregate.Errors;
 using Domain.Entities.OrderAggregate.ValueObjects;
 
 using FluentResults;
@@ -47,10 +48,37 @@ public sealed class Order : AggregateRoot<OrderId>
         Items.Add(item);
     }
 
-    public void UpdateStatus(OrderStatus status)
+    public Result UpdateToStatus(OrderStatus toStatus)
     {
-        Status = status;
+        if (Status == toStatus)
+        {
+            return Result.Fail(new OrderAlreadyWithStatusError(toStatus));
+        }
+
+        switch (Status, toStatus)
+        {
+            case (OrderStatus.None, OrderStatus.Created):
+                Status = OrderStatus.Created;
+                break;
+            case (OrderStatus.Created, OrderStatus.Received):
+                Status = OrderStatus.Received;
+                break;
+            case (OrderStatus.Received, OrderStatus.OnGoing):
+                Status = OrderStatus.OnGoing;
+                break;
+            case (OrderStatus.OnGoing, OrderStatus.Done):
+                Status = OrderStatus.Done;
+                break;
+            case (OrderStatus.Done, OrderStatus.Completed):
+                Status = OrderStatus.Completed;
+                break;
+            default:
+                return Result.Fail(new OrderInvalidStatusTransitionError(Status, toStatus));
+        }
+
         StatusUpdatedAt = DateTime.UtcNow;
+
+        return Result.Ok();
     }
 
     public static Result<Order> Create(

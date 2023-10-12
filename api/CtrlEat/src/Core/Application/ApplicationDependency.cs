@@ -5,6 +5,7 @@ using Application.UseCases.Orders.AddOrderItem;
 using Application.UseCases.Orders.CreateOrder;
 using Application.UseCases.Orders.GetOrderById;
 using Application.UseCases.Orders.GetOrdersByStatus;
+using Application.UseCases.Orders.UpdateOrderStatus;
 using Application.UseCases.ProductCategories.CreateProductCategory;
 using Application.UseCases.ProductCategories.DeleteProductCategory;
 using Application.UseCases.ProductCategories.GetAllProductCategories;
@@ -24,6 +25,7 @@ using Domain.UseCases.Orders.AddOrderItem;
 using Domain.UseCases.Orders.CreateOrder;
 using Domain.UseCases.Orders.GetOrderById;
 using Domain.UseCases.Orders.GetOrdersByStatus;
+using Domain.UseCases.Orders.UpdateOrderStatus;
 using Domain.UseCases.ProductCategories.CreateProductCategory;
 using Domain.UseCases.ProductCategories.DeleteProductCategory;
 using Domain.UseCases.ProductCategories.GetAllProductCategories;
@@ -65,6 +67,7 @@ public static class ApplicationDependency
         services.AddScoped<IGetOrderByIdUseCase, GetOrderByIdUseCase>();
         services.AddScoped<IAddOrderItemUseCase, AddOrderItemUseCase>();
         services.AddScoped<IGetOrdersByStatusUseCase, GetOrdersByStatusUseCase>();
+        services.AddScoped<IUpdateOrderStatusUseCase, UpdateOrderStatusUseCase>();
 
         return services;
     }

@@ -9,6 +9,18 @@ public class ApiError
 
 public static class FluentResultExtensions
 {
+    public static ApiError ToApiError(this Result result)
+    {
+        var apiError = new ApiError();
+
+        foreach (var error in result.Errors)
+        {
+            apiError.Errors.Add(error.Message);
+        }
+
+        return apiError;
+    }
+
     public static ApiError ToApiError<T>(this Result<T> result)
     {
         var apiError = new ApiError();

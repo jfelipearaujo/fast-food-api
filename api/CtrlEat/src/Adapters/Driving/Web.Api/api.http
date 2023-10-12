@@ -30,7 +30,7 @@ POST {{rootUrl}}/products
 Content-Type: application/json
 
 {
-  "productCategoryId": "29cbc5ab-fb01-441a-ba6d-e25c30b7b94d",
+  "productCategoryId": "432df276-2353-4fa6-9ad9-6792439cec2e",
   "description": "Hamburguer Especial do Chef",
   "amount": 25.99,
   "currency": "BRL",
@@ -45,18 +45,18 @@ POST {{rootUrl}}/orders
 Content-Type: application/json
 
 {
-  "clientId": "d13cf399-41c4-40b0-9b88-da12fc3001e9"
+  "clientId": "81a43438-c3ac-4074-90e7-7fa359ecc70e"
 }
 
 ### Get an order
-GET {{rootUrl}}/orders/977ce04b-0edd-4f62-86cc-b8afa65af450
+GET {{rootUrl}}/orders/bbe55dc1-de7f-4320-8c93-96f49e2c3c7d
 
 ### Add a product to the order
-POST {{rootUrl}}/orders/977ce04b-0edd-4f62-86cc-b8afa65af450/items
+POST {{rootUrl}}/orders/bbe55dc1-de7f-4320-8c93-96f49e2c3c7d/items
 Content-Type: application/json
 
 {
-  "productId": "4639bb39-be20-49be-82ef-ccb7674096fe",
+  "productId": "fea58b8d-76f3-4bad-ac31-d83ee11b59f6",
   "quantity": 1,
   "observation": null
 }
