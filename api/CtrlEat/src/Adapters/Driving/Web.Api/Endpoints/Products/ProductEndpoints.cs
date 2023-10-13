@@ -43,6 +43,10 @@ public static class ProductEndpoints
             .WithName(nameof(CreateProduct))
             .WithOpenApi();
 
+        group.MapGet("{id}/image", GetProductImage)
+            .WithName(nameof(GetProductImage))
+            .WithOpenApi();
+
         group.MapPost("{id}/image", UploadProductImage)
             .WithName(nameof(UploadProductImage))
             .WithOpenApi();
@@ -129,6 +133,26 @@ public static class ProductEndpoints
             {
                 id = response.Id
             });
+    }
+
+    public static async Task<Ok> GetProductImage(
+        Guid id,
+        IFormFile file,
+        CancellationToken cancellationToken)
+    {
+        var dir = Path.Join(Directory.GetCurrentDirectory(), "images");
+        var extension = Path.GetExtension(file.FileName);
+        var tempFile = Path.Join(dir, $"{id}{extension}");
+
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        using var stream = File.OpenWrite(tempFile);
+        await file.CopyToAsync(stream, cancellationToken);
+
+        return TypedResults.Ok();
     }
 
     public static async Task<Ok> UploadProductImage(
