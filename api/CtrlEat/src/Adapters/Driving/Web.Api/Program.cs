@@ -4,6 +4,8 @@ using Infrastructure;
 
 using Microsoft.AspNetCore.Mvc;
 
+using MinimalHelpers.OpenApi;
+
 using Persistence;
 
 using System.Text.Json.Serialization;
@@ -26,7 +28,10 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddMissingSchemas();
+});
 
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();

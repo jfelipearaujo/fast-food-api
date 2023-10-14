@@ -15,8 +15,10 @@ using Application.UseCases.Products.CreateProduct;
 using Application.UseCases.Products.DeleteProduct;
 using Application.UseCases.Products.GetAllProducts;
 using Application.UseCases.Products.GetProductById;
+using Application.UseCases.Products.GetProductImage;
 using Application.UseCases.Products.GetProductsByCategory;
 using Application.UseCases.Products.UpdateProduct;
+using Application.UseCases.Products.UploadProductImage;
 
 using Domain.UseCases.Clients.CreateClient;
 using Domain.UseCases.Clients.GetAllClients;
@@ -35,8 +37,10 @@ using Domain.UseCases.Products.CreateProduct;
 using Domain.UseCases.Products.DeleteProduct;
 using Domain.UseCases.Products.GetAllProducts;
 using Domain.UseCases.Products.GetProductById;
+using Domain.UseCases.Products.GetProductImage;
 using Domain.UseCases.Products.GetProductsByCategory;
 using Domain.UseCases.Products.UpdateProduct;
+using Domain.UseCases.Products.UploadProductImage;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -58,6 +62,8 @@ public static class ApplicationDependency
         services.AddScoped<IGetProductsByCategoryUseCase, GetProductsByCategoryUseCase>();
         services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();
         services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
+        services.AddScoped<IUploadProductImageUseCase, UploadProductImageUseCase>();
+        services.AddScoped<IGetProductImageUseCase, GetProductImageUseCase>();
 
         services.AddScoped<ICreateClientUseCase, CreateClientUseCase>();
         services.AddScoped<IGetClientByIdUseCase, GetClientByIdUseCase>();

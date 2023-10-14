@@ -4,12 +4,17 @@ using Domain.UseCases.Products.DeleteProduct.Requests;
 using Domain.UseCases.Products.GetAllProducts;
 using Domain.UseCases.Products.GetProductById;
 using Domain.UseCases.Products.GetProductById.Requests;
+using Domain.UseCases.Products.GetProductImage;
+using Domain.UseCases.Products.GetProductImage.Requests;
 using Domain.UseCases.Products.GetProductsByCategory;
 using Domain.UseCases.Products.GetProductsByCategory.Requests;
 using Domain.UseCases.Products.UpdateProduct;
+using Domain.UseCases.Products.UploadProductImage;
+using Domain.UseCases.Products.UploadProductImage.Requests;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
+using Web.Api.Endpoints.Common.Constants;
 using Web.Api.Endpoints.Products.Requests;
 using Web.Api.Endpoints.Products.Requests.Mapping;
 using Web.Api.Endpoints.Products.Responses;
@@ -41,6 +46,14 @@ public static class ProductEndpoints
 
         group.MapPost("/", CreateProduct)
             .WithName(nameof(CreateProduct))
+            .WithOpenApi();
+
+        group.MapGet("{id}/image", GetProductImage)
+            .WithName(nameof(GetProductImage))
+            .WithOpenApi();
+
+        group.MapPost("{id}/image", UploadProductImage)
+            .WithName(nameof(UploadProductImage))
             .WithOpenApi();
 
         group.MapPut("{id}", UpdateProduct)
@@ -124,6 +137,64 @@ public static class ProductEndpoints
             new
             {
                 id = response.Id
+            });
+    }
+
+    public static async Task<Results<PhysicalFileHttpResult, BadRequest<ApiError>>> GetProductImage(
+        Guid id,
+        IGetProductImageUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var request = new GetProductImageRequest
+        {
+            Id = id,
+        };
+
+        var result = await useCase.Execute(request, cancellationToken);
+
+        if (result.IsFailed)
+        {
+            return TypedResults.BadRequest(result.ToApiError());
+        }
+
+        return TypedResults.PhysicalFile(result.Value, ContentTypes.ImageJpeg);
+    }
+
+    public static async Task<Results<CreatedAtRoute, BadRequest<ApiError>>> UploadProductImage(
+        Guid id,
+        IFormFile file,
+        IUploadProductImageUseCase useCase,
+        HttpContext httpContext,
+        LinkGenerator linkGenerator,
+        CancellationToken cancellationToken)
+    {
+        var fileUrl = linkGenerator.GetUriByRouteValues(
+            httpContext,
+            nameof(GetProductImage),
+            new
+            {
+                id
+            });
+
+        var request = new UploadProductImageRequest
+        {
+            Id = id,
+            File = file,
+            ImageUrl = fileUrl,
+        };
+
+        var result = await useCase.ExecuteAsync(request, cancellationToken);
+
+        if (result.IsFailed)
+        {
+            return TypedResults.BadRequest(result.ToApiError());
+        }
+
+        return TypedResults.CreatedAtRoute(
+            nameof(GetProductImage),
+            new
+            {
+                id = result.Value
             });
     }
 
