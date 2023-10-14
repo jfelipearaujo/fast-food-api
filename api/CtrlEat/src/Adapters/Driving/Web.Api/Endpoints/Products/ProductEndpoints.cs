@@ -4,12 +4,17 @@ using Domain.UseCases.Products.DeleteProduct.Requests;
 using Domain.UseCases.Products.GetAllProducts;
 using Domain.UseCases.Products.GetProductById;
 using Domain.UseCases.Products.GetProductById.Requests;
+using Domain.UseCases.Products.GetProductImage;
+using Domain.UseCases.Products.GetProductImage.Requests;
 using Domain.UseCases.Products.GetProductsByCategory;
 using Domain.UseCases.Products.GetProductsByCategory.Requests;
 using Domain.UseCases.Products.UpdateProduct;
+using Domain.UseCases.Products.UploadProductImage;
+using Domain.UseCases.Products.UploadProductImage.Requests;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
+using Web.Api.Endpoints.Common.Constants;
 using Web.Api.Endpoints.Products.Requests;
 using Web.Api.Endpoints.Products.Requests.Mapping;
 using Web.Api.Endpoints.Products.Responses;
@@ -135,44 +140,62 @@ public static class ProductEndpoints
             });
     }
 
-    public static async Task<Ok> GetProductImage(
+    public static async Task<Results<PhysicalFileHttpResult, BadRequest<ApiError>>> GetProductImage(
         Guid id,
-        IFormFile file,
+        IGetProductImageUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var dir = Path.Join(Directory.GetCurrentDirectory(), "images");
-        var extension = Path.GetExtension(file.FileName);
-        var tempFile = Path.Join(dir, $"{id}{extension}");
-
-        if (!Directory.Exists(dir))
+        var request = new GetProductImageRequest
         {
-            Directory.CreateDirectory(dir);
+            Id = id,
+        };
+
+        var result = await useCase.Execute(request, cancellationToken);
+
+        if (result.IsFailed)
+        {
+            return TypedResults.BadRequest(result.ToApiError());
         }
 
-        using var stream = File.OpenWrite(tempFile);
-        await file.CopyToAsync(stream, cancellationToken);
-
-        return TypedResults.Ok();
+        return TypedResults.PhysicalFile(result.Value, ContentTypes.ImageJpeg);
     }
 
-    public static async Task<Ok> UploadProductImage(
+    public static async Task<Results<CreatedAtRoute, BadRequest<ApiError>>> UploadProductImage(
         Guid id,
         IFormFile file,
+        IUploadProductImageUseCase useCase,
+        HttpContext httpContext,
+        LinkGenerator linkGenerator,
         CancellationToken cancellationToken)
     {
-        var dir = Path.Join(Directory.GetCurrentDirectory(), "images");
-        var extension = Path.GetExtension(file.FileName);
-        var tempFile = Path.Join(dir, $"{id}{extension}");
+        var fileUrl = linkGenerator.GetUriByRouteValues(
+            httpContext,
+            nameof(GetProductImage),
+            new
+            {
+                id
+            });
 
-        if (!Directory.Exists(dir))
+        var request = new UploadProductImageRequest
         {
-            Directory.CreateDirectory(dir);
+            Id = id,
+            File = file,
+            ImageUrl = fileUrl,
+        };
+
+        var result = await useCase.ExecuteAsync(request, cancellationToken);
+
+        if (result.IsFailed)
+        {
+            return TypedResults.BadRequest(result.ToApiError());
         }
 
-        using var stream = File.OpenWrite(tempFile);
-        await file.CopyToAsync(stream, cancellationToken);
-
-        return TypedResults.Ok();
+        return TypedResults.CreatedAtRoute(
+            nameof(GetProductImage),
+            new
+            {
+                id = result.Value
+            });
     }
 
     public static async Task<Results<CreatedAtRoute<ProductEndpointResponse>, NotFound<ApiError>>> UpdateProduct(

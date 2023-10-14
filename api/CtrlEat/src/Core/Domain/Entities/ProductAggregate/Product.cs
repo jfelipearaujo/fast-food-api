@@ -40,13 +40,13 @@ public sealed class Product : AggregateRoot<ProductId>
     }
 
     public void Update(
-        string description,
-        Money price,
-        string imageUrl)
+        string? description = null,
+        Money? price = null,
+        string? imageUrl = null)
     {
-        Description = description;
-        Price = price;
-        ImageUrl = imageUrl;
+        Description = description ?? Description;
+        Price = price ?? Price;
+        ImageUrl = imageUrl ?? ImageUrl;
     }
 
     public static Result<Product> Create(
