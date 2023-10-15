@@ -34,7 +34,7 @@ entity "Product" as product {
     ---
     CategoryId: Guid <<FK>>
     Description: String
-    UnitPrice: Decimal
+    Amount: Decimal
     Currency: String
     ImageUrl: String
     ---
@@ -59,6 +59,10 @@ entity "Order Item" as orderItem {
     ProductId: Guid <<FK>>
     Quantity: Integer
     Observation: String
+    Description: String
+    Amount: Decimal
+    Currency: String
+    ImageUrl: String
     ---
     CreatedAtUtc: DateTime
     UpdatedAtUtc: DateTime
@@ -82,7 +86,9 @@ entity "Order" as order {
     ---
     ClientId: Guid <<FK>>
     PaymentId: Guid <<FK>>
+    TrackId: String
     Status: Integer
+    StatusUpdatedAtUtc: DateTime
     ---
     CreatedAtUtc: DateTime
     UpdatedAtUtc: DateTime
