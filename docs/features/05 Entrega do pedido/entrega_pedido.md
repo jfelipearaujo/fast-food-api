@@ -2,8 +2,25 @@
 
 ## Entidades
 
-- Cliente: Entidade responsável por realizar os pedidos no sistema podendo se identificar via CPF, realizar cadastro com nome e e-mail ou permanecer de forma anônima
-- Pedido: Entidade responsável por agrupar um conjunto de itens selecionados pelo cliente
+```
+Cliente
+
+> Entidade responsável por realizar os pedidos no sistema
+
+CPF
+Nome completo
+E-mail
+```
+
+```
+Pedido
+
+> Entidade responsável por agrupar um conjunto de itens selecionados pelo cliente
+
+Cliente
+Status do pedido
+Lista dos produtos
+```
 
 ## Fluxo
 

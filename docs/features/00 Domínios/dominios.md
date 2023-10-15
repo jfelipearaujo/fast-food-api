@@ -10,11 +10,12 @@ Controle e Preparação de Pedidos do Fast Food
 ### Subdomínios Genéricos:
 
 - Gestão de Pagamentos
-- Autenticação e Autorização
 - Notificações
 - Controle de Estoque
 
 ### Subdomínios de Suporte:
 
+- Autenticação e Autorização
 - Gestão de Usuários
 - Relatórios e Análises
+- Gestão de Produtos
