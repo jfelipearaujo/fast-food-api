@@ -6,8 +6,6 @@ using Domain.UseCases.Orders.GetOrdersByStatus;
 using Domain.UseCases.Orders.GetOrdersByStatus.Requests;
 using Domain.UseCases.Orders.UpdateOrderStatus;
 
-using Microsoft.AspNetCore.Http.HttpResults;
-
 using Web.Api.Endpoints.Orders.Requests;
 using Web.Api.Endpoints.Orders.Requests.Mapping;
 using Web.Api.Endpoints.Orders.Responses;
@@ -22,31 +20,44 @@ public static class OrderEndpoints
 
     public static void MapOrderEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/orders")
-            .WithTags(EndpointTag);
+        var orders = app.NewVersionedApi(EndpointTag);
+
+        var group = orders.MapGroup(ApiEndpoints.Orders.BaseRoute)
+            .HasApiVersion(ApiEndpoints.Orders.V1.Version)
+            .WithOpenApi();
 
         group.MapGet("{id}", GetOrderById)
-            .WithName(nameof(GetOrderById))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.Orders.V1.GetById)
+            .WithDescription("Searches and returns a order's data based on their identifier")
+            .Produces<OrderEndpointResponse>(StatusCodes.Status200OK)
+            .Produces<ApiError>(StatusCodes.Status404NotFound);
 
         group.MapGet("/tracking", GetOrdersByStatus)
-            .WithName(nameof(GetOrdersByStatus))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.Orders.V1.GetByStatus)
+            .WithDescription("Searches and returns a order's data based on their status. If not provided, then all orders will be returned.")
+            .Produces<List<OrderTrackingEndpointResponse>>(StatusCodes.Status200OK)
+            .Produces<ApiError>(StatusCodes.Status400BadRequest);
 
         group.MapPost("/", CreateOrder)
-            .WithName(nameof(CreateOrder))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.Orders.V1.Create)
+            .WithDescription("Register an order")
+            .Produces<CreateOrderEndpointResponse>(StatusCodes.Status201Created)
+            .Produces<ApiError>(StatusCodes.Status404NotFound);
 
         group.MapPatch("{id}/status", UpdateOrderStatus)
-            .WithName(nameof(UpdateOrderStatus))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.Orders.V1.UpdateStatus)
+            .WithDescription("Update an order status")
+            .Produces(StatusCodes.Status200OK)
+            .Produces<ApiError>(StatusCodes.Status400BadRequest);
 
         group.MapPost("{id}/items", AddOrderItem)
-            .WithName(nameof(AddOrderItem))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.Orders.V1.AddOrderItem)
+            .WithDescription("Add an item to the order")
+            .Produces<OrderItemEndpointResponse>(StatusCodes.Status200OK)
+            .Produces<ApiError>(StatusCodes.Status400BadRequest);
     }
 
-    public static async Task<Results<Ok<OrderEndpointResponse>, NotFound<ApiError>>> GetOrderById(
+    public static async Task<IResult> GetOrderById(
         Guid id,
         IGetOrderByIdUseCase useCase,
         CancellationToken cancellation)
@@ -60,15 +71,15 @@ public static class OrderEndpoints
 
         if (result.IsFailed)
         {
-            return TypedResults.NotFound(result.ToApiError());
+            return Results.NotFound(result.ToApiError());
         }
 
         var response = result.Value.MapToResponse();
 
-        return TypedResults.Ok(response);
+        return Results.Ok(response);
     }
 
-    public static async Task<Results<Ok<List<OrderTrackingEndpointResponse>>, BadRequest<ApiError>>> GetOrdersByStatus(
+    public static async Task<IResult> GetOrdersByStatus(
         string? status,
         IGetOrdersByStatusUseCase useCase,
         CancellationToken cancellationToken)
@@ -82,15 +93,15 @@ public static class OrderEndpoints
 
         if (result.IsFailed)
         {
-            return TypedResults.BadRequest(result.ToApiError());
+            return Results.BadRequest(result.ToApiError());
         }
 
         var response = result.Value.MapToResponse();
 
-        return TypedResults.Ok(response);
+        return Results.Ok(response);
     }
 
-    public static async Task<Results<CreatedAtRoute<CreateOrderEndpointResponse>, NotFound<ApiError>>> CreateOrder(
+    public static async Task<IResult> CreateOrder(
         CreateOrderEndpointRequest endpointRequest,
         ICreateOrderUseCase useCase,
         CancellationToken cancellationToken)
@@ -101,21 +112,21 @@ public static class OrderEndpoints
 
         if (result.IsFailed)
         {
-            return TypedResults.NotFound(result.ToApiError());
+            return Results.NotFound(result.ToApiError());
         }
 
         var response = result.Value.MapToCreatedResponse();
 
-        return TypedResults.CreatedAtRoute(
+        return Results.CreatedAtRoute(
+            ApiEndpoints.Orders.V1.GetById,
             response,
-            nameof(GetOrderById),
             new
             {
                 id = response.Id
             });
     }
 
-    public static async Task<Results<Ok, BadRequest<ApiError>>> UpdateOrderStatus(
+    public static async Task<IResult> UpdateOrderStatus(
         Guid id,
         UpdateOrderStatusEndpointRequest endpointRequest,
         IUpdateOrderStatusUseCase useCase,
@@ -127,13 +138,13 @@ public static class OrderEndpoints
 
         if (result.IsFailed)
         {
-            return TypedResults.BadRequest(result.ToApiError());
+            return Results.BadRequest(result.ToApiError());
         }
 
-        return TypedResults.Ok();
+        return Results.Ok();
     }
 
-    public static async Task<Results<Ok<OrderItemEndpointResponse>, BadRequest<ApiError>>> AddOrderItem(
+    public static async Task<IResult> AddOrderItem(
         Guid id,
         AddOrderItemEndpointRequest endpointRequest,
         IAddOrderItemUseCase useCase,
@@ -145,11 +156,11 @@ public static class OrderEndpoints
 
         if (result.IsFailed)
         {
-            return TypedResults.BadRequest(result.ToApiError());
+            return Results.BadRequest(result.ToApiError());
         }
 
         var response = result.Value.MapToResponse();
 
-        return TypedResults.Ok(response);
+        return Results.Ok(response);
     }
 }
