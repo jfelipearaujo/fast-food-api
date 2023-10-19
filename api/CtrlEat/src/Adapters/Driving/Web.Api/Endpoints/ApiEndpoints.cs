@@ -52,4 +52,20 @@ public static class ApiEndpoints
             public static readonly string Delete = $"DeleteProduct:{Version}";
         }
     }
+
+    public static class ProductCategories
+    {
+        public static readonly string BaseRoute = $"{ApiBase}/products/categories";
+
+        public static class V1
+        {
+            public static readonly double Version = 1.0;
+
+            public static readonly string GetById = $"GetProductCategoryById:{Version}";
+            public static readonly string GetAll = $"GetAllProductCategories:{Version}";
+            public static readonly string Create = $"CreateProductCategory:{Version}";
+            public static readonly string Update = $"UpdateProductCategory:{Version}";
+            public static readonly string Delete = $"DeleteProductCategory:{Version}";
+        }
+    }
 }
