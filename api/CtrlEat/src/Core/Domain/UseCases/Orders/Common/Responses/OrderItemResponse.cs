@@ -28,7 +28,7 @@ public class OrderItemResponse
             Quantity = orderItem.Quantity,
             Observation = orderItem.Observation,
             Description = orderItem.Description,
-            Price = orderItem.Price.Amount.ToString("C", CultureInfo.CreateSpecificCulture(currencyCultureName)),
+            Price = (orderItem.Quantity * orderItem.Price.Amount).ToString("C", CultureInfo.CreateSpecificCulture(currencyCultureName)),
         };
     }
 

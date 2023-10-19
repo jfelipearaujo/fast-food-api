@@ -1,8 +1,7 @@
 ﻿using Application.UseCases.Common.Errors;
 using Application.UseCases.Orders.AddOrderItem.Errors;
 using Application.UseCases.Orders.Common.Errors;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.OrderAggregate;
 using Domain.Entities.OrderAggregate.ValueObjects;
 using Domain.Entities.ProductAggregate.ValueObjects;

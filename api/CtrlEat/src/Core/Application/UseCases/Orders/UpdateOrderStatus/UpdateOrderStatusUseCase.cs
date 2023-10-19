@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.Orders.Common.Errors;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.OrderAggregate.Enums;
 using Domain.Entities.OrderAggregate.ValueObjects;
 using Domain.UseCases.Orders.UpdateOrderStatus;

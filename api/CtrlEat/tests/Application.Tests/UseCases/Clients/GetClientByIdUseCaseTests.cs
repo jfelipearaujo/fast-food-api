@@ -1,7 +1,6 @@
 ﻿using Application.UseCases.Clients.GetClientById;
 using Application.UseCases.Common.Errors;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.ClientAggregate;
 using Domain.Entities.ClientAggregate.ValueObjects;
 using Domain.UseCases.Clients.Common.Responses;

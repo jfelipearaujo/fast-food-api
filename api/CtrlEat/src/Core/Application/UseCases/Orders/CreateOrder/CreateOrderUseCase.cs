@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.Common.Errors;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.ClientAggregate.ValueObjects;
 using Domain.Entities.OrderAggregate;
 using Domain.Entities.OrderAggregate.ValueObjects;

@@ -1,8 +1,7 @@
 ﻿using Application.UseCases.Common.Constants;
 using Application.UseCases.Common.Errors;
 using Application.UseCases.Products.GetProductImage.Errors;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.GetProductImage;
 using Domain.UseCases.Products.GetProductImage.Requests;

@@ -1,4 +1,4 @@
-﻿using Domain.Adapters;
+﻿using Domain.Adapters.Repositories;
 
 using Infrastructure.Repositories;
 
@@ -14,6 +14,7 @@ public static class InfrastructureDependency
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IClientRepository, ClientRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
 
         return services;
     }

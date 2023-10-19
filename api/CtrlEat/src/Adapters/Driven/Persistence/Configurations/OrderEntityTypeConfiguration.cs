@@ -46,9 +46,5 @@ public class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
         builder.HasOne(o => o.Client)
             .WithMany(c => c.Orders)
             .HasForeignKey(o => o.ClientId);
-
-        builder.HasOne(o => o.Payment)
-            .WithOne(p => p.Order)
-            .HasForeignKey<Payment>(p => p.OrderId);
     }
 }

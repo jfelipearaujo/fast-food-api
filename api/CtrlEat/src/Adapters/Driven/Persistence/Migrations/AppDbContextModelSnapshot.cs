@@ -163,8 +163,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId")
-                        .IsUnique();
+                    b.HasIndex("OrderId");
 
                     b.ToTable("payments", (string)null);
                 });
@@ -339,8 +338,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.OrderAggregate.Payment", b =>
                 {
                     b.HasOne("Domain.Entities.OrderAggregate.Order", "Order")
-                        .WithOne("Payment")
-                        .HasForeignKey("Domain.Entities.OrderAggregate.Payment", "OrderId")
+                        .WithMany("Payments")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -428,8 +427,7 @@ namespace Persistence.Migrations
                 {
                     b.Navigation("Items");
 
-                    b.Navigation("Payment")
-                        .IsRequired();
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductAggregate.Product", b =>

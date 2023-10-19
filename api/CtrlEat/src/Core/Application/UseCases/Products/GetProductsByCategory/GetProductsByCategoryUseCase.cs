@@ -1,4 +1,4 @@
-﻿using Domain.Adapters;
+﻿using Domain.Adapters.Repositories;
 using Domain.UseCases.Products.Common.Responses;
 using Domain.UseCases.Products.GetProductsByCategory;
 using Domain.UseCases.Products.GetProductsByCategory.Requests;

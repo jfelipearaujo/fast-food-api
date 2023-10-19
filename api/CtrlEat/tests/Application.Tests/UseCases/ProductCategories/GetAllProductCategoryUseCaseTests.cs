@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.ProductCategories.GetAllProductCategories;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate;
 using Domain.UseCases.ProductCategories.Common.Responses;
 

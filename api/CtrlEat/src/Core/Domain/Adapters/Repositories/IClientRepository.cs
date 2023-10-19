@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.ClientAggregate;
 using Domain.Entities.ClientAggregate.ValueObjects;
 
-namespace Domain.Adapters;
+namespace Domain.Adapters.Repositories;
 
 public interface IClientRepository
 {

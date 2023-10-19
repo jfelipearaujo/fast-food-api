@@ -1,7 +1,6 @@
 ﻿using Application.UseCases.Clients.CreateClient;
 using Application.UseCases.Clients.CreateClient.Errors;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.ClientAggregate;
 using Domain.Entities.ClientAggregate.Enums;
 using Domain.Entities.ClientAggregate.ValueObjects;

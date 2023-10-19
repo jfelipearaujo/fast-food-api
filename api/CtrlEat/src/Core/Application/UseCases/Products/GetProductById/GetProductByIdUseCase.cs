@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.Common.Errors;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.Common.Responses;
 using Domain.UseCases.Products.GetProductById;

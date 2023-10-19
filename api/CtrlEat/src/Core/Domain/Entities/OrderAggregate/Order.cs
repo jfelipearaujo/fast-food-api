@@ -23,7 +23,7 @@ public sealed class Order : AggregateRoot<OrderId>
 
     public ICollection<OrderItem> Items { get; private set; }
 
-    public Payment Payment { get; private set; }
+    public ICollection<Payment> Payments { get; private set; }
 
     private Order()
     {
