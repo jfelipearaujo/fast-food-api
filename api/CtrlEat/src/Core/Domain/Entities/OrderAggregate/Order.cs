@@ -15,13 +15,15 @@ public sealed class Order : AggregateRoot<OrderId>
 
     public OrderStatus Status { get; private set; }
 
-    public DateTime StatusUpdatedAt { get; set; }
+    public DateTime StatusUpdatedAt { get; private set; }
 
-    public ClientId ClientId { get; set; }
+    public ClientId ClientId { get; private set; }
 
-    public Client Client { get; set; }
+    public Client Client { get; private set; }
 
-    public ICollection<OrderItem> Items { get; set; }
+    public ICollection<OrderItem> Items { get; private set; }
+
+    public Payment Payment { get; private set; }
 
     private Order()
     {

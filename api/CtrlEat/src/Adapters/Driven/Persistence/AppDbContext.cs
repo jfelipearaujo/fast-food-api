@@ -31,6 +31,8 @@ public class AppDbContext : DbContext
 
     public DbSet<OrderItem> OrderItem { get; set; }
 
+    public DbSet<Payment> Payment { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
