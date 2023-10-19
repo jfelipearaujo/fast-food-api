@@ -10,7 +10,6 @@ using FluentResults;
 
 namespace Application.UseCases.Orders.UpdateOrderStatus;
 
-
 public class UpdateOrderStatusUseCase : IUpdateOrderStatusUseCase
 {
     private readonly IOrderRepository repository;

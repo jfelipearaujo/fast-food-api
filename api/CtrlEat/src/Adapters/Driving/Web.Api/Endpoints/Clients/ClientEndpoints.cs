@@ -3,7 +3,6 @@ using Domain.UseCases.Clients.GetAllClients;
 using Domain.UseCases.Clients.GetClientById;
 using Domain.UseCases.Clients.GetClientById.Requests;
 
-using Microsoft.AspNetCore.Http.HttpResults;
 using Web.Api.Endpoints.Clients.Requests;
 using Web.Api.Endpoints.Clients.Requests.Mapping;
 using Web.Api.Endpoints.Clients.Responses;
@@ -18,23 +17,31 @@ public static class ClientEndpoints
 
     public static void MapClientEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/clients")
-            .WithTags(EndpointTag);
+        var clients = app.NewVersionedApi(EndpointTag);
+
+        var group = clients.MapGroup(ApiEndpoints.Clients.BaseRoute)
+            .HasApiVersion(ApiEndpoints.Clients.V1.Version)
+            .WithOpenApi();
 
         group.MapGet("{id}", GetClientById)
-            .WithName(nameof(GetClientById))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.Clients.V1.GetById)
+            .WithDescription("Searches and returns a client's data based on their identifier")
+            .Produces<ClientEndpointResponse>(StatusCodes.Status200OK)
+            .Produces<ApiError>(StatusCodes.Status404NotFound);
 
         group.MapGet("/", GetAllClients)
-            .WithName(nameof(GetAllClients))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.Clients.V1.GetAll)
+            .WithDescription("Searches and returns all registered client data")
+            .Produces<List<ClientEndpointResponse>>(StatusCodes.Status200OK);
 
         group.MapPost("/", CreateClient)
-            .WithName(nameof(CreateClient))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.Clients.V1.Create)
+            .WithDescription("Register a client")
+            .Produces<ClientEndpointResponse>(StatusCodes.Status201Created)
+            .Produces<ApiError>(StatusCodes.Status400BadRequest);
     }
 
-    public static async Task<Results<Ok<ClientEndpointResponse>, NotFound<ApiError>>> GetClientById(
+    public static async Task<IResult> GetClientById(
         Guid id,
         IGetClientByIdUseCase useCase,
         CancellationToken cancellationToken)
@@ -48,15 +55,15 @@ public static class ClientEndpoints
 
         if (result.IsFailed)
         {
-            return TypedResults.NotFound(result.ToApiError());
+            return Results.NotFound(result.ToApiError());
         }
 
         var response = result.Value.MapToResponse();
 
-        return TypedResults.Ok(response);
+        return Results.Ok(response);
     }
 
-    public static async Task<Ok<List<ClientEndpointResponse>>> GetAllClients(
+    public static async Task<IResult> GetAllClients(
         IGetAllClientsUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -64,10 +71,10 @@ public static class ClientEndpoints
 
         var response = result.Value.MapToResponse();
 
-        return TypedResults.Ok(response);
+        return Results.Ok(response);
     }
 
-    public static async Task<Results<CreatedAtRoute<ClientEndpointResponse>, BadRequest<ApiError>>> CreateClient(
+    public static async Task<IResult> CreateClient(
         CreateClientEndpointRequest endpointRequest,
         ICreateClientUseCase useCase,
         CancellationToken cancellationToken)
@@ -78,14 +85,14 @@ public static class ClientEndpoints
 
         if (result.IsFailed)
         {
-            return TypedResults.BadRequest(result.ToApiError());
+            return Results.BadRequest(result.ToApiError());
         }
 
         var response = result.Value.MapToResponse();
 
-        return TypedResults.CreatedAtRoute(
+        return Results.CreatedAtRoute(
+            ApiEndpoints.Clients.V1.GetById,
             response,
-            nameof(GetClientById),
             new
             {
                 id = response.Id,

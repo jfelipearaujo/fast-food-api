@@ -8,7 +8,6 @@ using Domain.UseCases.ProductCategories.GetProductCategoryById.Request;
 using Domain.UseCases.ProductCategories.UpdateProductCategory;
 using Domain.UseCases.ProductCategories.UpdateProductCategory.Request;
 
-using Microsoft.AspNetCore.Http.HttpResults;
 using Web.Api.Endpoints.ProductCategories.Requests;
 using Web.Api.Endpoints.ProductCategories.Responses;
 using Web.Api.Endpoints.ProductCategories.Responses.Mapping;
@@ -22,31 +21,42 @@ public static class ProductCategoriesEndpoints
 
     public static void MapProductCategoryEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/products/categories")
-            .WithTags(EndpointTag);
+        var productCategories = app.NewVersionedApi(EndpointTag);
+
+        var group = productCategories.MapGroup(ApiEndpoints.ProductCategories.BaseRoute)
+            .HasApiVersion(ApiEndpoints.ProductCategories.V1.Version)
+            .WithOpenApi();
 
         group.MapGet("{id}", GetProductCategoryById)
-            .WithName(nameof(GetProductCategoryById))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.ProductCategories.V1.GetById)
+            .WithDescription("Searches and returns a product's category based on their identifier")
+            .Produces<ProductCategoryEndpointResponse>(StatusCodes.Status200OK)
+            .Produces<ApiError>(StatusCodes.Status404NotFound);
 
         group.MapGet("/", GetAllProductCategories)
-            .WithName(nameof(GetAllProductCategories))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.ProductCategories.V1.GetAll)
+            .WithDescription("Searches and returns all registered product's categories")
+            .Produces<List<ProductCategoryEndpointResponse>>(StatusCodes.Status200OK);
 
         group.MapPost("/", CreateProductCategory)
-            .WithName(nameof(CreateProductCategory))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.ProductCategories.V1.Create)
+            .WithDescription("Register a new product category")
+            .Produces<ProductCategoryEndpointResponse>(StatusCodes.Status201Created);
 
         group.MapPut("{id}", UpdateProductCategory)
-            .WithName(nameof(UpdateProductCategory))
-            .WithOpenApi();
+            .WithName(ApiEndpoints.ProductCategories.V1.Update)
+            .WithDescription("Update product category")
+            .Produces<ProductCategoryEndpointResponse>(StatusCodes.Status201Created)
+            .Produces<ApiError>(StatusCodes.Status404NotFound);
 
         group.MapDelete("{id}", DeleteProductCategory)
-           .WithName(nameof(DeleteProductCategory))
-           .WithOpenApi();
+           .WithName(ApiEndpoints.ProductCategories.V1.Delete)
+           .WithDescription("Delete a product category")
+           .Produces(StatusCodes.Status204NoContent)
+           .Produces<ApiError>(StatusCodes.Status404NotFound);
     }
 
-    public static async Task<Results<Ok<ProductCategoryEndpointResponse>, NotFound<ApiError>>> GetProductCategoryById(
+    public static async Task<IResult> GetProductCategoryById(
         Guid id,
         IGetProductCategoryByIdUseCase useCase,
         CancellationToken cancellationToken)
@@ -60,15 +70,15 @@ public static class ProductCategoriesEndpoints
 
         if (result.IsFailed)
         {
-            return TypedResults.NotFound(result.ToApiError());
+            return Results.NotFound(result.ToApiError());
         }
 
         var response = result.Value.MapToResponse();
 
-        return TypedResults.Ok(response);
+        return Results.Ok(response);
     }
 
-    public static async Task<Ok<List<ProductCategoryEndpointResponse>>> GetAllProductCategories(
+    public static async Task<IResult> GetAllProductCategories(
         IGetAllProductCategoriesUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -76,10 +86,10 @@ public static class ProductCategoriesEndpoints
 
         var response = result.Value.MapToResponse();
 
-        return TypedResults.Ok(response);
+        return Results.Ok(response);
     }
 
-    public static async Task<CreatedAtRoute<ProductCategoryEndpointResponse>> CreateProductCategory(
+    public static async Task<IResult> CreateProductCategory(
         CreateProductCategoryEndpointRequest endpointRequest,
         ICreateProductCategoryUseCase useCase,
         CancellationToken cancellationToken)
@@ -93,16 +103,16 @@ public static class ProductCategoriesEndpoints
 
         var response = result.Value.MapToResponse();
 
-        return TypedResults.CreatedAtRoute(
+        return Results.CreatedAtRoute(
+            ApiEndpoints.ProductCategories.V1.GetById,
             response,
-            nameof(GetProductCategoryById),
             new
             {
                 id = response.Id,
             });
     }
 
-    public static async Task<Results<CreatedAtRoute<ProductCategoryEndpointResponse>, NotFound<ApiError>>> UpdateProductCategory(
+    public static async Task<IResult> UpdateProductCategory(
         Guid id,
         UpdateProductCategoryEndpointRequest endpointRequest,
         IUpdateProductCategoryUseCase useCase,
@@ -118,21 +128,21 @@ public static class ProductCategoriesEndpoints
 
         if (result.IsFailed)
         {
-            return TypedResults.NotFound(result.ToApiError());
+            return Results.NotFound(result.ToApiError());
         }
 
         var response = result.Value.MapToResponse();
 
-        return TypedResults.CreatedAtRoute(
+        return Results.CreatedAtRoute(
+            ApiEndpoints.ProductCategories.V1.GetById,
             response,
-            nameof(GetProductCategoryById),
             new
             {
                 id = response.Id,
             });
     }
 
-    public static async Task<Results<NoContent, NotFound<ApiError>>> DeleteProductCategory(
+    public static async Task<IResult> DeleteProductCategory(
         Guid id,
         IDeleteProductCategoryUseCase useCase,
         CancellationToken cancellationToken)
@@ -146,9 +156,9 @@ public static class ProductCategoriesEndpoints
 
         if (result.IsFailed)
         {
-            return TypedResults.NotFound(result.ToApiError());
+            return Results.NotFound(result.ToApiError());
         }
 
-        return TypedResults.NoContent();
+        return Results.NoContent();
     }
 }
