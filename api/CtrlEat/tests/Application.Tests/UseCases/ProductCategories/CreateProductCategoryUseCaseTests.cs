@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.ProductCategories.CreateProductCategory;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate;
 using Domain.UseCases.ProductCategories.Common.Responses;
 using Domain.UseCases.ProductCategories.CreateProductCategory.Request;

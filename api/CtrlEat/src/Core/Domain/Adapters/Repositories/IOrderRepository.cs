@@ -2,7 +2,7 @@
 using Domain.Entities.OrderAggregate.Enums;
 using Domain.Entities.OrderAggregate.ValueObjects;
 
-namespace Domain.Adapters;
+namespace Domain.Adapters.Repositories;
 
 public interface IOrderRepository
 {

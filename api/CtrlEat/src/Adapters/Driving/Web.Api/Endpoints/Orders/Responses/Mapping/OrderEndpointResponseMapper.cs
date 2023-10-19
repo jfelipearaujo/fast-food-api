@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.OrderAggregate.Enums;
+using Domain.UseCases.Orders.CheckoutOrder.Responses;
 using Domain.UseCases.Orders.Common.Responses;
 
 namespace Web.Api.Endpoints.Orders.Responses.Mapping;
@@ -11,7 +12,8 @@ public static class OrderEndpointResponseMapper
         {
             Id = order.Id,
             TrackId = order.TrackId,
-            Status = order.Status,
+            Status = order.OrderStatus,
+            Payments = order.Payments,
             Items = order.Items.MapToResponse(),
         };
     }
@@ -108,5 +110,13 @@ public static class OrderEndpointResponseMapper
         }
 
         return response;
+    }
+
+    public static OrderCheckoutEndpointResponse MapToResponse(this CheckoutOrderResponse response)
+    {
+        return new OrderCheckoutEndpointResponse
+        {
+            Status = response.Status
+        };
     }
 }

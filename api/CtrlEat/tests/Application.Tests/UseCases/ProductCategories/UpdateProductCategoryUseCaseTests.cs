@@ -1,7 +1,6 @@
 ﻿using Application.UseCases.Common.Errors;
 using Application.UseCases.ProductCategories.UpdateProductCategory;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.ProductCategories.Common.Responses;

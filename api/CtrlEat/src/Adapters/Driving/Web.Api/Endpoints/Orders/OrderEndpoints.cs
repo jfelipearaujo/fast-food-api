@@ -1,4 +1,6 @@
 ﻿using Domain.UseCases.Orders.AddOrderItem;
+using Domain.UseCases.Orders.CheckoutOrder;
+using Domain.UseCases.Orders.CheckoutOrder.Requests;
 using Domain.UseCases.Orders.CreateOrder;
 using Domain.UseCases.Orders.GetOrderById;
 using Domain.UseCases.Orders.GetOrderById.Requests;
@@ -46,7 +48,7 @@ public static class OrderEndpoints
 
         group.MapPatch("{id}/status", UpdateOrderStatus)
             .WithName(ApiEndpoints.Orders.V1.UpdateStatus)
-            .WithDescription("Update an order status")
+            .WithDescription("Update the order status")
             .Produces(StatusCodes.Status200OK)
             .Produces<ApiError>(StatusCodes.Status400BadRequest);
 
@@ -55,6 +57,13 @@ public static class OrderEndpoints
             .WithDescription("Add an item to the order")
             .Produces<OrderItemEndpointResponse>(StatusCodes.Status200OK)
             .Produces<ApiError>(StatusCodes.Status400BadRequest);
+
+        group.MapPost("{id}/checkout", CheckoutOrder)
+            .WithName(ApiEndpoints.Orders.V1.Checkout)
+            .WithDescription("Checkout the order")
+            .Produces(StatusCodes.Status201Created)
+            .Produces<ApiError>(StatusCodes.Status400BadRequest)
+            .Produces<ApiError>(StatusCodes.Status404NotFound);
     }
 
     public static async Task<IResult> GetOrderById(
@@ -156,6 +165,33 @@ public static class OrderEndpoints
 
         if (result.IsFailed)
         {
+            return Results.BadRequest(result.ToApiError());
+        }
+
+        var response = result.Value.MapToResponse();
+
+        return Results.Ok(response);
+    }
+
+    public static async Task<IResult> CheckoutOrder(
+        Guid id,
+        ICheckoutOrderUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var request = new CheckoutOrderRequest
+        {
+            OrderId = id
+        };
+
+        var result = await useCase.ExecuteAsync(request, cancellationToken);
+
+        if (result.IsFailed)
+        {
+            if (result.HasNotFound())
+            {
+                return Results.NotFound(result.ToApiError());
+            }
+
             return Results.BadRequest(result.ToApiError());
         }
 

@@ -1,4 +1,4 @@
-﻿using Domain.Adapters;
+﻿using Domain.Adapters.Repositories;
 using Domain.Entities.ClientAggregate;
 using Domain.Entities.ClientAggregate.ValueObjects;
 

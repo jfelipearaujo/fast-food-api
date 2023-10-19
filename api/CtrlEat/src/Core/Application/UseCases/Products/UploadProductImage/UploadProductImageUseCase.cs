@@ -1,8 +1,7 @@
 ﻿using Application.UseCases.Common.Constants;
 using Application.UseCases.Common.Errors;
 using Application.UseCases.Products.UploadProductImage.Errors;
-
-using Domain.Adapters;
+using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.UploadProductImage;
 using Domain.UseCases.Products.UploadProductImage.Requests;

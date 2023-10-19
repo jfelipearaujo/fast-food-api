@@ -1,4 +1,4 @@
-﻿using Domain.Adapters;
+﻿using Domain.Adapters.Repositories;
 using Domain.Entities.OrderAggregate;
 using Domain.Entities.OrderAggregate.Enums;
 using Domain.Entities.OrderAggregate.ValueObjects;
@@ -54,6 +54,7 @@ public class OrderRepository : IOrderRepository
         return await context
             .Order
             .Include(x => x.Items)
+            .Include(x => x.Payments)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 

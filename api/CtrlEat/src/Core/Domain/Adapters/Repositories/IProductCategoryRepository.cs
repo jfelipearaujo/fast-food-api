@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
 
-namespace Domain.Adapters;
+namespace Domain.Adapters.Repositories;
 
 public interface IProductCategoryRepository
 {

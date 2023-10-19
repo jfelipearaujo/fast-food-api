@@ -9,7 +9,9 @@ public class OrderResponse
 
     public string TrackId { get; set; }
 
-    public OrderStatus Status { get; set; }
+    public OrderStatus OrderStatus { get; set; }
+
+    public IEnumerable<PaymentResponse> Payments { get; set; }
 
     public List<OrderItemResponse> Items { get; set; }
 
@@ -21,7 +23,8 @@ public class OrderResponse
         {
             Id = order.Id.Value,
             TrackId = order.TrackId.Value,
-            Status = order.Status,
+            OrderStatus = order.Status,
+            Payments = PaymentResponse.MapFromDomain(order.Payments),
             Items = OrderItemResponse.MapFromDomain(order.Items),
         };
     }

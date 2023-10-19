@@ -35,5 +35,11 @@ public class PaymentEntityTypeConfiguration : IEntityTypeConfiguration<Payment>
         builder.Property(x => x.UpdatedAtUtc)
             .IsRequired()
             .HasPrecision(7);
+
+        // Relationships
+
+        builder.HasOne(p => p.Order)
+            .WithMany(o => o.Payments)
+            .HasForeignKey(p => p.OrderId);
     }
 }

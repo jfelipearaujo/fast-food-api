@@ -2,6 +2,7 @@
 using Application.UseCases.Clients.GetAllClients;
 using Application.UseCases.Clients.GetClientById;
 using Application.UseCases.Orders.AddOrderItem;
+using Application.UseCases.Orders.CheckoutOrder;
 using Application.UseCases.Orders.CreateOrder;
 using Application.UseCases.Orders.GetOrderById;
 using Application.UseCases.Orders.GetOrdersByStatus;
@@ -24,6 +25,7 @@ using Domain.UseCases.Clients.CreateClient;
 using Domain.UseCases.Clients.GetAllClients;
 using Domain.UseCases.Clients.GetClientById;
 using Domain.UseCases.Orders.AddOrderItem;
+using Domain.UseCases.Orders.CheckoutOrder;
 using Domain.UseCases.Orders.CreateOrder;
 using Domain.UseCases.Orders.GetOrderById;
 using Domain.UseCases.Orders.GetOrdersByStatus;
@@ -74,6 +76,7 @@ public static class ApplicationDependency
         services.AddScoped<IAddOrderItemUseCase, AddOrderItemUseCase>();
         services.AddScoped<IGetOrdersByStatusUseCase, GetOrdersByStatusUseCase>();
         services.AddScoped<IUpdateOrderStatusUseCase, UpdateOrderStatusUseCase>();
+        services.AddScoped<ICheckoutOrderUseCase, CheckoutOrderUseCase>();
 
         return services;
     }
