@@ -4,6 +4,8 @@ using Domain.Entities.ProductAggregate.ValueObjects;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ProductAggregate;
 
 public sealed class Stock : AggregateRoot<StockId>
@@ -13,6 +15,7 @@ public sealed class Stock : AggregateRoot<StockId>
     public ProductId ProductId { get; set; }
     public Product Product { get; set; }
 
+    [ExcludeFromCodeCoverage]
     private Stock()
     {
     }

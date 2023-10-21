@@ -4,6 +4,8 @@ using Domain.Entities.ProductAggregate.ValueObjects;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ProductAggregate;
 
 public sealed class ProductCategory : AggregateRoot<ProductCategoryId>
@@ -14,6 +16,7 @@ public sealed class ProductCategory : AggregateRoot<ProductCategoryId>
 
     public ICollection<Product> Products { get; set; }
 
+    [ExcludeFromCodeCoverage]
     private ProductCategory()
     {
     }

@@ -3,16 +3,19 @@ using Domain.Entities.ClientAggregate.Errors;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ClientAggregate.ValueObjects;
 
 public sealed class FullName : ValueObject
 {
-    private const int MAX_LENGTH = 250;
+    public const int MAX_LENGTH = 250;
 
     public string FirstName { get; private set; }
 
     public string LastName { get; private set; }
 
+    [ExcludeFromCodeCoverage]
     private FullName()
     {
     }
@@ -25,12 +28,13 @@ public sealed class FullName : ValueObject
 
     public static Result<FullName> Create(string firstName, string lastName)
     {
-        if (!string.IsNullOrEmpty(firstName) && firstName.Length > MAX_LENGTH)
+        if (string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
         {
-            return Result.Fail(new FullNameInvalidLengthError(MAX_LENGTH));
+            return Result.Fail(new FullNameMissingFirstNameError());
         }
 
-        if (!string.IsNullOrEmpty(lastName) && lastName.Length > MAX_LENGTH)
+        if ((!string.IsNullOrEmpty(firstName) && firstName.Length > MAX_LENGTH)
+            || (!string.IsNullOrEmpty(lastName) && lastName.Length > MAX_LENGTH))
         {
             return Result.Fail(new FullNameInvalidLengthError(MAX_LENGTH));
         }

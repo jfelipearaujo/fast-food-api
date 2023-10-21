@@ -1,8 +1,6 @@
 ﻿using Domain.Entities.ProductAggregate.Errors;
 using Domain.Entities.ProductAggregate.ValueObjects;
 
-using FluentAssertions;
-
 namespace Domain.Tests.ValueObjects;
 
 public class MoneyTests
@@ -11,6 +9,7 @@ public class MoneyTests
     public void ShouldCreateValidMoney()
     {
         // Arrange
+        var expected = Money.Create(10.5m, "BRL");
 
         // Act
         var result = Money.Create(10.5m, "BRL");
@@ -19,6 +18,7 @@ public class MoneyTests
         result.Should().BeSuccess();
         result.Value.Currency.Should().Be("BRL");
         result.Value.Amount.Should().Be(10.5m);
+        result.Value.Equals(expected.Value).Should().BeTrue();
     }
 
     [Theory]

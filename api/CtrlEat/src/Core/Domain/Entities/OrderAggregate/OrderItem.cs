@@ -6,6 +6,8 @@ using Domain.Entities.ProductAggregate.ValueObjects;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.OrderAggregate;
 
 public sealed class OrderItem : AggregateRoot<OrderItemId>
@@ -26,6 +28,7 @@ public sealed class OrderItem : AggregateRoot<OrderItemId>
     public ProductId ProductId { get; set; }
     public Product Product { get; set; }
 
+    [ExcludeFromCodeCoverage]
     private OrderItem()
     {
     }

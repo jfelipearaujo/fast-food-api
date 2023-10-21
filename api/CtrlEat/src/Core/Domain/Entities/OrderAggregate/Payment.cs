@@ -6,6 +6,8 @@ using Domain.Entities.ProductAggregate.ValueObjects;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.OrderAggregate;
 
 public sealed class Payment : AggregateRoot<PaymentId>
@@ -18,6 +20,7 @@ public sealed class Payment : AggregateRoot<PaymentId>
 
     public Money Price { get; private set; }
 
+    [ExcludeFromCodeCoverage]
     private Payment()
     {
     }

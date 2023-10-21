@@ -1,10 +1,17 @@
 ﻿using Domain.Common.Models;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ProductAggregate.ValueObjects;
 
 public sealed class StockId : ValueObject
 {
     public Guid Value { get; private set; }
+
+    [ExcludeFromCodeCoverage]
+    private StockId()
+    {
+    }
 
     private StockId(Guid value)
     {

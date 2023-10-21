@@ -3,6 +3,8 @@ using Domain.Entities.ProductAggregate.Errors;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ProductAggregate.ValueObjects;
 
 public sealed class Money : ValueObject
@@ -14,6 +16,7 @@ public sealed class Money : ValueObject
 
     public string Currency { get; private set; }
 
+    [ExcludeFromCodeCoverage]
     private Money()
     {
     }
