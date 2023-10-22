@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Common.Models;
 
+[ExcludeFromCodeCoverage]
 public abstract class AggregateRoot<TId> : Entity<TId>
     where TId : notnull
 {

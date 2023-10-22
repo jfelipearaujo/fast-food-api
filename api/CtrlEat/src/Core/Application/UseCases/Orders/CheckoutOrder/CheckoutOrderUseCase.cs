@@ -16,7 +16,7 @@ namespace Application.UseCases.Orders.CheckoutOrder;
 
 public class CheckoutOrderUseCase : ICheckoutOrderUseCase
 {
-    private const int MINIMUM_ORDER_ITEMS_TO_CHECKOUT = 1;
+    public const int MINIMUM_ORDER_ITEMS_TO_CHECKOUT = 1;
 
     private readonly IOrderRepository orderRepository;
     private readonly IPaymentRepository paymentRepository;
@@ -61,11 +61,6 @@ public class CheckoutOrderUseCase : ICheckoutOrderUseCase
         var orderCurrency = order.Items.Select(x => x.Price.Currency).First();
 
         var paymentPrice = Money.Create(orderTotalAmount, orderCurrency);
-
-        if (paymentPrice.IsFailed)
-        {
-            return Result.Fail(paymentPrice.Errors);
-        }
 
         var payment = Payment.Create(order.Id, paymentPrice.Value);
 

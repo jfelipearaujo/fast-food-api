@@ -7,6 +7,7 @@ using Domain.Entities.ProductAggregate.ValueObjects;
 using FluentResults;
 
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace Domain.Entities.OrderAggregate;
 
@@ -51,6 +52,14 @@ public sealed class OrderItem : AggregateRoot<OrderItemId>
         Price = price;
         ImageUrl = imageUrl;
         Product = product;
+        ProductId = product.Id;
+    }
+
+    public string FormatPrice()
+    {
+        var currencyCultureName = Price.Currency == Money.BRL ? "pt-BR" : "en-US";
+
+        return (Quantity * Price.Amount).ToString("C", CultureInfo.CreateSpecificCulture(currencyCultureName));
     }
 
     public static Result<OrderItem> Create(

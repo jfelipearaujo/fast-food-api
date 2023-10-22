@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Common.Models;
 
 public interface IEntity
@@ -7,6 +9,7 @@ public interface IEntity
     public DateTime UpdatedAtUtc { get; set; }
 }
 
+[ExcludeFromCodeCoverage]
 public abstract class Entity<TId> : IEquatable<Entity<TId>>, IEntity
     where TId : notnull
 {

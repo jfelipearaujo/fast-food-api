@@ -10,7 +10,7 @@ using Domain.Entities.ProductAggregate.ValueObjects;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 
-using Utils.Tests.Builders.Application.Products;
+using Utils.Tests.Builders.Application.Products.Requests;
 using Utils.Tests.Builders.Domain.Entities;
 
 namespace Application.Tests.UseCases.Products;

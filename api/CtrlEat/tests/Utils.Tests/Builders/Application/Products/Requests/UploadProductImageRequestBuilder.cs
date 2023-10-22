@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 
-namespace Utils.Tests.Builders.Application.Products;
+namespace Utils.Tests.Builders.Application.Products.Requests;
 
 public class UploadProductImageRequestBuilder
 {

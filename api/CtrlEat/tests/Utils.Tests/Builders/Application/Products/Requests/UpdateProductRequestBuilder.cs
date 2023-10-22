@@ -1,6 +1,6 @@
 ﻿using Domain.UseCases.Products.UpdateProduct.Requests;
 
-namespace Utils.Tests.Builders.Application.Products;
+namespace Utils.Tests.Builders.Application.Products.Requests;
 
 public class UpdateProductRequestBuilder
 {

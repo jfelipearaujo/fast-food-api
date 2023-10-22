@@ -1,6 +1,6 @@
 ﻿using Domain.UseCases.Products.CreateProduct.Requests;
 
-namespace Utils.Tests.Builders.Application.Products;
+namespace Utils.Tests.Builders.Application.Products.Requests;
 
 public class CreateProductRequestBuilder
 {

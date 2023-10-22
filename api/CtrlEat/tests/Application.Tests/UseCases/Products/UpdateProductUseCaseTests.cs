@@ -6,7 +6,7 @@ using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.Common.Responses;
 
-using Utils.Tests.Builders.Application.Products;
+using Utils.Tests.Builders.Application.Products.Requests;
 using Utils.Tests.Builders.Domain.Entities;
 
 namespace Application.Tests.UseCases.Products;
