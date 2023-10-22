@@ -50,6 +50,89 @@ public class OrderRepositoryTests : IDisposable
     }
 
     [Fact]
+    public async Task CreateSuccessfully()
+    {
+        // Arrange
+        var order = Order.Create(TrackId.CreateUnique(), client, OrderStatus.Created).Value;
+
+        // Act
+        var result = await sut.CreateAsync(order, default);
+
+        // Assert
+        result.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task GetByIdSuccesfully()
+    {
+        // Arrange
+        var order = Order.Create(TrackId.CreateUnique(), client, OrderStatus.Created).Value;
+
+        await sut.CreateAsync(order, default);
+
+        // Act
+        var result = await sut.GetByIdAsync(order.Id, default);
+
+        // Assert
+        result.Should().BeEquivalentTo(order);
+    }
+
+    [Fact]
+    public async Task UpdateSuccesfully()
+    {
+        // Arrange
+        var order = Order.Create(TrackId.CreateUnique(), client, OrderStatus.Created).Value;
+
+        await sut.CreateAsync(order, default);
+
+        order.UpdateToStatus(OrderStatus.Received);
+
+        // Act
+        var result = await sut.UpdateAsync(order, default);
+
+        // Assert
+        result.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task DeleteSuccesfully()
+    {
+        // Arrange
+        var order = Order.Create(TrackId.CreateUnique(), client, OrderStatus.Created).Value;
+
+        await sut.CreateAsync(order, default);
+
+        // Act
+        var result = await sut.DeleteAsync(order, default);
+
+        // Assert
+        result.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task GetAllSuccessfully()
+    {
+        // Arrange
+        var ordersCount = 10;
+        var orders = new List<Order>();
+
+        for (int i = 0; i < ordersCount; i++)
+        {
+            orders.Add(Order.Create(TrackId.CreateUnique(), client, OrderStatus.Created).Value);
+        }
+
+        dbContext.Order.AddRange(orders);
+        await dbContext.SaveChangesAsync();
+
+        // Act
+        var result = await sut.GetAllAsync(default);
+
+        // Assert
+        result.Should().NotBeNullOrEmpty()
+            .And.BeEquivalentTo(orders);
+    }
+
+    [Fact]
     public async Task GetAllByStatusSuccessfullyWhenSearchForSpecificStatus()
     {
         // Arrange
