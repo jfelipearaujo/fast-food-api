@@ -7,20 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UseCases\Clients\GetClientById\Errors\**" />
+    <EmbeddedResource Remove="UseCases\Clients\GetClientById\Errors\**" />
+    <None Remove="UseCases\Clients\GetClientById\Errors\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="19.2.69" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UseCases\Clients\GetClientById\Errors\" />
   </ItemGroup>
 
 </Project>

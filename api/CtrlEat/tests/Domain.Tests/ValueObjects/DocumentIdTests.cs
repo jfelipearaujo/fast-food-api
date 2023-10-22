@@ -23,7 +23,7 @@ public class DocumentIdTests
     }
 
     [Theory]
-    [InlineData(null, "")]
+    [InlineData(null, null)]
     [InlineData("", "")]
     public void ShouldCreateValidEmptyDocumentId(string documentId, string expected)
     {

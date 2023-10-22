@@ -1,11 +1,12 @@
 ﻿using Application.UseCases.Common.Errors;
 using Application.UseCases.Products.UpdateProduct;
+
 using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.Common.Responses;
-using Domain.UseCases.Products.UpdateProduct.Requests;
 
+using Utils.Tests.Builders.Application.Products.Requests;
 using Utils.Tests.Builders.Domain.Entities;
 
 namespace Application.Tests.UseCases.Products;
@@ -40,15 +41,12 @@ public class UpdateProductUseCaseTests
             .WithProductCategory(productCategory)
             .Build();
 
-        var request = new UpdateProductRequest
-        {
-            ProductId = product.Id.Value,
-            ProductCategoryId = productCategory.Id.Value,
-            Description = "New Product Description",
-            Amount = 10,
-            Currency = "BRL",
-            ImageUrl = "http://image.com/123.png"
-        };
+        var request = new UpdateProductRequestBuilder()
+            .WithSample()
+            .WithProductId(product.Id.Value)
+            .WithProductCategoryId(product.ProductCategoryId.Value)
+            .WithDescription("New Product Description")
+            .Build();
 
         productRepository
             .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
@@ -95,15 +93,10 @@ public class UpdateProductUseCaseTests
         // Arrange
         var newProductCategoryId = Guid.NewGuid();
 
-        var request = new UpdateProductRequest
-        {
-            ProductId = Guid.NewGuid(),
-            ProductCategoryId = newProductCategoryId,
-            Description = "Product Description",
-            Amount = 10,
-            Currency = "BRL",
-            ImageUrl = "http://image.com/123.png"
-        };
+        var request = new UpdateProductRequestBuilder()
+            .WithSample()
+            .WithProductCategoryId(newProductCategoryId)
+            .Build();
 
         var oldProductCategory = new ProductCategoryBuilder()
             .WithDescription("Old Product Category")
@@ -160,18 +153,61 @@ public class UpdateProductUseCaseTests
     }
 
     [Fact]
+    public async Task ShouldHandleWhenPriceDataIsInvalid()
+    {
+        // Arrange
+        var productCategory = new ProductCategoryBuilder()
+            .WithSample()
+            .Build();
+
+        var product = new ProductBuilder()
+            .WithSample()
+            .WithDescription("Old Product Description")
+            .WithProductCategory(productCategory)
+            .Build();
+
+        var request = new UpdateProductRequestBuilder()
+            .WithSample()
+            .WithProductId(product.Id.Value)
+            .WithProductCategoryId(product.ProductCategoryId.Value)
+            .WithDescription("New Product Description")
+            .WithAmount(0)
+            .Build();
+
+        // Act
+        var response = await sut.ExecuteAsync(request, cancellationToken: default);
+
+        // Assert
+        response.Should().BeFailure();
+
+        await productRepository
+            .DidNotReceive()
+            .GetByIdAsync(
+                Arg.Any<ProductId>(),
+                Arg.Any<CancellationToken>());
+
+        await productCategoryRepository
+            .DidNotReceive()
+            .GetByIdAsync(
+                Arg.Any<ProductCategoryId>(),
+                Arg.Any<CancellationToken>());
+
+        await productRepository
+            .DidNotReceive()
+            .UpdateAsync(
+                Arg.Any<Product>(),
+                Arg.Any<CancellationToken>());
+    }
+
+
+    [Fact]
     public async Task ShouldHandleWhenProductWasNotFound()
     {
         // Arrange
-        var request = new UpdateProductRequest
-        {
-            ProductId = Guid.NewGuid(),
-            ProductCategoryId = Guid.NewGuid(),
-            Description = "New Product Description",
-            Amount = 10,
-            Currency = "BRL",
-            ImageUrl = "http://image.com/123.png"
-        };
+        var request = new UpdateProductRequestBuilder()
+            .WithSample()
+            .WithDescription("New Product Description")
+            .Build();
 
         productRepository
             .GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
@@ -208,15 +244,10 @@ public class UpdateProductUseCaseTests
         // Arrange
         var newProductCategoryId = ProductCategoryId.CreateUnique();
 
-        var request = new UpdateProductRequest
-        {
-            ProductId = Guid.NewGuid(),
-            ProductCategoryId = newProductCategoryId.Value,
-            Description = "Product Description",
-            Amount = 10,
-            Currency = "BRL",
-            ImageUrl = "http://image.com/123.png"
-        };
+        var request = new UpdateProductRequestBuilder()
+            .WithSample()
+            .WithProductCategoryId(newProductCategoryId.Value)
+            .Build();
 
         var productCategory = new ProductCategoryBuilder()
             .WithSample()

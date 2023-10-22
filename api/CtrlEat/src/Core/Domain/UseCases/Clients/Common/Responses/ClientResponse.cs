@@ -40,4 +40,9 @@ public class ClientResponse
             UpdatedAtUtc = client.UpdatedAtUtc,
         };
     }
+
+    public static IEnumerable<ClientResponse> MapFromDomain(IEnumerable<Client> clients)
+    {
+        return clients.Select(MapFromDomain);
+    }
 }

@@ -1,7 +1,5 @@
 ﻿using Domain.Entities.OrderAggregate;
 
-using System.Globalization;
-
 namespace Domain.UseCases.Orders.Common.Responses;
 
 public class OrderItemResponse
@@ -14,21 +12,19 @@ public class OrderItemResponse
 
     public string Description { get; set; }
 
-    public string Price { get; private set; }
+    public string Price { get; set; }
 
     // --
 
     public static OrderItemResponse MapFromDomain(OrderItem orderItem)
     {
-        var currencyCultureName = orderItem.Price.Currency == "BRL" ? "pt-BR" : "en-US";
-
         return new OrderItemResponse
         {
             Id = orderItem.Id.Value,
             Quantity = orderItem.Quantity,
             Observation = orderItem.Observation,
             Description = orderItem.Description,
-            Price = (orderItem.Quantity * orderItem.Price.Amount).ToString("C", CultureInfo.CreateSpecificCulture(currencyCultureName)),
+            Price = orderItem.FormatPrice(),
         };
     }
 

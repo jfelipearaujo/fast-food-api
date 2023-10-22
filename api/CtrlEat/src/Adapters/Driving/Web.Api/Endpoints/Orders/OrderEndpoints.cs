@@ -73,7 +73,7 @@ public static class OrderEndpoints
     {
         var request = new GetOrderByIdRequest
         {
-            Id = id,
+            OrderId = id,
         };
 
         var result = await useCase.ExecuteAsync(request, cancellation);

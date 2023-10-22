@@ -44,13 +44,19 @@ public sealed class Order : AggregateRoot<OrderId>
         Status = status ?? OrderStatus.Created;
         StatusUpdatedAt = statusUpdatedAt ?? DateTime.UtcNow;
         Client = client;
+
+        Items ??= new List<OrderItem>();
+        Payments ??= new List<Payment>();
     }
 
     public void AddItem(OrderItem item)
     {
-        Items ??= new List<OrderItem>();
-
         Items.Add(item);
+    }
+
+    public void AddPayment(Payment payment)
+    {
+        Payments.Add(payment);
     }
 
     public Result UpdateToStatus(OrderStatus toStatus)

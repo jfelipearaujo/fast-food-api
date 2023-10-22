@@ -1,4 +1,5 @@
 ﻿using Application.UseCases.Orders.Common.Errors;
+
 using Domain.Adapters.Repositories;
 using Domain.Entities.OrderAggregate.ValueObjects;
 using Domain.UseCases.Orders.Common.Responses;
@@ -23,12 +24,12 @@ public class GetOrderByIdUseCase : IGetOrderByIdUseCase
         CancellationToken cancellationToken)
     {
         var order = await repository.GetByIdAsync(
-            OrderId.Create(request.Id),
+            OrderId.Create(request.OrderId),
             cancellationToken);
 
         if (order is null)
         {
-            return Result.Fail(new OrderNotFoundError(request.Id));
+            return Result.Fail(new OrderNotFoundError(request.OrderId));
         }
 
         return OrderResponse.MapFromDomain(order);
