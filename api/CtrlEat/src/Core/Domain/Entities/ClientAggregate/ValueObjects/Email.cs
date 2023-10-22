@@ -19,7 +19,7 @@ public partial class Email : ValueObject
 
     private Email(string address)
     {
-        Value = string.IsNullOrEmpty(address) ? string.Empty : address;
+        Value = address;
     }
 
     public static Result<Email> Create(string address)

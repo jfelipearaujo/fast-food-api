@@ -19,7 +19,7 @@ public sealed class DocumentId : ValueObject
 
     private DocumentId(string documentId)
     {
-        Value = string.IsNullOrEmpty(documentId) ? string.Empty : documentId;
+        Value = documentId;
     }
 
     public static Result<DocumentId> Create(string documentId)
