@@ -4,6 +4,8 @@ using Domain.Entities.ProductAggregate.ValueObjects;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ProductAggregate;
 
 public sealed class Product : AggregateRoot<ProductId>
@@ -20,6 +22,7 @@ public sealed class Product : AggregateRoot<ProductId>
     public Stock Stock { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; }
 
+    [ExcludeFromCodeCoverage]
     private Product()
     {
     }
@@ -56,6 +59,10 @@ public sealed class Product : AggregateRoot<ProductId>
         ProductCategory productCategory,
         ProductId? productId = null)
     {
-        return new Product(description, price, imageUrl, productCategory, productId);
+        return new Product(description,
+            price,
+            imageUrl,
+            productCategory,
+            productId);
     }
 }

@@ -3,6 +3,7 @@ using Domain.Entities.ClientAggregate.Errors;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace Domain.Entities.ClientAggregate.ValueObjects;
@@ -11,6 +12,7 @@ public partial class Email : ValueObject
 {
     public string Value { get; private set; }
 
+    [ExcludeFromCodeCoverage]
     private Email()
     {
     }
@@ -22,7 +24,7 @@ public partial class Email : ValueObject
 
     public static Result<Email> Create(string address)
     {
-        var regex = new Regex("^\\S+@\\S+\\.\\S+$");
+        var regex = EmailPattern();
 
         if (!string.IsNullOrEmpty(address) && !regex.IsMatch(address))
         {
@@ -36,6 +38,9 @@ public partial class Email : ValueObject
     {
         yield return Value;
     }
+
+    [GeneratedRegex("^\\S+@\\S+\\.\\S+$")]
+    private static partial Regex EmailPattern();
 }
 
 public static class EmailExtensions

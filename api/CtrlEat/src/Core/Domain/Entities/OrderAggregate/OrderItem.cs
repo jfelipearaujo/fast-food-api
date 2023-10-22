@@ -6,10 +6,14 @@ using Domain.Entities.ProductAggregate.ValueObjects;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.OrderAggregate;
 
 public sealed class OrderItem : AggregateRoot<OrderItemId>
 {
+    public const int MIN_QUANTITY = 0;
+
     public int Quantity { get; private set; }
 
     public string Observation { get; private set; }
@@ -26,6 +30,7 @@ public sealed class OrderItem : AggregateRoot<OrderItemId>
     public ProductId ProductId { get; set; }
     public Product Product { get; set; }
 
+    [ExcludeFromCodeCoverage]
     private OrderItem()
     {
     }
@@ -54,7 +59,7 @@ public sealed class OrderItem : AggregateRoot<OrderItemId>
         Product product,
         OrderItemId? orderItemId = null)
     {
-        if (quantity <= 0)
+        if (quantity <= MIN_QUANTITY)
         {
             return Result.Fail(new OrderItemInvalidQuantityError());
         }

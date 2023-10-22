@@ -1,5 +1,6 @@
 ﻿using Domain.Common.Models;
 
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -9,6 +10,7 @@ public class TrackId : ValueObject
 {
     public string Value { get; private set; }
 
+    [ExcludeFromCodeCoverage]
     private TrackId()
     {
     }

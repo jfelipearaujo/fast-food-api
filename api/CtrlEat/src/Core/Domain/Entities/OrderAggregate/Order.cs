@@ -7,6 +7,8 @@ using Domain.Entities.OrderAggregate.ValueObjects;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.OrderAggregate;
 
 public sealed class Order : AggregateRoot<OrderId>
@@ -25,6 +27,7 @@ public sealed class Order : AggregateRoot<OrderId>
 
     public ICollection<Payment> Payments { get; private set; }
 
+    [ExcludeFromCodeCoverage]
     private Order()
     {
     }

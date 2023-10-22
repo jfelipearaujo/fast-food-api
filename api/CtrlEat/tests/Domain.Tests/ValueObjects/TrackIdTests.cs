@@ -1,7 +1,5 @@
 ﻿using Domain.Entities.OrderAggregate.ValueObjects;
 
-using FluentAssertions;
-
 namespace Domain.Tests.ValueObjects;
 
 public class TrackIdTests
@@ -16,6 +14,23 @@ public class TrackIdTests
 
         // Assert
         trackId.Should().NotBeNull();
+    }
+
+    // create a test to validate a already created track id
+    [Fact]
+    public void ShouldCreateValidTrackId()
+    {
+        // Arrange
+        var trackId = "AA1234";
+
+        var expected = TrackId.Create(trackId);
+
+        // Act
+        var result = TrackId.Create(trackId);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Equals(expected).Should().BeTrue();
     }
 
     [Fact]

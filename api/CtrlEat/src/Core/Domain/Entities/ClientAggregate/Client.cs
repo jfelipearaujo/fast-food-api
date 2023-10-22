@@ -5,6 +5,8 @@ using Domain.Entities.OrderAggregate;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ClientAggregate;
 
 public sealed class Client : AggregateRoot<ClientId>
@@ -21,6 +23,7 @@ public sealed class Client : AggregateRoot<ClientId>
 
     public ICollection<Order> Orders { get; set; }
 
+    [ExcludeFromCodeCoverage]
     private Client()
     {
     }

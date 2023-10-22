@@ -1,10 +1,17 @@
 ﻿using Domain.Common.Models;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ClientAggregate.ValueObjects;
 
 public sealed class ClientId : ValueObject
 {
     public Guid Value { get; private set; }
+
+    [ExcludeFromCodeCoverage]
+    private ClientId()
+    {
+    }
 
     private ClientId(Guid value)
     {

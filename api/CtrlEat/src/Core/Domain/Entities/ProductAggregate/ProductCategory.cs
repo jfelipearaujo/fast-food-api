@@ -4,16 +4,19 @@ using Domain.Entities.ProductAggregate.ValueObjects;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ProductAggregate;
 
 public sealed class ProductCategory : AggregateRoot<ProductCategoryId>
 {
-    private const int MAX_DESCRIPTION_LENGTH = 250;
+    public const int MAX_DESCRIPTION_LENGTH = 250;
 
     public string Description { get; private set; }
 
     public ICollection<Product> Products { get; set; }
 
+    [ExcludeFromCodeCoverage]
     private ProductCategory()
     {
     }

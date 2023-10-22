@@ -4,12 +4,15 @@ using Domain.Entities.ClientAggregate.Validators;
 
 using FluentResults;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ClientAggregate.ValueObjects;
 
 public sealed class DocumentId : ValueObject
 {
     public string Value { get; private set; }
 
+    [ExcludeFromCodeCoverage]
     private DocumentId()
     {
     }

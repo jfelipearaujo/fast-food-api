@@ -1,11 +1,14 @@
 ﻿using Domain.Common.Models;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.OrderAggregate.ValueObjects;
 
 public sealed class PaymentId : ValueObject
 {
     public Guid Value { get; private set; }
 
+    [ExcludeFromCodeCoverage]
     private PaymentId()
     {
     }

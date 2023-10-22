@@ -1,10 +1,17 @@
 ﻿using Domain.Common.Models;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain.Entities.ProductAggregate.ValueObjects;
 
 public sealed class ProductCategoryId : ValueObject
 {
     public Guid Value { get; private set; }
+
+    [ExcludeFromCodeCoverage]
+    private ProductCategoryId()
+    {
+    }
 
     private ProductCategoryId(Guid value)
     {
