@@ -46,6 +46,8 @@ using Domain.UseCases.Products.UploadProductImage;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using System.IO.Abstractions;
+
 namespace Application;
 
 public static class ApplicationDependency
@@ -77,6 +79,8 @@ public static class ApplicationDependency
         services.AddScoped<IGetOrdersByStatusUseCase, GetOrdersByStatusUseCase>();
         services.AddScoped<IUpdateOrderStatusUseCase, UpdateOrderStatusUseCase>();
         services.AddScoped<ICheckoutOrderUseCase, CheckoutOrderUseCase>();
+
+        services.AddSingleton<IFileSystem, FileSystem>();
 
         return services;
     }

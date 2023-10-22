@@ -1,11 +1,12 @@
 ﻿using Application.UseCases.Common.Errors;
 using Application.UseCases.Products.CreateProduct;
+
 using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.Common.Responses;
-using Domain.UseCases.Products.CreateProduct.Requests;
 
+using Utils.Tests.Builders.Application.Products;
 using Utils.Tests.Builders.Domain.Entities;
 
 namespace Application.Tests.UseCases.Products;
@@ -30,14 +31,9 @@ public class CreateProductUseCaseTests
     public async Task ShouldCreateProductSuccessfully()
     {
         // Arrange
-        var request = new CreateProductRequest
-        {
-            ProductCategoryId = Guid.NewGuid(),
-            Description = "Product",
-            Amount = 1.0m,
-            Currency = "BRL",
-            ImageUrl = "http://image.com/123.png"
-        };
+        var request = new CreateProductRequestBuilder()
+            .WithSample()
+            .Build();
 
         var productCategory = new ProductCategoryBuilder()
             .WithSample()
@@ -84,14 +80,9 @@ public class CreateProductUseCaseTests
     public async Task ShouldHandleIfProductCategoryWasNotFound()
     {
         // Arrange
-        var request = new CreateProductRequest
-        {
-            ProductCategoryId = Guid.NewGuid(),
-            Description = "Product",
-            Amount = 1.0m,
-            Currency = "BRL",
-            ImageUrl = "http://image.com/123.png"
-        };
+        var request = new CreateProductRequestBuilder()
+            .WithSample()
+            .Build();
 
         productCategoryRepository
             .GetByIdAsync(Arg.Any<ProductCategoryId>(), Arg.Any<CancellationToken>())
@@ -107,6 +98,34 @@ public class CreateProductUseCaseTests
             .Received(1)
             .GetByIdAsync(
                 Arg.Is<ProductCategoryId>(x => x.Value == request.ProductCategoryId),
+                Arg.Any<CancellationToken>());
+
+        await productRepository
+            .DidNotReceive()
+            .CreateAsync(
+                Arg.Any<Product>(),
+                Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task ShouldNotCreateProductWhenThereIsInvalidData()
+    {
+        // Arrange
+        var request = new CreateProductRequestBuilder()
+            .WithSample()
+            .WithAmount(0)
+            .Build();
+
+        // Act
+        var response = await sut.ExecuteAsync(request, default);
+
+        // Assert
+        response.Should().BeFailure();
+
+        await productCategoryRepository
+            .DidNotReceive()
+            .GetByIdAsync(
+                Arg.Any<ProductCategoryId>(),
                 Arg.Any<CancellationToken>());
 
         await productRepository

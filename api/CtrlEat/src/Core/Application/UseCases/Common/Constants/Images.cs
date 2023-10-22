@@ -2,5 +2,5 @@
 
 public static class Images
 {
-    public static readonly string ValidImageExtension = ".jpg";
+    public static readonly string FILE_EXTENSION_JPG = ".jpg";
 }

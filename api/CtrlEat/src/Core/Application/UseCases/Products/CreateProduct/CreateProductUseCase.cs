@@ -1,4 +1,5 @@
 ﻿using Application.UseCases.Common.Errors;
+
 using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
@@ -27,6 +28,13 @@ public class CreateProductUseCase : ICreateProductUseCase
         CreateProductRequest request,
         CancellationToken cancellationToken)
     {
+        var price = Money.Create(request.Amount, request.Currency);
+
+        if (price.IsFailed)
+        {
+            return Result.Fail(price.Errors);
+        }
+
         var productCategory = await productCategoryRepository.GetByIdAsync(
             ProductCategoryId.Create(request.ProductCategoryId),
             cancellationToken);
@@ -34,13 +42,6 @@ public class CreateProductUseCase : ICreateProductUseCase
         if (productCategory is null)
         {
             return Result.Fail(new ProductCategoryNotFoundError(request.ProductCategoryId));
-        }
-
-        var price = Money.Create(request.Amount, request.Currency);
-
-        if (price.IsFailed)
-        {
-            return Result.Fail(price.Errors);
         }
 
         var product = Product.Create(

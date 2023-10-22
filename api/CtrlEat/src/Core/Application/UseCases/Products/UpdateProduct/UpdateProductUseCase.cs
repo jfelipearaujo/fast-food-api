@@ -1,9 +1,11 @@
 ﻿using Application.UseCases.Common.Errors;
+
 using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.Common.Responses;
 using Domain.UseCases.Products.UpdateProduct;
 using Domain.UseCases.Products.UpdateProduct.Requests;
+
 using FluentResults;
 
 namespace Application.UseCases.Products.UpdateProduct;
@@ -25,6 +27,13 @@ public class UpdateProductUseCase : IUpdateProductUseCase
         UpdateProductRequest request,
         CancellationToken cancellationToken)
     {
+        var price = Money.Create(request.Amount, request.Currency);
+
+        if (price.IsFailed)
+        {
+            return Result.Fail(price.Errors);
+        }
+
         var product = await productRepository.GetByIdAsync(
             ProductId.Create(request.ProductCategoryId),
             cancellationToken);
@@ -46,13 +55,6 @@ public class UpdateProductUseCase : IUpdateProductUseCase
             }
 
             product.ProductCategory = productCategory;
-        }
-
-        var price = Money.Create(request.Amount, request.Currency);
-
-        if (price.IsFailed)
-        {
-            return Result.Fail(price.Errors);
         }
 
         product.Update(request.Description, price.Value, request.ImageUrl);
