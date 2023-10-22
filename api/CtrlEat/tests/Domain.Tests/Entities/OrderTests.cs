@@ -68,6 +68,26 @@ public class OrderTests
     }
 
     [Fact]
+    public void ShouldNotUpdateStatusToTheSameStatus()
+    {
+        // Arrange
+        var currentStatus = OrderStatus.Created;
+        var toStatus = OrderStatus.Created;
+
+        var trackId = TrackId.CreateUnique();
+        var client = new ClientBuilder().WithSample().Build();
+
+        var order = Order.Create(trackId, client, currentStatus).Value;
+
+        // Act
+        var result = order.UpdateToStatus(toStatus);
+
+        // Assert
+        result.Should().BeFailure();
+        result.Should().HaveReason(new OrderAlreadyWithStatusError(toStatus));
+    }
+
+    [Fact]
     public void ShouldNotUpdateStatusToAnInvalid()
     {
         // Arrange

@@ -9,14 +9,14 @@ public class MoneyTests
     public void ShouldCreateValidMoney()
     {
         // Arrange
-        var expected = Money.Create(10.5m, "BRL");
+        var expected = Money.Create(10.5m, Money.BRL);
 
         // Act
-        var result = Money.Create(10.5m, "BRL");
+        var result = Money.Create(10.5m, Money.BRL);
 
         // Assert
         result.Should().BeSuccess();
-        result.Value.Currency.Should().Be("BRL");
+        result.Value.Currency.Should().Be(Money.BRL);
         result.Value.Amount.Should().Be(10.5m);
         result.Value.Equals(expected.Value).Should().BeTrue();
     }
@@ -44,7 +44,7 @@ public class MoneyTests
         // Arrange
 
         // Act
-        var result = Money.Create(amount, "BRL");
+        var result = Money.Create(amount, Money.BRL);
 
         // Assert
         result.Should().BeFailure().And.HaveReason(new MoneyInvalidAmountError());

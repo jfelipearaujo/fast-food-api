@@ -59,6 +59,10 @@ public sealed class Product : AggregateRoot<ProductId>
         ProductCategory productCategory,
         ProductId? productId = null)
     {
-        return new Product(description, price, imageUrl, productCategory, productId);
+        return new Product(description,
+            price,
+            imageUrl,
+            productCategory,
+            productId);
     }
 }

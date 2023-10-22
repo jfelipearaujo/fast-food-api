@@ -65,8 +65,13 @@ public sealed class Payment : AggregateRoot<PaymentId>
     public static Result<Payment> Create(
         OrderId orderId,
         Money price,
+        PaymentStatus? status = null,
         PaymentId? paymentId = null)
     {
-        return new Payment(orderId, PaymentStatus.WaitingApproval, price, paymentId);
+        return new Payment(
+            orderId,
+            status ?? PaymentStatus.WaitingApproval,
+            price,
+            paymentId);
     }
 }

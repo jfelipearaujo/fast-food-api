@@ -10,6 +10,8 @@ namespace Domain.Entities.ProductAggregate;
 
 public sealed class Stock : AggregateRoot<StockId>
 {
+    public const int MIN_QUANTITY = 0;
+
     public int Quantity { get; private set; }
 
     public ProductId ProductId { get; set; }
@@ -33,7 +35,7 @@ public sealed class Stock : AggregateRoot<StockId>
         Product product,
         StockId? stockId = null)
     {
-        if (quantity <= 0)
+        if (quantity <= MIN_QUANTITY)
         {
             return Result.Fail(new StockInvalidQuantityError());
         }

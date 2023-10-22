@@ -12,6 +12,8 @@ public sealed class Money : ValueObject
     private const int MAX_LENGTH_CURRENCY = 3;
     private const int MIN_CURRENCY_AMOUNT = 0;
 
+    public const string BRL = "BRL";
+
     public decimal Amount { get; private set; }
 
     public string Currency { get; private set; }
