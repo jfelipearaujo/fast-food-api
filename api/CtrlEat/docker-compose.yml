@@ -17,6 +17,8 @@ services:
       - api
 
   pgadmin:
+    depends_on:
+      - app-db
     image: dpage/pgadmin4
     container_name: CtrlEat.PgAdmin
     volumes:
@@ -26,8 +28,6 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "admin"
     ports:
       - "5050:80"
-    depends_on:
-      - app-db
     networks:
       - api
 
@@ -39,12 +39,18 @@ services:
     build:
       context: .
       dockerfile: src/Adapters/Driving/Web.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
-      - "5001:443"
+      - "5001:80"
+      - "5002:443"
     networks:
       - api
     volumes:
       - ./.containers/api:/app/images
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
 networks:
   api:
