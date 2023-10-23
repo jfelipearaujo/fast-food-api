@@ -55,7 +55,7 @@ public class UploadProductImageUseCase : IUploadProductImageUseCase
         using var stream = fileSystem.File.OpenWrite(filePath);
         await request.File.CopyToAsync(stream, cancellationToken);
 
-        product.Update(imageUrl: request.ImageUrl);
+        product.Update(imageUrl: filePath);
 
         await repository.UpdateAsync(product, cancellationToken);
 

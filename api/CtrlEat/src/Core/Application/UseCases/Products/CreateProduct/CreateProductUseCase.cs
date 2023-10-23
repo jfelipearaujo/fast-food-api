@@ -47,7 +47,6 @@ public class CreateProductUseCase : ICreateProductUseCase
         var product = Product.Create(
             request.Description,
             price.Value,
-            request.ImageUrl,
             productCategory
         );
 

@@ -30,14 +30,13 @@ public sealed class Product : AggregateRoot<ProductId>
     private Product(
         string description,
         Money price,
-        string imageUrl,
         ProductCategory productCategory,
         ProductId? productId = null)
         : base(productId ?? ProductId.CreateUnique())
     {
         Description = description;
         Price = price;
-        ImageUrl = imageUrl;
+        ImageUrl = string.Empty;
         ProductCategory = productCategory;
         ProductCategoryId = productCategory.Id;
     }
@@ -55,13 +54,11 @@ public sealed class Product : AggregateRoot<ProductId>
     public static Result<Product> Create(
         string description,
         Money price,
-        string imageUrl,
         ProductCategory productCategory,
         ProductId? productId = null)
     {
         return new Product(description,
             price,
-            imageUrl,
             productCategory,
             productId);
     }

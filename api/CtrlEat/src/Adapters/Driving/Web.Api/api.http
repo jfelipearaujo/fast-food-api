@@ -1,4 +1,4 @@
-@rootUrl=https://localhost:5001/api/v1
+@rootUrl=http://localhost:5001/api/v1
 
 ### Create a client
 POST {{rootUrl}}/clients
@@ -30,11 +30,10 @@ POST {{rootUrl}}/products
 Content-Type: application/json
 
 {
-  "productCategoryId": "432df276-2353-4fa6-9ad9-6792439cec2e",
+  "productCategoryId": "60fe2f67-cef9-4c61-808d-02f245f748e8",
   "description": "Hamburguer Especial do Chef",
   "amount": 25.99,
-  "currency": "BRL",
-  "imageUrl": "http://images-products.com/123456.png"
+  "currency": "BRL"
 }
 
 ### Get all product

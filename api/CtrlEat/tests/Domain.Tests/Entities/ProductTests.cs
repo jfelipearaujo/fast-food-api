@@ -13,13 +13,12 @@ public class ProductTests
         // Arrange
         var description = "Product description";
         var price = Money.Create(10, Money.BRL).Value;
-        var imageUrl = "https://image.com";
         var productCategory = new ProductCategoryBuilder()
             .WithSample()
             .Build();
 
         // Act
-        var result = Product.Create(description, price, imageUrl, productCategory);
+        var result = Product.Create(description, price, productCategory);
 
         // Assert
         result.Should().BeSuccess();
@@ -31,12 +30,11 @@ public class ProductTests
         // Arrange
         var description = "Product description";
         var price = Money.Create(10, Money.BRL).Value;
-        var imageUrl = "https://image.com";
         var productCategory = new ProductCategoryBuilder()
             .WithSample()
             .Build();
 
-        var product = Product.Create(description, price, imageUrl, productCategory).Value;
+        var product = Product.Create(description, price, productCategory).Value;
 
         // Act
         product.Update("New description",

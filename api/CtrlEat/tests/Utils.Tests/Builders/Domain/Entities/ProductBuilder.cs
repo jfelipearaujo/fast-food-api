@@ -10,8 +10,6 @@ public class ProductBuilder
     private ProductId id;
     private string description;
     private Money price;
-    private string imageUrl;
-    private ProductCategoryId productCategoryId;
     private ProductCategory productCategory;
 
     public ProductBuilder()
@@ -24,8 +22,6 @@ public class ProductBuilder
         id = default;
         description = default;
         price = default;
-        imageUrl = default;
-        productCategoryId = default;
         productCategory = default;
 
         return this;
@@ -36,7 +32,6 @@ public class ProductBuilder
         id = ProductId.CreateUnique();
         description = "Product Description";
         price = new MoneyBuilder().WithSample().Build();
-        imageUrl = "http://image.com/123123.png";
 
         return this;
     }
@@ -44,13 +39,6 @@ public class ProductBuilder
     public ProductBuilder WithId(Guid id)
     {
         this.id = ProductId.Create(id);
-
-        return this;
-    }
-
-    public ProductBuilder WithProductCategoryId(Guid productCategoryId)
-    {
-        this.productCategoryId = ProductCategoryId.Create(productCategoryId);
 
         return this;
     }
@@ -79,19 +67,11 @@ public class ProductBuilder
         return this;
     }
 
-    public ProductBuilder WithImageUrl(string imageUrl)
-    {
-        this.imageUrl = imageUrl;
-
-        return this;
-    }
-
     public Product Build()
     {
         return Product.Create(
             description,
             price,
-            imageUrl,
             productCategory,
             id
         ).Value;

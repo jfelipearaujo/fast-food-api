@@ -15,7 +15,4 @@ public class CreateProductEndpointRequest
 
     [Required]
     public string Currency { get; set; }
-
-    [Required]
-    public string ImageUrl { get; set; }
 }
