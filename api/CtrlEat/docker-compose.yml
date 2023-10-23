@@ -6,6 +6,7 @@ services:
     container_name: CtrlEat.Db
     volumes:
       - ./.containers/database:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d/
     environment:
       POSTGRES_DB: "AppDbCtrlEat"
       POSTGRES_USER: "postgres"

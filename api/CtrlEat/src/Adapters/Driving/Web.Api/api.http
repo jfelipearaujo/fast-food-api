@@ -1,4 +1,4 @@
-@rootUrl=https://localhost:5001
+@rootUrl=https://localhost:5001/api/v1
 
 ### Create a client
 POST {{rootUrl}}/clients
