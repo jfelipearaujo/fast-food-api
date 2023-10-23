@@ -31,6 +31,9 @@ Content-Type: application/json
 ### Get an order
 GET {{rootUrl}}/orders/30598ed9-1eb6-4380-babe-9fa5e7ea78fc
 
+### Get all orders (by status or not)
+GET {{rootUrl}}/orders/30598ed9-1eb6-4380-babe-9fa5e7ea78fc/tracking?status=Created
+
 ### Add a product to the order
 POST {{rootUrl}}/orders/30598ed9-1eb6-4380-babe-9fa5e7ea78fc/items
 Content-Type: application/json

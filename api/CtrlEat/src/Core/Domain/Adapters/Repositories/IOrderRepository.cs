@@ -1,4 +1,5 @@
-﻿using Domain.Entities.OrderAggregate;
+﻿using Domain.Entities.ClientAggregate.ValueObjects;
+using Domain.Entities.OrderAggregate;
 using Domain.Entities.OrderAggregate.Enums;
 using Domain.Entities.OrderAggregate.ValueObjects;
 
@@ -13,6 +14,8 @@ public interface IOrderRepository
     Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken);
 
     Task<IEnumerable<Order>> GetAllByStatusAsync(OrderStatus status, CancellationToken cancellationToken);
+
+    Task<IEnumerable<Order>> GetByClientAsync(ClientId clientId, CancellationToken cancellationToken);
 
     Task<int> UpdateAsync(Order order, CancellationToken cancellationToken);
 

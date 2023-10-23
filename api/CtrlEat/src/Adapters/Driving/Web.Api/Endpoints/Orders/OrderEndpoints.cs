@@ -44,6 +44,7 @@ public static class OrderEndpoints
             .WithName(ApiEndpoints.Orders.V1.Create)
             .WithDescription("Register an order")
             .Produces<CreateOrderEndpointResponse>(StatusCodes.Status201Created)
+            .Produces<ApiError>(StatusCodes.Status400BadRequest)
             .Produces<ApiError>(StatusCodes.Status404NotFound);
 
         group.MapPatch("{id}/status", UpdateOrderStatus)
@@ -113,6 +114,8 @@ public static class OrderEndpoints
     public static async Task<IResult> CreateOrder(
         CreateOrderEndpointRequest endpointRequest,
         ICreateOrderUseCase useCase,
+        HttpContext httpContext,
+        LinkGenerator linkGenerator,
         CancellationToken cancellationToken)
     {
         var request = endpointRequest.MapToRequest();
@@ -121,18 +124,27 @@ public static class OrderEndpoints
 
         if (result.IsFailed)
         {
-            return Results.NotFound(result.ToApiError());
+            if (result.HasNotFound())
+            {
+                return Results.NotFound(result.ToApiError());
+            }
+
+            return Results.BadRequest(result.ToApiError());
         }
 
         var response = result.Value.MapToCreatedResponse();
 
-        return Results.CreatedAtRoute(
+        var location = linkGenerator.GetUriByName(
+            httpContext,
             ApiEndpoints.Orders.V1.GetById,
-            response,
             new
             {
                 id = response.Id
             });
+
+        return Results.Created(
+            location,
+            response);
     }
 
     public static async Task<IResult> UpdateOrderStatus(

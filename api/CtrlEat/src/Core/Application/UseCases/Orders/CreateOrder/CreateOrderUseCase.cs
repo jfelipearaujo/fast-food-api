@@ -1,4 +1,6 @@
 ﻿using Application.UseCases.Common.Errors;
+using Application.UseCases.Orders.CreateOrder.Errors;
+
 using Domain.Adapters.Repositories;
 using Domain.Entities.ClientAggregate.ValueObjects;
 using Domain.Entities.OrderAggregate;
@@ -35,6 +37,13 @@ public class CreateOrderUseCase : ICreateOrderUseCase
         if (client is null)
         {
             return Result.Fail(new ClientNotFoundError(request.ClientId));
+        }
+
+        var orders = await orderRepository.GetByClientAsync(client.Id, cancellationToken);
+
+        if (orders.Any())
+        {
+            return Result.Fail(new OrderOnGoingForClientError());
         }
 
         var order = Order.Create(TrackId.CreateUnique(), client);
