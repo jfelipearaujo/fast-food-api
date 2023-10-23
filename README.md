@@ -9,6 +9,7 @@
 ## Conteúdo
 
 - [Event Storming](https://miro.com/app/board/uXjVMlp82Do=/?share_link_id=110707337684)
+- [Mapa de Navegação e uso de APIs](https://miro.com/app/board/uXjVNXQyIeY=/?share_link_id=702397873101)
 - [Domínios](./docs/features/00%20Domínios/dominios.md)
 - [Mapa de Contexto](./docs/features/01%20Mapa%20de%20Contexto/mapa_contexto.md)
 - [Funcionalidades](./docs/features/features.md)
