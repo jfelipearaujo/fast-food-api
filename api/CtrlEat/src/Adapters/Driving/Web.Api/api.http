@@ -20,36 +20,45 @@ GET {{rootUrl}}/products/categories
 ### Get all product
 GET {{rootUrl}}/products
 
+### Get all product by category
+GET {{rootUrl}}/products/category/Lanches
+
 ### Create an order
 POST {{rootUrl}}/orders
 Content-Type: application/json
 
 {
-  "clientId": "2ac7ebfc-e8f9-4922-ad24-5a49a918c521"
+  "clientId": "940e7f4a-7cc6-4d9d-b9f6-cd99f684e57a"
 }
 
-### Get an order
-GET {{rootUrl}}/orders/30598ed9-1eb6-4380-babe-9fa5e7ea78fc
+### Set the order ID
+@orderId=6f533479-62b8-42dc-9a8a-c78cf0a02822
 
-### Get all orders (by status or not)
-GET {{rootUrl}}/orders/30598ed9-1eb6-4380-babe-9fa5e7ea78fc/tracking?status=Created
+### Get an order
+GET {{rootUrl}}/orders/{{orderId}}
+
+### Get all orders (ps.: Completed orders will be returned for 5 minutes)
+GET {{rootUrl}}/orders/tracking
+
+### Get all orders by status
+GET {{rootUrl}}/orders/tracking?status=Received
 
 ### Add a product to the order
-POST {{rootUrl}}/orders/30598ed9-1eb6-4380-babe-9fa5e7ea78fc/items
+POST {{rootUrl}}/orders/{{orderId}}/items
 Content-Type: application/json
 
 {
-  "productId": "3038eac8-c417-46d6-969c-4bef747cebcd",
+  "productId": "10c649e9-c478-45bc-9681-3404aac95363",
   "quantity": 2,
   "observation": null
 }
 
 ### Pay the order
-POST {{rootUrl}}/orders/30598ed9-1eb6-4380-babe-9fa5e7ea78fc/checkout
+POST {{rootUrl}}/orders/{{orderId}}/checkout
 Content-Type: application/json
 
 ### Start the preparation of the order
-PATCH {{rootUrl}}/orders/30598ed9-1eb6-4380-babe-9fa5e7ea78fc/status
+PATCH {{rootUrl}}/orders/{{orderId}}/status
 Content-Type: application/json
 
 {
@@ -57,7 +66,7 @@ Content-Type: application/json
 }
 
 ### After a while, the kitchen finishes the order
-PATCH {{rootUrl}}/orders/30598ed9-1eb6-4380-babe-9fa5e7ea78fc/status
+PATCH {{rootUrl}}/orders/{{orderId}}/status
 Content-Type: application/json
 
 {
@@ -65,7 +74,7 @@ Content-Type: application/json
 }
 
 ### The client sees the order is Done and goes to pick it up
-PATCH {{rootUrl}}/orders/30598ed9-1eb6-4380-babe-9fa5e7ea78fc/status
+PATCH {{rootUrl}}/orders/{{orderId}}/status
 Content-Type: application/json
 
 {
