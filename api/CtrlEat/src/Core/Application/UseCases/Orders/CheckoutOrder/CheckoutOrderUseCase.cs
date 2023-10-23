@@ -66,10 +66,15 @@ public class CheckoutOrderUseCase : ICheckoutOrderUseCase
 
         await paymentRepository.CreateAsync(payment.Value, cancellationToken);
 
-        // TODO: Fake approval
+        // Fake approval
         payment.Value.UpdateToStatus(PaymentStatus.Approved);
 
         await paymentRepository.UpdateAsync(payment.Value, cancellationToken);
+
+        // Deliver the order to be prepared
+        order.UpdateToStatus(OrderStatus.Received);
+
+        await orderRepository.UpdateAsync(order, cancellationToken);
 
         return CheckoutOrderResponse.MapFromDomain(payment.Value);
     }
