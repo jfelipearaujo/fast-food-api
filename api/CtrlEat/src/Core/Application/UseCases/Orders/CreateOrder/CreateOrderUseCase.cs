@@ -39,7 +39,7 @@ public class CreateOrderUseCase : ICreateOrderUseCase
             return Result.Fail(new ClientNotFoundError(request.ClientId));
         }
 
-        var orders = await orderRepository.GetByClientAsync(client.Id, cancellationToken);
+        var orders = await orderRepository.GetOnGoingByClientAsync(client.Id, cancellationToken);
 
         if (orders.Any())
         {

@@ -50,13 +50,11 @@ public class OrderRepository : IOrderRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Order>> GetByClientAsync(ClientId clientId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Order>> GetOnGoingByClientAsync(ClientId clientId, CancellationToken cancellationToken)
     {
-        var filterTime = DateTime.UtcNow.AddMinutes(-5);
-
         return await context.Order
             .Where(x => x.ClientId == clientId)
-            .Where(x => x.Status != OrderStatus.Completed || (x.Status == OrderStatus.Completed && x.StatusUpdatedAt >= filterTime))
+            .Where(x => x.Status != OrderStatus.Completed)
             .ToListAsync(cancellationToken);
     }
 

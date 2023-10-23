@@ -15,7 +15,7 @@ public interface IOrderRepository
 
     Task<IEnumerable<Order>> GetAllByStatusAsync(OrderStatus status, CancellationToken cancellationToken);
 
-    Task<IEnumerable<Order>> GetByClientAsync(ClientId clientId, CancellationToken cancellationToken);
+    Task<IEnumerable<Order>> GetOnGoingByClientAsync(ClientId clientId, CancellationToken cancellationToken);
 
     Task<int> UpdateAsync(Order order, CancellationToken cancellationToken);
 
