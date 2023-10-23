@@ -40,4 +40,8 @@ make seed-all
 
 ## Exemplos de uso
 
-Para visualizar alguns exemplos de uso, instalar a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code e abrir o arquivo [api.http](./api/CtrlEat/src/Adapters/Driving/Web.Api/api.http) para executar as requisições.
+Para visualizar alguns exemplos de uso, instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code e abra o arquivo [api.http](./api/CtrlEat/src/Adapters/Driving/Web.Api/api.http) para executar as requisições.
+
+Cliente na label `Send Request` para executar a chamada da rota:
+
+![rest_client_example](./docs/assets/rest_client_example.png)
