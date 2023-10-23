@@ -75,7 +75,6 @@ public class CreateProductRequestBuilder
             Description = description,
             Currency = currency,
             Amount = amount,
-            ImageUrl = imageUrl
         };
     }
 }

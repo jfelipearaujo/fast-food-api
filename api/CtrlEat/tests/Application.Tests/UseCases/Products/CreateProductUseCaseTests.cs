@@ -44,7 +44,6 @@ public class CreateProductUseCaseTests
             .WithDescription(request.Description)
             .WithProductCategory(productCategory)
             .WithPrice(request.Currency, request.Amount)
-            .WithImageUrl(request.ImageUrl)
             .Build();
 
         productCategoryRepository

@@ -1,4 +1,5 @@
 ﻿using Domain.Adapters.Repositories;
+using Domain.Entities.ClientAggregate.ValueObjects;
 using Domain.Entities.OrderAggregate;
 using Domain.Entities.OrderAggregate.Enums;
 using Domain.Entities.OrderAggregate.ValueObjects;
@@ -46,6 +47,14 @@ public class OrderRepository : IOrderRepository
                 status != OrderStatus.None,
                 x => x.Status == status,
                 x => x.Status != OrderStatus.Completed || (x.Status == OrderStatus.Completed && x.StatusUpdatedAt >= filterTime))
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Order>> GetOnGoingByClientAsync(ClientId clientId, CancellationToken cancellationToken)
+    {
+        return await context.Order
+            .Where(x => x.ClientId == clientId)
+            .Where(x => x.Status != OrderStatus.Completed)
             .ToListAsync(cancellationToken);
     }
 

@@ -5,10 +5,11 @@
       "commandVersion": "1.0",
       "composeLaunchAction": "LaunchBrowser",
       "composeLaunchServiceName": "web.api",
-      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger",
+      "composeLaunchUrl": "http://localhost:{ServicePort}/swagger",
       "serviceActions": {
         "web.api": "StartDebugging",
-        "app-db": "StartWithoutDebugging"
+        "app-db": "StartWithoutDebugging",
+        "pgadmin": "StartWithoutDebugging"
       }
     }
   }

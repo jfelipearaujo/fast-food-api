@@ -5,8 +5,8 @@ services:
     image: postgres:16.0
     container_name: CtrlEat.Db
     volumes:
-      - ./.containers/database:/var/lib/postgresql/data
-      - ./scripts:/docker-entrypoint-initdb.d/
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/database:/docker-entrypoint-initdb.d/
     environment:
       POSTGRES_DB: "AppDbCtrlEat"
       POSTGRES_USER: "postgres"
@@ -16,21 +16,44 @@ services:
     networks:
       - api
 
+  pgadmin:
+    depends_on:
+      - app-db
+    image: dpage/pgadmin4
+    container_name: CtrlEat.PgAdmin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "5050:80"
+    networks:
+      - api
+
   web.api:
-    depends_on: 
+    depends_on:
       - app-db
     image: ${DOCKER_REGISTRY-}webapi
     container_name: CtrlEat.Api
     build:
       context: .
       dockerfile: src/Adapters/Driving/Web.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
     ports:
-      - "5001:443"
+      - "5001:80"
     networks:
       - api
     volumes:
-      - ./.containers/api:/app/images
+      - api-data:/app/images
 
 networks:
   api:
     driver: bridge
+
+volumes:
+  api-data:
+  postgres-data:
+  pgadmin-data:

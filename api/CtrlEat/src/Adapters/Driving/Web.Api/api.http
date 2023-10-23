@@ -1,4 +1,4 @@
-@rootUrl=https://localhost:5001/api/v1
+@rootUrl=http://localhost:5001/api/v1
 
 ### Create a client
 POST {{rootUrl}}/clients
@@ -14,49 +14,69 @@ Content-Type: application/json
 ### Get all clients
 GET {{rootUrl}}/clients
 
-### Create a product category
-POST {{rootUrl}}/products/categories
-Content-Type: application/json
-
-{
-  "description": "Hamburguer"
-}
-
 ### Get all products categories
 GET {{rootUrl}}/products/categories
 
-### Create a product
-POST {{rootUrl}}/products
-Content-Type: application/json
-
-{
-  "productCategoryId": "432df276-2353-4fa6-9ad9-6792439cec2e",
-  "description": "Hamburguer Especial do Chef",
-  "amount": 25.99,
-  "currency": "BRL",
-  "imageUrl": "http://images-products.com/123456.png"
-}
-
 ### Get all product
 GET {{rootUrl}}/products
+
+### Get all product by category
+GET {{rootUrl}}/products/category/Lanches
 
 ### Create an order
 POST {{rootUrl}}/orders
 Content-Type: application/json
 
 {
-  "clientId": "81a43438-c3ac-4074-90e7-7fa359ecc70e"
+  "clientId": "940e7f4a-7cc6-4d9d-b9f6-cd99f684e57a"
 }
 
+### Set the order ID
+@orderId=6f533479-62b8-42dc-9a8a-c78cf0a02822
+
 ### Get an order
-GET {{rootUrl}}/orders/bbe55dc1-de7f-4320-8c93-96f49e2c3c7d
+GET {{rootUrl}}/orders/{{orderId}}
+
+### Get all orders (ps.: Completed orders will be returned for 5 minutes)
+GET {{rootUrl}}/orders/tracking
+
+### Get all orders by status
+GET {{rootUrl}}/orders/tracking?status=Received
 
 ### Add a product to the order
-POST {{rootUrl}}/orders/bbe55dc1-de7f-4320-8c93-96f49e2c3c7d/items
+POST {{rootUrl}}/orders/{{orderId}}/items
 Content-Type: application/json
 
 {
-  "productId": "fea58b8d-76f3-4bad-ac31-d83ee11b59f6",
-  "quantity": 1,
+  "productId": "10c649e9-c478-45bc-9681-3404aac95363",
+  "quantity": 2,
   "observation": null
+}
+
+### Pay the order
+POST {{rootUrl}}/orders/{{orderId}}/checkout
+Content-Type: application/json
+
+### Start the preparation of the order
+PATCH {{rootUrl}}/orders/{{orderId}}/status
+Content-Type: application/json
+
+{
+  "status": "OnGoing"  
+}
+
+### After a while, the kitchen finishes the order
+PATCH {{rootUrl}}/orders/{{orderId}}/status
+Content-Type: application/json
+
+{
+  "status": "Done"  
+}
+
+### The client sees the order is Done and goes to pick it up
+PATCH {{rootUrl}}/orders/{{orderId}}/status
+Content-Type: application/json
+
+{
+  "status": "Completed"  
 }

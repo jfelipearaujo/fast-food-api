@@ -12,7 +12,6 @@ public static class ProductEndpointRequestMapper
             Description = request.Description,
             Currency = request.Currency,
             Amount = request.Amount,
-            ImageUrl = request.ImageUrl
         };
     }
 }
