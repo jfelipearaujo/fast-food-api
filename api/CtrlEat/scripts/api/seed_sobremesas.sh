@@ -21,8 +21,7 @@ productId_1=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Sundae de Brownie",
   "amount": 6.99,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_2=$(curl -X 'POST' \
@@ -33,8 +32,7 @@ productId_2=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Milkshake de Morango",
   "amount": 4.99,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_3=$(curl -X 'POST' \
@@ -45,8 +43,7 @@ productId_3=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Torta de Maçã Quente",
   "amount": 5.75,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_4=$(curl -X 'POST' \
@@ -57,8 +54,7 @@ productId_4=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Banana Split",
   "amount": 7.5,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_5=$(curl -X 'POST' \
@@ -69,8 +65,7 @@ productId_5=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Torta de Limão Merengue",
   "amount": 6.25,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 echo "Sobremesas - Seeding product images..."

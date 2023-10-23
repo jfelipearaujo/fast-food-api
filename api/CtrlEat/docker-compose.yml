@@ -47,7 +47,7 @@ services:
     networks:
       - api
     volumes:
-      - ./.containers/api:/app/images
+      - api-data:/app/images
 
 networks:
   api:

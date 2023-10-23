@@ -21,8 +21,7 @@ productId_1=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Batata Frita Crocante",
   "amount": 3.99,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_2=$(curl -X 'POST' \
@@ -33,8 +32,7 @@ productId_2=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Anéis de Cebola Fritos",
   "amount": 4.5,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_3=$(curl -X 'POST' \
@@ -45,8 +43,7 @@ productId_3=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Nachos com Queijo e Guacamole",
   "amount": 5.25,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_4=$(curl -X 'POST' \
@@ -57,8 +54,7 @@ productId_4=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Molho de Queijo com Bacon",
   "amount": 4.75,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_5=$(curl -X 'POST' \
@@ -69,8 +65,7 @@ productId_5=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Salada de Repolho Coleslaw",
   "amount": 2.25,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 echo "Acompanhamentos - Seeding product images..."

@@ -21,8 +21,7 @@ productId_1=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Refrigerante de 500ml",
   "amount": 2.5,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_2=$(curl -X 'POST' \
@@ -33,8 +32,7 @@ productId_2=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Milkshake de Chocolate",
   "amount": 4.99,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_3=$(curl -X 'POST' \
@@ -45,8 +43,7 @@ productId_3=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Cerveja Artesanal",
   "amount": 6.5,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_4=$(curl -X 'POST' \
@@ -57,8 +54,7 @@ productId_4=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Água Mineral",
   "amount": 1.5,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_5=$(curl -X 'POST' \
@@ -69,8 +65,7 @@ productId_5=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Café Preto",
   "amount": 1.75,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 echo "Bebidas - Seeding product images..."

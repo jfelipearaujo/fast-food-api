@@ -21,8 +21,7 @@ productId_1=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Hambúrguer Clássico",
   "amount": 16.9,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_2=$(curl -X 'POST' \
@@ -33,8 +32,7 @@ productId_2=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Hamburguer de Frango Grelhado",
   "amount": 14.5,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_3=$(curl -X 'POST' \
@@ -45,8 +43,7 @@ productId_3=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Hamburguer Vegetariano",
   "amount": 12.99,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_4=$(curl -X 'POST' \
@@ -57,8 +54,7 @@ productId_4=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Hamburguer Duplo com Queijo",
   "amount": 15.5,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 productId_5=$(curl -X 'POST' \
@@ -69,8 +65,7 @@ productId_5=$(curl -X 'POST' \
   "productCategoryId": "'"$categoryId"'",
   "description": "Hamburguer Picante com Jalapeños",
   "amount": 13.75,
-  "currency": "BRL",
-  "ImageUrl": ""
+  "currency": "BRL"
 }' 2>/dev/null | jq --raw-output '"\(.id)"')
 
 echo "Lanches - Seeding product images..."

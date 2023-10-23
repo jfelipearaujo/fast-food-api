@@ -14,3 +14,30 @@
 - [Funcionalidades](./docs/features/features.md)
 - [Diagrama de Relacionamento de Entidades](./docs/database/database.md)
  
+## Dependências
+
+Para executar esta aplicação são necessárias as seguintes dependências:
+
+- [Docker](https://docs.docker.com/engine/install/)
+- [Makefile no Ubuntu](https://linuxhint.com/install-make-ubuntu/)
+- [Makefile no Windows](https://linuxhint.com/run-makefile-windows/)
+
+Uma vez instalados o docker e o makefile, podemos prosseguir!
+
+## Executando a aplicação
+
+1 - Inicialize os containers:
+```bash
+make up
+```
+
+2 - Realize o seed dos dados:
+```bash
+make seed-all
+```
+
+3 - Acesse a aplicação em [http://localhost:5001/swagger/index.html](http://localhost:5001/swagger/index.html)
+
+## Exemplos de uso
+
+Para visualizar alguns exemplos de uso, instalar a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code e abrir o arquivo [api.http](./api/CtrlEat/src/Adapters/Driving/Web.Api/api.http) para executar as requisições.
