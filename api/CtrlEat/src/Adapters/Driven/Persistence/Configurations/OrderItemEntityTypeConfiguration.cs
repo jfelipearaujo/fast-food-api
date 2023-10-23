@@ -33,7 +33,7 @@ public class OrderItemEntityTypeConfiguration : IEntityTypeConfiguration<OrderIt
         builder.OwnsOne(x => x.Price, propBuilder =>
         {
             propBuilder.Property(y => y.Currency).HasMaxLength(3);
-            propBuilder.Property(y => y.Amount).HasPrecision(4, 2);
+            propBuilder.Property(y => y.Amount).HasPrecision(7, 2);
         });
 
         builder.Property(x => x.ImageUrl)

@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Tests", "tests\Domain.Tests\Domain.Tests.csproj", "{2A93CF90-2C57-45F4-AC73-C92D3BD75357}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Tests", "tests\Utils.Tests\Utils.Tests.csproj", "{D95BA8DF-5518-435A-9325-165FEF120068}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.Tests", "tests\Utils.Tests\Utils.Tests.csproj", "{D95BA8DF-5518-435A-9325-165FEF120068}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

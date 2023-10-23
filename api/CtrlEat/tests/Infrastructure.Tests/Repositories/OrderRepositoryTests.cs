@@ -5,40 +5,33 @@ using Domain.Entities.OrderAggregate.ValueObjects;
 
 using Infrastructure.Repositories;
 
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 using Persistence;
-
-using System.Data.Common;
 
 using Utils.Tests.Builders.Domain.Entities;
 
 namespace Infrastructure.Tests.Repositories;
 
-public class OrderRepositoryTests : IDisposable
+public class OrderRepositoryTests : IClassFixture<CustomDbFactory>, IDisposable
 {
     private readonly OrderRepository sut;
 
     private readonly AppDbContext dbContext;
 
-    private readonly DbConnection dbConnection;
-
     private readonly DbContextOptions<AppDbContext> dbContextOptions;
 
     private readonly Client client;
 
-    public OrderRepositoryTests()
+    public OrderRepositoryTests(CustomDbFactory customDbFactory)
     {
-        dbConnection = new SqliteConnection("Filename=:memory:");
-        dbConnection.Open();
-
         dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlite(dbConnection)
+            .UseNpgsql(customDbFactory.DbContainer.GetConnectionString())
             .Options;
 
         dbContext = new AppDbContext(dbContextOptions);
 
+        dbContext.Database.EnsureDeleted();
         dbContext.Database.Migrate();
 
         client = new ClientBuilder().WithSample().Build();
@@ -223,7 +216,6 @@ public class OrderRepositoryTests : IDisposable
     {
         if (disposing)
         {
-            dbConnection.Dispose();
             dbContext.Dispose();
         }
     }

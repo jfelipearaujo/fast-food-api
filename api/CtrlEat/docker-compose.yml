@@ -2,16 +2,16 @@ version: '3.4'
 
 services:
   app-db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: postgres:16.0
     container_name: CtrlEat.Db
     volumes:
-      - ./.containers/database:/var/opt/mssql/data
+      - ./.containers/database:/var/lib/postgresql/data
     environment:
-      MSSQL_PID: "Express"
-      SA_PASSWORD: "StrongPassword123"
-      ACCEPT_EULA: "Y"
+      POSTGRES_DB: "AppDbCtrlEat"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "StrongPassword123"
     ports:
-      - "1433:1433"
+      - "5432:5432"
     networks:
       - api
 
