@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence;
 
 #nullable disable
@@ -18,38 +18,38 @@ namespace Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.12")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Domain.Entities.ClientAggregate.Client", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.Property<string>("DocumentId")
                         .IsRequired()
                         .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
+                        .HasColumnType("character varying(14)");
 
                     b.Property<int>("DocumentType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("character varying(250)");
 
                     b.Property<bool>("IsAnonymous")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("UpdatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.HasKey("Id");
 
@@ -65,30 +65,30 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.OrderAggregate.Order", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("StatusUpdatedAt")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.Property<string>("TrackId")
                         .IsRequired()
                         .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
+                        .HasColumnType("character varying(6)");
 
                     b.Property<DateTime>("UpdatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.HasKey("Id");
 
@@ -100,38 +100,38 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.OrderAggregate.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("character varying(250)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("character varying(250)");
 
                     b.Property<string>("Observation")
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("character varying(250)");
 
                     b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.HasKey("Id");
 
@@ -145,21 +145,21 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.OrderAggregate.Payment", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.HasKey("Id");
 
@@ -171,28 +171,28 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.ProductAggregate.Product", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("character varying(250)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("character varying(250)");
 
                     b.Property<Guid>("ProductCategoryId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.HasKey("Id");
 
@@ -204,20 +204,20 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.ProductAggregate.ProductCategory", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("character varying(250)");
 
                     b.Property<DateTime>("UpdatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.HasKey("Id");
 
@@ -227,21 +227,21 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.ProductAggregate.Stock", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAtUtc")
                         .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
+                        .HasColumnType("timestamp(7) with time zone");
 
                     b.HasKey("Id");
 
@@ -256,17 +256,17 @@ namespace Persistence.Migrations
                     b.OwnsOne("Domain.Entities.ClientAggregate.ValueObjects.FullName", "FullName", b1 =>
                         {
                             b1.Property<Guid>("ClientId")
-                                .HasColumnType("uniqueidentifier");
+                                .HasColumnType("uuid");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasMaxLength(250)
-                                .HasColumnType("nvarchar(250)");
+                                .HasColumnType("character varying(250)");
 
                             b1.Property<string>("LastName")
                                 .IsRequired()
                                 .HasMaxLength(250)
-                                .HasColumnType("nvarchar(250)");
+                                .HasColumnType("character varying(250)");
 
                             b1.HasKey("ClientId");
 
@@ -308,16 +308,16 @@ namespace Persistence.Migrations
                     b.OwnsOne("Domain.Entities.ProductAggregate.ValueObjects.Money", "Price", b1 =>
                         {
                             b1.Property<Guid>("OrderItemId")
-                                .HasColumnType("uniqueidentifier");
+                                .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasPrecision(4, 2)
-                                .HasColumnType("decimal(4,2)");
+                                .HasPrecision(7, 2)
+                                .HasColumnType("numeric(7,2)");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("nvarchar(3)");
+                                .HasColumnType("character varying(3)");
 
                             b1.HasKey("OrderItemId");
 
@@ -346,16 +346,16 @@ namespace Persistence.Migrations
                     b.OwnsOne("Domain.Entities.ProductAggregate.ValueObjects.Money", "Price", b1 =>
                         {
                             b1.Property<Guid>("PaymentId")
-                                .HasColumnType("uniqueidentifier");
+                                .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasPrecision(4, 2)
-                                .HasColumnType("decimal(4,2)");
+                                .HasPrecision(7, 2)
+                                .HasColumnType("numeric(7,2)");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("nvarchar(3)");
+                                .HasColumnType("character varying(3)");
 
                             b1.HasKey("PaymentId");
 
@@ -382,16 +382,16 @@ namespace Persistence.Migrations
                     b.OwnsOne("Domain.Entities.ProductAggregate.ValueObjects.Money", "Price", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
-                                .HasColumnType("uniqueidentifier");
+                                .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasPrecision(4, 2)
-                                .HasColumnType("decimal(4,2)");
+                                .HasPrecision(7, 2)
+                                .HasColumnType("numeric(7,2)");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("nvarchar(3)");
+                                .HasColumnType("character varying(3)");
 
                             b1.HasKey("ProductId");
 

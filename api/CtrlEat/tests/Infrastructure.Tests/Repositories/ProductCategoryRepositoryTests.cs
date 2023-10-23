@@ -1,38 +1,32 @@
 using Domain.Entities.ProductAggregate;
+
 using Infrastructure.Repositories;
 
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 using Persistence;
-
-using System.Data.Common;
 
 using Utils.Tests.Builders.Domain.Entities;
 
 namespace Infrastructure.Tests.Repositories;
 
-public class ProductCategoryRepositoryTests : IDisposable
+public class ProductCategoryRepositoryTests : IClassFixture<CustomDbFactory>, IDisposable
 {
     private readonly ProductCategoryRepository sut;
 
     private readonly AppDbContext dbContext;
 
-    private readonly DbConnection dbConnection;
-
     private readonly DbContextOptions<AppDbContext> dbContextOptions;
 
-    public ProductCategoryRepositoryTests()
+    public ProductCategoryRepositoryTests(CustomDbFactory customDbFactory)
     {
-        dbConnection = new SqliteConnection("Filename=:memory:");
-        dbConnection.Open();
-
         dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlite(dbConnection)
+            .UseNpgsql(customDbFactory.DbContainer.GetConnectionString())
             .Options;
 
         dbContext = new AppDbContext(dbContextOptions);
 
+        dbContext.Database.EnsureDeleted();
         dbContext.Database.Migrate();
 
         sut = new ProductCategoryRepository(dbContext);
@@ -166,7 +160,6 @@ public class ProductCategoryRepositoryTests : IDisposable
     {
         if (disposing)
         {
-            dbConnection.Dispose();
             dbContext.Dispose();
         }
     }

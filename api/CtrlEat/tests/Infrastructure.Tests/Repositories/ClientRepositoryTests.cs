@@ -3,38 +3,31 @@ using Domain.Entities.ClientAggregate.ValueObjects;
 
 using Infrastructure.Repositories;
 
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 using Persistence;
-
-using System.Data.Common;
 
 using Utils.Tests.Builders.Domain.Entities;
 
 namespace Infrastructure.Tests.Repositories;
 
-public class ClientRepositoryTests : IDisposable
+public class ClientRepositoryTests : IClassFixture<CustomDbFactory>, IDisposable
 {
     private readonly ClientRepository sut;
 
     private readonly AppDbContext dbContext;
 
-    private readonly DbConnection dbConnection;
-
     private readonly DbContextOptions<AppDbContext> dbContextOptions;
 
-    public ClientRepositoryTests()
+    public ClientRepositoryTests(CustomDbFactory customDbFactory)
     {
-        dbConnection = new SqliteConnection("Filename=:memory:");
-        dbConnection.Open();
-
         dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlite(dbConnection)
+            .UseNpgsql(customDbFactory.DbContainer.GetConnectionString())
             .Options;
 
         dbContext = new AppDbContext(dbContextOptions);
 
+        dbContext.Database.EnsureDeleted();
         dbContext.Database.Migrate();
 
         sut = new ClientRepository(dbContext);
@@ -177,7 +170,6 @@ public class ClientRepositoryTests : IDisposable
         clientOnDb.Should().NotBeNull().And.BeEquivalentTo(client);
     }
 
-
     public void Dispose()
     {
         Dispose(true);
@@ -188,7 +180,6 @@ public class ClientRepositoryTests : IDisposable
     {
         if (disposing)
         {
-            dbConnection.Dispose();
             dbContext.Dispose();
         }
     }
