@@ -57,8 +57,6 @@ builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-
 app.MapProductCategoryEndpoints();
 app.MapProductEndpoints();
 app.MapClientEndpoints();

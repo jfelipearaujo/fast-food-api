@@ -5,7 +5,7 @@ services:
     image: postgres:16.0
     container_name: CtrlEat.Db
     volumes:
-      - ./.containers/database:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
       - ./scripts:/docker-entrypoint-initdb.d/
     environment:
       POSTGRES_DB: "AppDbCtrlEat"
@@ -41,20 +41,18 @@ services:
       dockerfile: src/Adapters/Driving/Web.Api/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=http://+:80
     ports:
       - "5001:80"
-      - "5002:443"
     networks:
       - api
     volumes:
       - ./.containers/api:/app/images
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
 networks:
   api:
     driver: bridge
 
 volumes:
+  postgres-data:
   pgadmin-data:
