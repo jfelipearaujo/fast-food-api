@@ -399,3 +399,8 @@ FodyWeavers.xsd
 
 # Container Volumes
 .containers
+
+# Coverage Results
+coveragereport/*
+!coveragereport/SummaryGithub.md
+!coveragereport/CoverageHistory.svg

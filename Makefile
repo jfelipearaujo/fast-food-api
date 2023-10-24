@@ -1,5 +1,6 @@
 .PHONY:
 	test \
+	coverage \
 	up \
 	down \
 	seed-all \
@@ -10,6 +11,13 @@
 
 test:
 	dotnet test ./api/CtrlEat/CtrlEat.sln --collect:"XPlat Code Coverage;Format=json,lcov,cobertura"
+
+coverage:
+	reportgenerator \
+		-reports:"./api/CtrlEat/tests/**/TestResults/**/coverage.cobertura.xml" \
+		-targetdir:"coveragereport" \
+		-historydir:"coveragereport-hist" \
+		-reporttypes:"Html;SvgChart;MarkdownSummaryGithub"
 
 up:
 	docker compose -f ./api/CtrlEat/docker-compose.yml up -d
