@@ -52,6 +52,28 @@ Ou através do Visual Studio:
 
 ![visual_studio_test](./docs/assets/visual_studio_test.png)
 
+## Cobertura de código
+
+Este projeto utiliza a ferramenta [ReportGenerator](https://reportgenerator.io/) para visualizar a cobertura do código.
+
+É necessário intalar o ReportGenerator globalmente:
+```bash
+dotnet tool install --global dotnet-reportgenerator-globaltool
+```
+
+Para gerar o relatório de cobertura, execute o seguinte comando:
+```bash
+make coverage
+```
+
+O relatório será gerado na pasta `./coveragereport` e pode ser visualizado abrindo o arquivo `./coveragereport/index.html` em seu navegador.
+
+### Sumário de cobertura
+Para visualizar o sumário completo de cobertura, acesse este [arquivo](./coveragereport/SummaryGithub.md).
+
+### Histórico de cobertura
+![coverage_hist_report](./coveragereport/CoverageHistory.svg)
+
 ## Exemplos de uso das APIs
 
 Para visualizar alguns exemplos de uso, instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code e abra o arquivo [api.http](./api/CtrlEat/src/Adapters/Driving/Web.Api/api.http) para executar as requisições.
