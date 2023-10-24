@@ -77,6 +77,8 @@ public static class ClientEndpoints
     public static async Task<IResult> CreateClient(
         CreateClientEndpointRequest endpointRequest,
         ICreateClientUseCase useCase,
+        HttpContext httpContext,
+        LinkGenerator linkGenerator,
         CancellationToken cancellationToken)
     {
         var request = endpointRequest.MapToRequest();
@@ -90,12 +92,16 @@ public static class ClientEndpoints
 
         var response = result.Value.MapToResponse();
 
-        return Results.CreatedAtRoute(
+        var location = linkGenerator.GetUriByName(
+            httpContext,
             ApiEndpoints.Clients.V1.GetById,
-            response,
             new
             {
-                id = response.Id,
+                id = response.Id
             });
+
+        return Results.Created(
+            location,
+            response);
     }
 }

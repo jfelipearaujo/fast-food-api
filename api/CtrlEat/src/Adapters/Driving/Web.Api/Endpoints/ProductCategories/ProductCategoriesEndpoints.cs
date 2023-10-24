@@ -92,6 +92,8 @@ public static class ProductCategoriesEndpoints
     public static async Task<IResult> CreateProductCategory(
         CreateProductCategoryEndpointRequest endpointRequest,
         ICreateProductCategoryUseCase useCase,
+        HttpContext httpContext,
+        LinkGenerator linkGenerator,
         CancellationToken cancellationToken)
     {
         var request = new CreateProductCategoryRequest
@@ -103,13 +105,17 @@ public static class ProductCategoriesEndpoints
 
         var response = result.Value.MapToResponse();
 
-        return Results.CreatedAtRoute(
+        var location = linkGenerator.GetUriByName(
+            httpContext,
             ApiEndpoints.ProductCategories.V1.GetById,
-            response,
             new
             {
-                id = response.Id,
+                id = response.Id
             });
+
+        return Results.Created(
+            location,
+            response);
     }
 
     public static async Task<IResult> UpdateProductCategory(

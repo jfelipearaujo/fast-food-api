@@ -135,6 +135,8 @@ public static class ProductEndpoints
     public static async Task<IResult> CreateProduct(
         CreateProductEndpointRequest endpointRequest,
         ICreateProductUseCase useCase,
+        HttpContext httpContext,
+        LinkGenerator linkGenerator,
         CancellationToken cancellationToken)
     {
         var request = endpointRequest.MapToRequest();
@@ -148,13 +150,17 @@ public static class ProductEndpoints
 
         var response = result.Value.MapToResponse();
 
-        return Results.CreatedAtRoute(
+        var location = linkGenerator.GetUriByName(
+            httpContext,
             ApiEndpoints.Products.V1.GetById,
-            response,
             new
             {
                 id = response.Id
             });
+
+        return Results.Created(
+            location,
+            response);
     }
 
     public static async Task<IResult> GetProductImage(

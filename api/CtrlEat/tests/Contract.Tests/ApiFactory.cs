@@ -1,4 +1,4 @@
-﻿using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Builders;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -13,17 +13,23 @@ using Testcontainers.PostgreSql;
 
 using Web.Api.Markers;
 
-namespace Integration.Tests;
+namespace Contract.Tests;
 
 public class ApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
-    private readonly PostgreSqlContainer dbContainer = new PostgreSqlBuilder()
-        .WithEnvironment("POSTGRES_DB", "AppDbCtrlEat")
-        .WithEnvironment("POSTGRES_USER", "postgres")
-        .WithEnvironment("POSTGRES_PASSWORD", "StrongPassword123")
-        .WithPortBinding(5432)
-        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
-        .Build();
+    private readonly PostgreSqlContainer dbContainer;
+
+    public ApiFactory()
+    {
+        dbContainer = new PostgreSqlBuilder()
+            .WithImage("postgres:16.0")
+            .WithEnvironment("POSTGRES_DB", "AppDbCtrlEat")
+            .WithEnvironment("POSTGRES_USER", "postgres")
+            .WithEnvironment("POSTGRES_PASSWORD", "StrongPassword123")
+            .WithPortBinding(5432)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
+            .Build();
+    }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -37,6 +43,16 @@ public class ApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
         });
     }
 
+    public async Task ResetDatabase(IServiceProvider provider)
+    {
+        using var scope = provider.CreateScope();
+
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        await dbContext.Database.EnsureDeletedAsync();
+        await dbContext.Database.MigrateAsync();
+    }
+
     public async Task InitializeAsync()
     {
         await dbContainer.StartAsync();
@@ -45,5 +61,6 @@ public class ApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
     public new async Task DisposeAsync()
     {
         await dbContainer.StopAsync();
+        await dbContainer.DisposeAsync();
     }
 }

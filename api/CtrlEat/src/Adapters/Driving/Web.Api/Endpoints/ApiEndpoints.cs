@@ -1,4 +1,20 @@
-﻿namespace Web.Api.Endpoints;
+﻿using System.Globalization;
+
+namespace Web.Api.Endpoints;
+
+public static class ApiEndpointsExtensions
+{
+    public static string ReplaceWithVersion(this string endpoint, double version)
+    {
+        if (string.IsNullOrWhiteSpace(endpoint))
+            throw new ArgumentException("Endpoint must be provided");
+
+        if (!endpoint.Contains("{version:apiVersion}", StringComparison.InvariantCulture))
+            throw new ArgumentException("Endpoint must contain {version:apiVersion} to be replaced");
+
+        return endpoint.Replace("{version:apiVersion}", version.ToString(CultureInfo.InvariantCulture), StringComparison.InvariantCulture);
+    }
+}
 
 public static class ApiEndpoints
 {
