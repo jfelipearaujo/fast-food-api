@@ -3,9 +3,9 @@
 
 |||
 |:---|:---|
-| Generated on: | 10/24/2023 - 15:09:13 |
-| Coverage date: | 10/23/2023 - 20:12:18 - 10/24/2023 - 14:46:41 |
-| Parser: | MultiReport (14x Cobertura) |
+| Generated on: | 10/24/2023 - 15:16:14 |
+| Coverage date: | 10/23/2023 - 20:12:18 - 10/24/2023 - 15:16:05 |
+| Parser: | MultiReport (18x Cobertura) |
 | Assemblies: | 6 |
 | Classes: | 187 |
 | Files: | 182 |
@@ -13,7 +13,7 @@
 | Covered lines: | 3617 |
 | Uncovered lines: | 1034 |
 | Coverable lines: | 4651 |
-| Total lines: | 8389 |
+| Total lines: | 8391 |
 | **Branch coverage:** | 73.3% (330 of 450) |
 | Covered branches: | 330 |
 | Total branches: | 450 |

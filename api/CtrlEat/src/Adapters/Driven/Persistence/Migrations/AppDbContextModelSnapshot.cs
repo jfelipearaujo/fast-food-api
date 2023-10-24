@@ -9,9 +9,9 @@ using Persistence;
 
 #nullable disable
 
-[ExcludeFromCodeCoverage]
 namespace Persistence.Migrations
 {
+    [ExcludeFromCodeCoverage]
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
     {
