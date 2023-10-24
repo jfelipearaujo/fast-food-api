@@ -39,7 +39,20 @@ make seed-all
 
 3 - Acesse a aplicação em [http://localhost:5001/swagger/index.html](http://localhost:5001/swagger/index.html)
 
-## Exemplos de uso
+## Testes automatizados
+
+Este projeto consta com uma gama de testes automatizado. Para executá-los é essencial ter o Docker rodando pois é utilizado a estratégia dos [Test Containers](https://dotnet.testcontainers.org/) para executar as integrações com o banco de dados PostgreSQL.
+
+Para executar os testes via através da CLI, execute o seguinte comando:
+```bash
+make test
+```
+
+Ou através do Visual Studio:
+
+![visual_studio_test](./docs/assets/visual_studio_test.png)
+
+## Exemplos de uso das APIs
 
 Para visualizar alguns exemplos de uso, instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code e abra o arquivo [api.http](./api/CtrlEat/src/Adapters/Driving/Web.Api/api.http) para executar as requisições.
 

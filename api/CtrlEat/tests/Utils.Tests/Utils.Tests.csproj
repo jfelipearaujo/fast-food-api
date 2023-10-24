@@ -7,10 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Bogus" Version="34.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Adapters\Driving\Web.Api\Web.Api.csproj" />
     <ProjectReference Include="..\..\src\Core\Domain\Domain.csproj" />
   </ItemGroup>
 

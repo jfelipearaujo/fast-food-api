@@ -1,7 +1,6 @@
 ﻿using Domain.UseCases.Products.UploadProductImage.Requests;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 
 namespace Utils.Tests.Builders.Application.Products.Requests;
 

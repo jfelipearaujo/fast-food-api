@@ -1,4 +1,5 @@
 .PHONY:
+	test \
 	up \
 	down \
 	seed-all \
@@ -6,6 +7,9 @@
 	seed-acompanhamentos \
 	seed-bebidas \
 	seed-sobremesas \
+
+test:
+	dotnet test ./api/CtrlEat/CtrlEat.sln --collect:"XPlat Code Coverage;Format=json,lcov,cobertura"
 
 up:
 	docker compose -f ./api/CtrlEat/docker-compose.yml up -d
