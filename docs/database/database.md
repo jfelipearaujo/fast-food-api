@@ -1,5 +1,5 @@
 # Banco de Dados
 
-O banco de dados escolhido foi o Microsoft SQL Server.
+O banco de dados escolhido foi o [PostgreSQL](https://www.postgresql.org/).
 
 ![database](./database.png)
