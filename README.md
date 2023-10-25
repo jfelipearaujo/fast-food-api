@@ -20,10 +20,66 @@
 Para executar esta aplicação são necessárias as seguintes dependências:
 
 - [Docker](https://docs.docker.com/engine/install/)
-- [Makefile no Ubuntu](https://linuxhint.com/install-make-ubuntu/)
-- [Makefile no Windows](https://linuxhint.com/run-makefile-windows/)
+- [Makefile](https://linuxhint.com/install-make-ubuntu/)
+- [JQ](https://jqlang.github.io/jq/)
 
-Uma vez instalados o docker e o makefile, podemos prosseguir!
+Sugiro utilizar o WSL2 para executar esta aplicação. Para instalar o WSL2, siga este [tutorial](https://learn.microsoft.com/pt-br/windows/wsl/install).
+
+### Docker
+
+Primeiro, atualize as dependências do sistema:
+```bash
+sudo apt update && sudo apt upgrade
+```
+
+Remova as versões antigas:    
+```bash
+sudo apt remove docker docker-engine docker.io containerd runc
+```
+
+Instale os pré-requisitos do Docker:
+```bash
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+```
+
+Adicione o repositório do Docker nos sources do Ubuntu:
+```bash
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+Instale o Docker:
+```bash
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+Dê as permissões para rodar o Docker com o usuário atual:
+```bash
+sudo usermod -aG docker $USER
+```
+
+### Makefile
+
+Instale o Makefile:
+```bash
+sudo apt install make
+```
+
+### Jq
+
+Instale o JQ:
+```bash
+sudo apt install jq
+```
+
+Uma vez com todas as dependências instaladas, podemos prosseguir!
 
 ## Executando a aplicação
 
