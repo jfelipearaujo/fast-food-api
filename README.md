@@ -16,6 +16,20 @@
 - [Funcionalidades](./docs/features/features.md)
 - [Diagrama de Relacionamento de Entidades](./docs/database/database.md)
 
+## Conatineres
+
+Este projeto utiliza o Docker para executar os serviços necessários para a aplicação funcionar corretamente. Para facilitar a execução, foi criado um arquivo `docker-compose.yml` que contém todos os serviços necessários.
+
+Ao executar o comando para inicializar os containeres, o Docker irá baixar as imagens necessárias e executar os seguintes containers:
+
+- PostgreSQL (16.0)
+- pgAdmin (7.8)
+- Web API (.NET 7)
+
+As URLs necessárias para acessar os serviços são:
+- pgAdmin: [http://localhost:5050](http://localhost:5050) (user: `admin@admin`, password: `admin`)
+- Web API: [http://localhost:5001](http://localhost:5001/swagger/index.html)
+
 ## Dependências
 
 Para executar esta aplicação são necessárias as seguintes dependências:
@@ -28,24 +42,9 @@ Para executar esta aplicação são necessárias as seguintes dependências:
 
 Caso queira executar os testes automatizados ou a própria aplicação, é necessário ter o .NET 7 instalado. Para instalar visite este [link](https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu) e siga as instruções para instalar o dotnet.
 
-## WSL2
+### WSL2
 
 Sugiro utilizar o [WSL2](https://learn.microsoft.com/pt-br/windows/wsl/install) para executar esta aplicação.
-
-## Conatineres
-
-Este projeto utiliza o Docker para executar os serviços necessários para a aplicação funcionar corretamente. Para facilitar a execução, foi criado um arquivo `docker-compose.yml` que contém todos os serviços necessários.
-
-Ao executar o comando `make up`, o Docker irá baixar as imagens necessárias e executar os seguintes containers:
-
-- PostgreSQL (16.0)
-- pgAdmin (7.8)
-- Web API (.NET 7)
-
-As URLs necessárias para acessar os serviços são:
-- pgAdmin: [http://localhost:5050](http://localhost:5050) (user: `admin@admin`, password: `admin`)
-- Web API: [http://localhost:5001](http://localhost:5001/swagger/index.html)
-
 
 ### Docker
 
@@ -99,7 +98,7 @@ Instale o Makefile:
 sudo apt install make
 ```
 
-### Jq
+### JQ
 
 Instale o JQ:
 ```bash
@@ -124,7 +123,7 @@ make seed-all
 
 ## Testes automatizados
 
-Este projeto consta com uma gama de testes automatizado. Para executá-los é essencial ter o Docker rodando pois é utilizado a estratégia dos [Test Containers](https://dotnet.testcontainers.org/) para executar as integrações com o banco de dados PostgreSQL.
+Este projeto consta com uma gama de testes automatizados. Para executá-los é essencial ter o Docker rodando pois é utilizado a estratégia dos [Test Containers](https://dotnet.testcontainers.org/) para executar as integrações com o banco de dados PostgreSQL.
 
 Para executar os testes via através da CLI, execute o seguinte comando:
 ```bash
