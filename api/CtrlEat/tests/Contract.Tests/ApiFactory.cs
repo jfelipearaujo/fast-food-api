@@ -1,45 +1,42 @@
-using DotNet.Testcontainers.Builders;
+using Contract.Tests.Extensions;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-
-using Persistence;
 
 using Testcontainers.PostgreSql;
 
-using Web.Api.Markers;
+using Utils.Tests.Containers;
 
 namespace Contract.Tests;
 
-public class ApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
+public class ApiFactory<TProgramMarker, TDbContext> : WebApplicationFactory<TProgramMarker>, IAsyncLifetime
+    where TProgramMarker : class
+    where TDbContext : DbContext
 {
     private readonly PostgreSqlContainer dbContainer;
 
     public ApiFactory()
     {
-        dbContainer = new PostgreSqlBuilder()
-            .WithImage("postgres:16.0")
-            .WithEnvironment("POSTGRES_DB", "AppDbCtrlEat")
-            .WithEnvironment("POSTGRES_USER", "postgres")
-            .WithEnvironment("POSTGRES_PASSWORD", "StrongPassword123")
-            .WithPortBinding(5432)
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
-            .Build();
+        dbContainer = DatabaseContainer.DefaultContainer.Build();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
-            services.RemoveAll(typeof(AppDbContext));
-            services.AddDbContext<AppDbContext>(options =>
+            services.RemoveDbContext<TDbContext>();
+
+            services.AddDbContext<TDbContext>(options =>
             {
-                options.UseNpgsql(dbContainer.GetConnectionString());
+                var cs = dbContainer.GetConnectionString();
+
+                options.UseNpgsql(cs);
             });
+
+            services.EnsureDbCreatedAndMigrated<TDbContext>();
         });
     }
 
@@ -47,7 +44,7 @@ public class ApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
     {
         using var scope = provider.CreateScope();
 
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
         await dbContext.Database.EnsureDeletedAsync();
         await dbContext.Database.MigrateAsync();

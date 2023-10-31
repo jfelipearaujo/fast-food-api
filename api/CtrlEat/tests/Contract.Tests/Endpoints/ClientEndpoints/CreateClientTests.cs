@@ -1,5 +1,7 @@
 ﻿using Domain.Entities.ClientAggregate.Enums;
 
+using Persistence;
+
 using System.Net.Http.Json;
 
 using Utils.Tests.Builders.Api.ClientEndpoint.Requests;
@@ -7,15 +9,15 @@ using Utils.Tests.Builders.Api.ClientEndpoint.Responses;
 
 using Web.Api.Endpoints;
 using Web.Api.Endpoints.Clients.Responses;
+using Web.Api.Markers;
 
 namespace Contract.Tests.Endpoints.ClientEndpoints;
 
-[Collection("ContractTests")]
-public class CreateClientTests : IClassFixture<ApiFactory>, IAsyncLifetime
+public class CreateClientTests : IClassFixture<ApiFactory<IApiMarker, AppDbContext>>, IAsyncLifetime
 {
-    private readonly ApiFactory apiFactory;
+    private readonly ApiFactory<IApiMarker, AppDbContext> apiFactory;
 
-    public CreateClientTests(ApiFactory apiFactory)
+    public CreateClientTests(ApiFactory<IApiMarker, AppDbContext> apiFactory)
     {
         this.apiFactory = apiFactory;
     }
