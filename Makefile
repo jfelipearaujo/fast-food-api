@@ -2,6 +2,7 @@
 	test \
 	coverage \
 	up \
+	up-build \
 	down \
 	seed-all \
 	seed-lanches \
@@ -21,6 +22,9 @@ coverage:
 
 up:
 	docker compose -f ./api/CtrlEat/docker-compose.yml up -d
+
+up-build:
+	docker compose -f ./api/CtrlEat/docker-compose.yml up -d --build
 
 down:
 	docker compose -f ./api/CtrlEat/docker-compose.yml down

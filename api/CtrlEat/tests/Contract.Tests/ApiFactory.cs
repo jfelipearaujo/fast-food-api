@@ -23,11 +23,9 @@ public class ApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
     {
         dbContainer = new PostgreSqlBuilder()
             .WithImage("postgres:16.0")
-            .WithEnvironment("POSTGRES_DB", "AppDbCtrlEat")
-            .WithEnvironment("POSTGRES_USER", "postgres")
-            .WithEnvironment("POSTGRES_PASSWORD", "StrongPassword123")
-            .WithPortBinding(5432)
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
+            .WithDatabase("AppDbCtrlEat")
+            .WithUsername("postgres")
+            .WithPassword("StrongPassword123")
             .Build();
     }
 

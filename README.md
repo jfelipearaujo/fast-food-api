@@ -9,12 +9,13 @@
 ## Conteúdo
 
 - [Event Storming](https://miro.com/app/board/uXjVMlp82Do=/?share_link_id=110707337684)
+- [Dockerfile & docker-compose](./docs/features/06%20Docker/docker.md)
 - [Mapa de Navegação e uso de APIs](https://miro.com/app/board/uXjVNXQyIeY=/?share_link_id=702397873101)
 - [Domínios](./docs/features/00%20Domínios/dominios.md)
 - [Mapa de Contexto](./docs/features/01%20Mapa%20de%20Contexto/mapa_contexto.md)
 - [Funcionalidades](./docs/features/features.md)
 - [Diagrama de Relacionamento de Entidades](./docs/database/database.md)
- 
+
 ## Dependências
 
 Para executar esta aplicação são necessárias as seguintes dependências:
@@ -23,7 +24,28 @@ Para executar esta aplicação são necessárias as seguintes dependências:
 - [Makefile](https://linuxhint.com/install-make-ubuntu/)
 - [JQ](https://jqlang.github.io/jq/)
 
-Sugiro utilizar o WSL2 para executar esta aplicação. Para instalar o WSL2, siga este [tutorial](https://learn.microsoft.com/pt-br/windows/wsl/install).
+**ATENÇÃO:**
+
+Caso queira executar os testes automatizados ou a própria aplicação, é necessário ter o .NET 7 instalado. Para instalar visite este [link](https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu) e siga as instruções para instalar o dotnet.
+
+## WSL2
+
+Sugiro utilizar o [WSL2](https://learn.microsoft.com/pt-br/windows/wsl/install) para executar esta aplicação.
+
+## Conatineres
+
+Este projeto utiliza o Docker para executar os serviços necessários para a aplicação funcionar corretamente. Para facilitar a execução, foi criado um arquivo `docker-compose.yml` que contém todos os serviços necessários.
+
+Ao executar o comando `make up`, o Docker irá baixar as imagens necessárias e executar os seguintes containers:
+
+- PostgreSQL (16.0)
+- pgAdmin (7.8)
+- Web API (.NET 7)
+
+As URLs necessárias para acessar os serviços são:
+- pgAdmin: [http://localhost:5050](http://localhost:5050) (user: `admin@admin`, password: `admin`)
+- Web API: [http://localhost:5001](http://localhost:5001/swagger/index.html)
+
 
 ### Docker
 
@@ -63,6 +85,11 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 Dê as permissões para rodar o Docker com o usuário atual:
 ```bash
 sudo usermod -aG docker $USER
+```
+
+Execute o Docker:
+```bash
+sudo service docker start
 ```
 
 ### Makefile
@@ -132,8 +159,10 @@ Para visualizar o sumário completo de cobertura, acesse este [arquivo](./covera
 
 ## Exemplos de uso das APIs
 
-Para visualizar alguns exemplos de uso, instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code e abra o arquivo [api.http](./api/CtrlEat/src/Adapters/Driving/Web.Api/api.http) para executar as requisições.
+É possível utilizar e testar as rotas através do Swagger, porém para facilitar, segue abaixo alguns exemplos de uso das APIs através do VS Code + REST Cliente.
 
-Cliente na label `Send Request` para executar a chamada da rota:
+Para visualizar os exemplos de uso, instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code e abra o arquivo [api.http](./api/CtrlEat/src/Adapters/Driving/Web.Api/api.http) para executar as requisições.
+
+Clique na label `Send Request` para executar a chamada da rota:
 
 ![rest_client_example](./docs/assets/rest_client_example.png)
