@@ -1,19 +1,21 @@
-﻿using System.Net.Http.Json;
+﻿using Persistence;
+
+using System.Net.Http.Json;
 
 using Utils.Tests.Builders.Api.ProductCategoryEndpoint.Requests;
 using Utils.Tests.Builders.Api.ProductCategoryEndpoint.Responses;
 
 using Web.Api.Endpoints;
 using Web.Api.Endpoints.ProductCategories.Responses;
+using Web.Api.Markers;
 
 namespace Contract.Tests.Endpoints.ProductCategoryEndpoints;
 
-[Collection("ContractTests")]
-public class CreateProductCategoryTests : IClassFixture<ApiFactory>, IAsyncLifetime
+public class CreateProductCategoryTests : IClassFixture<ApiFactory<IApiMarker, AppDbContext>>, IAsyncLifetime
 {
-    private readonly ApiFactory apiFactory;
+    private readonly ApiFactory<IApiMarker, AppDbContext> apiFactory;
 
-    public CreateProductCategoryTests(ApiFactory apiFactory)
+    public CreateProductCategoryTests(ApiFactory<IApiMarker, AppDbContext> apiFactory)
     {
         this.apiFactory = apiFactory;
     }

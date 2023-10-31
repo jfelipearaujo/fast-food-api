@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Json;
+﻿using Persistence;
+
+using System.Net.Http.Json;
 
 using Utils.Tests.Builders.Api.ProductCategoryEndpoint.Requests;
 using Utils.Tests.Builders.Api.ProductEndpoint.Requests;
@@ -7,15 +9,15 @@ using Utils.Tests.Builders.Api.ProductEndpoint.Responses;
 using Web.Api.Endpoints;
 using Web.Api.Endpoints.ProductCategories.Responses;
 using Web.Api.Endpoints.Products.Responses;
+using Web.Api.Markers;
 
 namespace Contract.Tests.Endpoints.ProductEndpoints;
 
-[Collection("ContractTests")]
-public class ProductEndpointsTests : IClassFixture<ApiFactory>, IAsyncLifetime
+public class ProductEndpointsTests : IClassFixture<ApiFactory<IApiMarker, AppDbContext>>, IAsyncLifetime
 {
-    private readonly ApiFactory apiFactory;
+    private readonly ApiFactory<IApiMarker, AppDbContext> apiFactory;
 
-    public ProductEndpointsTests(ApiFactory apiFactory)
+    public ProductEndpointsTests(ApiFactory<IApiMarker, AppDbContext> apiFactory)
     {
         this.apiFactory = apiFactory;
     }

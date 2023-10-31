@@ -1,5 +1,7 @@
 ﻿using Testcontainers.PostgreSql;
 
+using Utils.Tests.Containers;
+
 namespace Infrastructure.Tests;
 
 public class CustomDbFactory : IAsyncLifetime
@@ -8,12 +10,7 @@ public class CustomDbFactory : IAsyncLifetime
 
     public CustomDbFactory()
     {
-        DbContainer = new PostgreSqlBuilder()
-            .WithImage("postgres:16.0")
-            .WithDatabase("AppDbCtrlEat")
-            .WithUsername("postgres")
-            .WithPassword("StrongPassword123")
-            .Build();
+        DbContainer = DatabaseContainer.DefaultContainer.Build();
     }
 
     public async Task InitializeAsync()
