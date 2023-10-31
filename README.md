@@ -107,7 +107,7 @@ sudo apt install jq
 
 Uma vez com todas as dependências instaladas, podemos prosseguir!
 
-## Executando a aplicação
+## Inicializando e executando a aplicação
 
 1 - Inicialize os containers:
 ```bash
@@ -120,6 +120,20 @@ make seed-all
 ```
 
 3 - Acesse a aplicação em [http://localhost:5001/swagger/index.html](http://localhost:5001/swagger/index.html)
+
+## Executando as APIs via Postman
+
+Caso queira executar as requisições através do Postman, basta importar o arquivo [postman.json](./docs/features/07%20Postman/postman.json).
+
+## Executando as APIs via REST Client
+
+É possível utilizar e testar as rotas através do Swagger, porém para facilitar, segue abaixo alguns exemplos de uso das APIs através do VS Code + REST Cliente.
+
+Para visualizar os exemplos de uso, instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code e abra o arquivo [api.http](./api/CtrlEat/src/Adapters/Driving/Web.Api/api.http) para executar as requisições.
+
+Clique na label `Send Request` para executar a chamada da rota:
+
+![rest_client_example](./docs/assets/rest_client_example.png)
 
 ## Testes automatizados
 
@@ -155,13 +169,3 @@ Para visualizar o sumário completo de cobertura, acesse este [arquivo](./covera
 
 ### Histórico de cobertura
 ![coverage_hist_report](./coveragereport/CoverageHistory.svg)
-
-## Exemplos de uso das APIs
-
-É possível utilizar e testar as rotas através do Swagger, porém para facilitar, segue abaixo alguns exemplos de uso das APIs através do VS Code + REST Cliente.
-
-Para visualizar os exemplos de uso, instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code e abra o arquivo [api.http](./api/CtrlEat/src/Adapters/Driving/Web.Api/api.http) para executar as requisições.
-
-Clique na label `Send Request` para executar a chamada da rota:
-
-![rest_client_example](./docs/assets/rest_client_example.png)
