@@ -9,6 +9,8 @@
 	seed-acompanhamentos \
 	seed-bebidas \
 	seed-sobremesas \
+	kube-db-up \
+	kube-db-down \
 
 test:
 	dotnet test ./api/CtrlEat/CtrlEat.sln --collect:"XPlat Code Coverage;Format=json,lcov,cobertura"
@@ -42,3 +44,19 @@ seed-bebidas:
 
 seed-sobremesas:
 	sh ./api/CtrlEat/scripts/api/seed_sobremesas.sh
+
+kube-db-up:
+	kubectl apply \
+		-f ./infra/db-pv.yaml \
+		-f ./infra/db-pvc.yaml \
+		-f ./infra/db-configmap.yaml \
+		-f ./infra/db-deployment.yaml \
+		-f ./infra/db-service.yaml
+
+kube-db-down:
+	kubectl delete \
+		-f ./infra/db-pv.yaml \
+		-f ./infra/db-pvc.yaml \
+		-f ./infra/db-configmap.yaml \
+		-f ./infra/db-deployment.yaml \
+		-f ./infra/db-service.yaml
