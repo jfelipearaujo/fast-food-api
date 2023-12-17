@@ -9,6 +9,14 @@
 	seed-acompanhamentos \
 	seed-bebidas \
 	seed-sobremesas \
+	docker-build-api \
+	docker-push-api \
+	docker-build-db \
+	docker-push-db \
+	kube-up \
+	kube-down \
+	kube-api-up \
+	kube-api-down \
 	kube-db-up \
 	kube-db-down \
 
@@ -56,6 +64,36 @@ docker-build-db:
 
 docker-push-db:
 	docker push jsfelipearaujo/ctrl-eat-db:v1
+
+kube-up:
+	kubectl apply \
+		-f ./infra/db-pv.yaml \
+		-f ./infra/db-pvc.yaml \
+		-f ./infra/db-configmap.yaml \
+		-f ./infra/db-secret.yaml \
+		-f ./infra/db-deployment.yaml \
+		-f ./infra/db-service.yaml \
+		-f ./infra/api-pv.yaml \
+		-f ./infra/api-pvc.yaml \
+		-f ./infra/api-configmap.yaml \
+		-f ./infra/api-secret.yaml \
+		-f ./infra/api-deployment.yaml \
+		-f ./infra/api-service.yaml
+
+kube-down:
+	kubectl delete \
+		-f ./infra/db-pv.yaml \
+		-f ./infra/db-pvc.yaml \
+		-f ./infra/db-configmap.yaml \
+		-f ./infra/db-secret.yaml \
+		-f ./infra/db-deployment.yaml \
+		-f ./infra/db-service.yaml \
+		-f ./infra/api-pv.yaml \
+		-f ./infra/api-pvc.yaml \
+		-f ./infra/api-configmap.yaml \
+		-f ./infra/api-secret.yaml \
+		-f ./infra/api-deployment.yaml \
+		-f ./infra/api-service.yaml
 
 kube-db-up:
 	kubectl apply \
