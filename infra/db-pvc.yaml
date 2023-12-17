@@ -1,11 +1,11 @@
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: postgres-pv-claim
+  name: ctrl-eat-db-pv-claim
   labels:
-    app: postgres
+    app: ctrl-eat-db
 spec:
-  storageClassName: manual
+  storageClassName: db
   accessModes:
     - ReadWriteMany
   resources:

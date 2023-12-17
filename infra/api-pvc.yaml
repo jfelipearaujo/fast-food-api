@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: api-pvc
+  name: ctrl-eat-api-pv-claim
   labels:
-    app: api
+    app: ctrl-eat-api
 spec:
-  storageClassName: local-storage
+  storageClassName: api
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 3Gi
+      storage: 5Gi

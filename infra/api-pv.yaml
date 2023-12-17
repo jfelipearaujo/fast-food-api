@@ -1,16 +1,14 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: api-pv
+  name: ctrl-eat-api-pv-volume
   labels:
-    type: local
-    app: api
+    app: ctrl-eat-api
 spec:
+  storageClassName: api
   capacity:
     storage: 3Gi
-  storageClassName: local-storage
   accessModes:
     - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: ./data/ctrl-eat
+    path: "/mnt/data"

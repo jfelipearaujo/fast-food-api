@@ -1,12 +1,12 @@
-kind: PersistentVolume
 apiVersion: v1
+kind: PersistentVolume
 metadata:
-  name: postgres-pv-volume
+  name: ctrl-eat-db-pv-volume
   labels:
     type: local
-    app: postgres
+    app: ctrl-eat-db
 spec:
-  storageClassName: manual
+  storageClassName: db
   capacity:
     storage: 5Gi
   accessModes:

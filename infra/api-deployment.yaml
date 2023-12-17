@@ -1,61 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ctrl-eat-app-deployment
-  labels:
-    name: ctrl-eat-app-deployment
+  name: ctrl-eat-api
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: ctrl-eat-app-deployment
+      app: ctrl-eat-api
   template:
     metadata:
       labels:
-        app: ctrl-eat-app-deployment
+        app: ctrl-eat-api
     spec:
       containers:
-        - name: ctrl-eat-app-container
-          image: ctrl-eat-app-image # TODO: Replace with the correct image
+        - name: ctrl-eat-api
+          image: jsfelipearaujo/ctrl-eat-api:v1.1
+          imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 80
           resources:
             requests:
-              memory: "64Mi"
+              memory: "128Mi"
               cpu: "250m"
             limits:
-              memory: "128Mi"
+              memory: "512Mi"
               cpu: "500m"
-          env:
-            - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: ctrl-eat-db-config
-                  key: DB_NAME
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: ctrl-eat-db-config
-                  key: DB_HOST
-            - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: ctrl-eat-db-config
-                  key: DB_PORT
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: ctrl-eat-db-secret
-                  key: DB_USER
-            - name: DB_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: ctrl-eat-db-secret
-                  key: DB_PASS
-          volumeMounts:
-            - name: ctrl-eat-app-pvc
-              mountPath: /app/images
-      volumes:
-        - name: ctrl-eat-app-pvc
-          persistentVolumeClaim:
-            claimName: ctrl-eat-app-pvc
+          envFrom:
+            - configMapRef:
+                name: ctrl-eat-api-config
+            - secretRef:
+                name: ctrl-eat-api-secret
+      #     volumeMounts:
+      #       - name: ctrl-eat-api-vol
+      #         mountPath: /app/images
+      # volumes:
+      #   - name: ctrl-eat-api-vol
+      #     persistentVolumeClaim:
+      #       claimName: ctrl-eat-api-pv-claim
