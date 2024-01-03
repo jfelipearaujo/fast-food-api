@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ctrl-eat-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ctrl-eat-api
+  template:
+    metadata:
+      labels:
+        app: ctrl-eat-api
+    spec:
+      containers:
+        - name: ctrl-eat-api
+          image: jsfelipearaujo/ctrl-eat-api:v1.1
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          envFrom:
+            - configMapRef:
+                name: ctrl-eat-api-config
+            - secretRef:
+                name: ctrl-eat-api-secret
+      #     volumeMounts:
+      #       - name: ctrl-eat-api-vol
+      #         mountPath: /app/images
+      # volumes:
+      #   - name: ctrl-eat-api-vol
+      #     persistentVolumeClaim:
+      #       claimName: ctrl-eat-api-pv-claim
