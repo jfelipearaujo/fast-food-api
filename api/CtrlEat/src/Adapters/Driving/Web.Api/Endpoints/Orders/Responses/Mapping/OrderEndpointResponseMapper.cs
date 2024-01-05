@@ -13,6 +13,7 @@ public static class OrderEndpointResponseMapper
             Id = order.Id,
             TrackId = order.TrackId,
             Status = order.OrderStatus,
+            TotalAmount = order.TotalAmount,
             Payments = order.Payments,
             Items = order.Items.MapToResponse(),
         };
@@ -116,7 +117,8 @@ public static class OrderEndpointResponseMapper
     {
         return new OrderCheckoutEndpointResponse
         {
-            Status = response.Status
+            TrackId = response.TrackId,
+            PaymentStatus = response.PaymentStatus
         };
     }
 }

@@ -35,7 +35,7 @@ public class CheckoutOrderResponseBuilder
     {
         return new CheckoutOrderResponse
         {
-            Status = status
+            PaymentStatus = status
         };
     }
 }

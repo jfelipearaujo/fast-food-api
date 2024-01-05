@@ -3,7 +3,7 @@
 # seed product categories
 echo "Lanches - Seeding product categories..."
 
-host="http://127.0.0.1:30002"
+host="http://127.0.0.1:$1"
 
 categoryId=$(curl -X 'POST' \
   $host'/api/v1/products/categories' \
