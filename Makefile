@@ -42,16 +42,16 @@ down:
 seed-all: seed-lanches seed-acompanhamentos seed-bebidas seed-sobremesas
 
 seed-lanches:
-	sh ./api/CtrlEat/scripts/api/seed_lanches.sh
+	sh ./api/CtrlEat/scripts/api/seed_lanches.sh 5001
 
 seed-acompanhamentos:
-	sh ./api/CtrlEat/scripts/api/seed_acompanhamentos.sh
+	sh ./api/CtrlEat/scripts/api/seed_acompanhamentos.sh 5001
 
 seed-bebidas:
-	sh ./api/CtrlEat/scripts/api/seed_bebidas.sh
+	sh ./api/CtrlEat/scripts/api/seed_bebidas.sh 5001
 
 seed-sobremesas:
-	sh ./api/CtrlEat/scripts/api/seed_sobremesas.sh
+	sh ./api/CtrlEat/scripts/api/seed_sobremesas.sh 5001
 
 docker-build-api:
 	cd api/CtrlEat && docker build -t jsfelipearaujo/ctrl-eat-api:v1.1 .
