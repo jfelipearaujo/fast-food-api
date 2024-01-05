@@ -92,6 +92,11 @@ public sealed class Order : AggregateRoot<OrderId>
         return Result.Ok();
     }
 
+    public decimal GetTotalAmount()
+    {
+        return Items.Sum(item => item.Quantity * item.Price.Amount);
+    }
+
     public static Result<Order> Create(
         TrackId trackId,
         Client client,
