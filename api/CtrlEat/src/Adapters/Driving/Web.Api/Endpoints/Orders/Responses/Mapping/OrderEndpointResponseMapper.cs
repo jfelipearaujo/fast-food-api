@@ -13,6 +13,7 @@ public static class OrderEndpointResponseMapper
             Id = order.Id,
             TrackId = order.TrackId,
             Status = order.OrderStatus,
+            TotalPrice = order.TotalPrice,
             Payments = order.Payments,
             Items = order.Items.MapToResponse(),
         };

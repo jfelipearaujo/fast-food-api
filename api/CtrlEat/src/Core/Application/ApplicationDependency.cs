@@ -2,6 +2,7 @@
 using Application.UseCases.Clients.GetAllClients;
 using Application.UseCases.Clients.GetClientById;
 using Application.UseCases.Orders.AddOrderItem;
+using Application.UseCases.Orders.CheckoutHookOrder;
 using Application.UseCases.Orders.CheckoutOrder;
 using Application.UseCases.Orders.CreateOrder;
 using Application.UseCases.Orders.GetOrderById;
@@ -25,6 +26,7 @@ using Domain.UseCases.Clients.CreateClient;
 using Domain.UseCases.Clients.GetAllClients;
 using Domain.UseCases.Clients.GetClientById;
 using Domain.UseCases.Orders.AddOrderItem;
+using Domain.UseCases.Orders.CheckoutHookOrder;
 using Domain.UseCases.Orders.CheckoutOrder;
 using Domain.UseCases.Orders.CreateOrder;
 using Domain.UseCases.Orders.GetOrderById;
@@ -79,6 +81,7 @@ public static class ApplicationDependency
         services.AddScoped<IGetOrdersByStatusUseCase, GetOrdersByStatusUseCase>();
         services.AddScoped<IUpdateOrderStatusUseCase, UpdateOrderStatusUseCase>();
         services.AddScoped<ICheckoutOrderUseCase, CheckoutOrderUseCase>();
+        services.AddScoped<ICheckoutHookOrderUseCase, CheckoutHookOrderUseCase>();
 
         services.AddSingleton<IFileSystem, FileSystem>();
 

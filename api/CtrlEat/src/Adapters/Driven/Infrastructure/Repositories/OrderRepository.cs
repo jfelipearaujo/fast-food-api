@@ -40,13 +40,20 @@ public class OrderRepository : IOrderRepository
 
     public async Task<IEnumerable<Order>> GetAllByStatusAsync(OrderStatus status, CancellationToken cancellationToken)
     {
-        var filterTime = DateTime.UtcNow.AddMinutes(-5);
+        var statusOrder = new List<OrderStatus>
+        {
+            OrderStatus.Done,
+            OrderStatus.OnGoing,
+            OrderStatus.Received,
+        };
 
         return await context.Order
             .WhereIfElse(
                 status != OrderStatus.None,
                 x => x.Status == status,
-                x => x.Status != OrderStatus.Completed || (x.Status == OrderStatus.Completed && x.StatusUpdatedAt >= filterTime))
+                x => x.Status != OrderStatus.Created && x.Status != OrderStatus.Completed && x.Status != OrderStatus.Cancelled)
+            .OrderBy(x => statusOrder.IndexOf(x.Status))
+            .ThenBy(x => x.CreatedAtUtc)
             .ToListAsync(cancellationToken);
     }
 
@@ -54,7 +61,7 @@ public class OrderRepository : IOrderRepository
     {
         return await context.Order
             .Where(x => x.ClientId == clientId)
-            .Where(x => x.Status != OrderStatus.Completed)
+            .Where(x => x.Status != OrderStatus.Completed && x.Status != OrderStatus.Cancelled)
             .ToListAsync(cancellationToken);
     }
 

@@ -48,6 +48,7 @@ public static class ApiEndpoints
             public static readonly string UpdateStatus = $"UpdateOrderStatus:{Version}";
             public static readonly string AddOrderItem = $"AddOrderItem:{Version}";
             public static readonly string Checkout = $"CheckoutOrder:{Version}";
+            public static readonly string CheckoutHook = $"CheckoutHookOrder:{Version}";
         }
     }
 
