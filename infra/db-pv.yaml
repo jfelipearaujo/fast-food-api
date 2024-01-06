@@ -6,11 +6,10 @@ metadata:
     type: local
     app: ctrl-eat-db
 spec:
-  storageClassName: local-storage-db
+  storageClassName: manual
   capacity:
-    storage: 3Gi
+    storage: 5Gi
   accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+    - ReadWriteMany
   hostPath:
-    path: /data
+    path: "/opt/postgres-data"
