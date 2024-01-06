@@ -3,13 +3,13 @@ kind: PersistentVolume
 metadata:
   name: ctrl-eat-api-pv-volume
   labels:
+    type: local
     app: ctrl-eat-api
 spec:
-  storageClassName: hostpath
+  storageClassName: manual
   capacity:
-    storage: 3Gi
+    storage: 5Gi
   accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+    - ReadWriteMany
   hostPath:
-    path: /images
+    path: "/opt/api-data"
