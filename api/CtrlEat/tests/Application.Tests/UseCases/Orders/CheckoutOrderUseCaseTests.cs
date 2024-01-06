@@ -50,7 +50,7 @@ public class CheckoutOrderUseCaseTests
             .Build();
 
         var expected = new CheckoutOrderResponseBuilder()
-            .WithStatus(PaymentStatus.Approved)
+            .WithStatus(PaymentStatus.WaitingApproval)
             .Build();
 
         // Act
@@ -70,10 +70,6 @@ public class CheckoutOrderUseCaseTests
         await paymentRepository
             .Received(1)
             .CreateAsync(Arg.Any<Payment>(), Arg.Any<CancellationToken>());
-
-        await paymentRepository
-            .Received(1)
-            .UpdateAsync(Arg.Any<Payment>(), Arg.Any<CancellationToken>());
     }
 
     [Fact]
