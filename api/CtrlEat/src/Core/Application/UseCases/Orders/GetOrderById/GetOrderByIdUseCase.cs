@@ -32,8 +32,6 @@ public class GetOrderByIdUseCase : IGetOrderByIdUseCase
             return Result.Fail(new OrderNotFoundError(request.OrderId));
         }
 
-        var total_amount = order.GetTotalAmount();
-
-        return OrderResponse.MapFromDomain(order, total_amount);
+        return OrderResponse.MapFromDomain(order);
     }
 }

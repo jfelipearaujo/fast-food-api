@@ -50,6 +50,7 @@ public class CheckoutOrderUseCaseTests
             .Build();
 
         var expected = new CheckoutOrderResponseBuilder()
+            .WithTrackId(order.TrackId)
             .WithStatus(PaymentStatus.WaitingApproval)
             .Build();
 

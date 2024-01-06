@@ -66,6 +66,6 @@ public class CheckoutOrderUseCase : ICheckoutOrderUseCase
 
         await paymentRepository.CreateAsync(payment.Value, cancellationToken);
 
-        return CheckoutOrderResponse.MapFromDomain(payment.Value);
+        return CheckoutOrderResponse.MapFromDomain(order.TrackId, payment.Value);
     }
 }

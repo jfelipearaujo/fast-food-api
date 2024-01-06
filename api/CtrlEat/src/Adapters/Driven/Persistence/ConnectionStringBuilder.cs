@@ -24,6 +24,14 @@ public class ConnectionStringBuilder : IConnectionStringBuilder
             return connectionString;
         }
 
+#if DEBUG
+        //Environment.SetEnvironmentVariable("DB_NAME", "AppDbCtrlEat");
+        //Environment.SetEnvironmentVariable("DB_HOST", "localhost");
+        //Environment.SetEnvironmentVariable("DB_PORT", "5432");
+        //Environment.SetEnvironmentVariable("DB_USER", "postgres");
+        //Environment.SetEnvironmentVariable("DB_PASS", "StrongPassword123");
+#endif
+
         var connectionStringBuilder = new NpgsqlConnectionStringBuilder
         {
             Database = Environment.GetEnvironmentVariable("DB_NAME"),

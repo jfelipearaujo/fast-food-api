@@ -1,2753 +1,1080 @@
 {
 	"info": {
-		"_postman_id": "c5e99768-1bd6-40a0-9103-466b211a11a4",
-		"name": "Web.Api",
-		"description": "API responsible for complete management of the Ctrl+Eat Fast Food restaurant\n\nContact Support:\n Name: Jose Felipe Blum de Araujo\n Email: contato@jsfelipearaujo.com",
+		"_postman_id": "8330472b-a86a-4493-9f96-5d0f6cc333cc",
+		"name": "CtrlEat",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30871606"
 	},
 	"item": [
 		{
-			"name": "api",
+			"name": "Clientes",
 			"item": [
 				{
-					"name": "v1",
-					"item": [
+					"name": "Cadastrar cliente",
+					"event": [
 						{
-							"name": "clients",
-							"item": [
-								{
-									"name": "{id}",
-									"item": [
-										{
-											"name": "Get Client By Id:1",
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/clients/:id",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"clients",
-														":id"
-													],
-													"variable": [
-														{
-															"key": "id",
-															"value": "<uuid>",
-															"description": "(Required) "
-														}
-													]
-												},
-												"description": "Searches and returns a client's data based on their identifier"
-											},
-											"response": [
-												{
-													"name": "OK",
-													"originalRequest": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/clients/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"clients",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "OK",
-													"code": 200,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"id\": \"<uuid>\",\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"email\": \"<string>\",\n  \"documentId\": \"<string>\",\n  \"documentType\": \"CPF\",\n  \"isAnonymous\": \"<boolean>\",\n  \"createdAtUtc\": \"<dateTime>\",\n  \"updatedAtUtc\": \"<dateTime>\"\n}"
-												},
-												{
-													"name": "Not Found",
-													"originalRequest": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/clients/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"clients",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "Not Found",
-													"code": 404,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-												}
-											]
-										}
-									]
-								},
-								{
-									"name": "Get All Clients:1",
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
-										"url": {
-											"raw": "{{baseUrl}}/api/v1/clients",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"v1",
-												"clients"
-											]
-										},
-										"description": "Searches and returns all registered client data"
-									},
-									"response": [
-										{
-											"name": "OK",
-											"originalRequest": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/clients",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"clients"
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"email\": \"<string>\",\n    \"documentId\": \"<string>\",\n    \"documentType\": \"None\",\n    \"isAnonymous\": \"<boolean>\",\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"email\": \"<string>\",\n    \"documentId\": \"<string>\",\n    \"documentType\": \"None\",\n    \"isAnonymous\": \"<boolean>\",\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  }\n]"
-										}
-									]
-								},
-								{
-									"name": "Create Client:1",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"email\": \"<string>\",\n  \"documentId\": \"<string>\"\n}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/api/v1/clients",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"v1",
-												"clients"
-											]
-										},
-										"description": "Register a client"
-									},
-									"response": [
-										{
-											"name": "Created",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"email\": \"<string>\",\n  \"documentId\": \"<string>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/clients",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"clients"
-													]
-												}
-											},
-											"status": "Created",
-											"code": 201,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"id\": \"<uuid>\",\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"email\": \"<string>\",\n  \"documentId\": \"<string>\",\n  \"documentType\": \"CPF\",\n  \"isAnonymous\": \"<boolean>\",\n  \"createdAtUtc\": \"<dateTime>\",\n  \"updatedAtUtc\": \"<dateTime>\"\n}"
-										},
-										{
-											"name": "Bad Request",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"email\": \"<string>\",\n  \"documentId\": \"<string>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/clients",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"clients"
-													]
-												}
-											},
-											"status": "Bad Request",
-											"code": 400,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-										}
-									]
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var status = pm.response.code;\r",
+									"\r",
+									"if (status === 201) {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"client_id\", jsonData.id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"{{$randomFirstName}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"documentId\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
-						{
-							"name": "orders",
-							"item": [
-								{
-									"name": "{id}",
-									"item": [
-										{
-											"name": "status",
-											"item": [
-												{
-													"name": "Update Order Status:1",
-													"request": {
-														"method": "PATCH",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{\n  \"status\": \"<string>\"\n}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/orders/:id/status",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"orders",
-																":id",
-																"status"
-															],
-															"variable": [
-																{
-																	"key": "id",
-																	"value": "<uuid>",
-																	"description": "(Required) "
-																}
-															]
-														},
-														"description": "Update the order status"
-													},
-													"response": [
-														{
-															"name": "OK",
-															"originalRequest": {
-																"method": "PATCH",
-																"header": [
-																	{
-																		"key": "Content-Type",
-																		"value": "application/json"
-																	}
-																],
-																"body": {
-																	"mode": "raw",
-																	"raw": "{\n  \"status\": \"<string>\"\n}",
-																	"options": {
-																		"raw": {
-																			"headerFamily": "json",
-																			"language": "json"
-																		}
-																	}
-																},
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/orders/:id/status",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"orders",
-																		":id",
-																		"status"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "OK",
-															"code": 200,
-															"_postman_previewlanguage": "text",
-															"header": [],
-															"cookie": [],
-															"body": ""
-														},
-														{
-															"name": "Bad Request",
-															"originalRequest": {
-																"method": "PATCH",
-																"header": [
-																	{
-																		"key": "Content-Type",
-																		"value": "application/json"
-																	},
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"body": {
-																	"mode": "raw",
-																	"raw": "{\n  \"status\": \"<string>\"\n}",
-																	"options": {
-																		"raw": {
-																			"headerFamily": "json",
-																			"language": "json"
-																		}
-																	}
-																},
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/orders/:id/status",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"orders",
-																		":id",
-																		"status"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Bad Request",
-															"code": 400,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-														}
-													]
-												}
-											]
-										},
-										{
-											"name": "items",
-											"item": [
-												{
-													"name": "Add Order Item:1",
-													"request": {
-														"method": "POST",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{\n  \"productId\": \"<uuid>\",\n  \"quantity\": \"<integer>\",\n  \"observation\": \"<string>\"\n}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/orders/:id/items",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"orders",
-																":id",
-																"items"
-															],
-															"variable": [
-																{
-																	"key": "id",
-																	"value": "<uuid>",
-																	"description": "(Required) "
-																}
-															]
-														},
-														"description": "Add an item to the order"
-													},
-													"response": [
-														{
-															"name": "OK",
-															"originalRequest": {
-																"method": "POST",
-																"header": [
-																	{
-																		"key": "Content-Type",
-																		"value": "application/json"
-																	},
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"body": {
-																	"mode": "raw",
-																	"raw": "{\n  \"productId\": \"<uuid>\",\n  \"quantity\": \"<integer>\",\n  \"observation\": \"<string>\"\n}",
-																	"options": {
-																		"raw": {
-																			"headerFamily": "json",
-																			"language": "json"
-																		}
-																	}
-																},
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/orders/:id/items",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"orders",
-																		":id",
-																		"items"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "OK",
-															"code": 200,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"id\": \"<uuid>\",\n  \"quantity\": \"<integer>\",\n  \"observation\": \"<string>\",\n  \"description\": \"<string>\",\n  \"price\": \"<string>\"\n}"
-														},
-														{
-															"name": "Bad Request",
-															"originalRequest": {
-																"method": "POST",
-																"header": [
-																	{
-																		"key": "Content-Type",
-																		"value": "application/json"
-																	},
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"body": {
-																	"mode": "raw",
-																	"raw": "{\n  \"productId\": \"<uuid>\",\n  \"quantity\": \"<integer>\",\n  \"observation\": \"<string>\"\n}",
-																	"options": {
-																		"raw": {
-																			"headerFamily": "json",
-																			"language": "json"
-																		}
-																	}
-																},
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/orders/:id/items",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"orders",
-																		":id",
-																		"items"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Bad Request",
-															"code": 400,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-														}
-													]
-												}
-											]
-										},
-										{
-											"name": "checkout",
-											"item": [
-												{
-													"name": "Checkout Order:1",
-													"request": {
-														"method": "POST",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/orders/:id/checkout",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"orders",
-																":id",
-																"checkout"
-															],
-															"variable": [
-																{
-																	"key": "id",
-																	"value": "<uuid>",
-																	"description": "(Required) "
-																}
-															]
-														},
-														"description": "Checkout the order"
-													},
-													"response": [
-														{
-															"name": "Created",
-															"originalRequest": {
-																"method": "POST",
-																"header": [],
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/orders/:id/checkout",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"orders",
-																		":id",
-																		"checkout"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Created",
-															"code": 201,
-															"_postman_previewlanguage": "text",
-															"header": [],
-															"cookie": [],
-															"body": ""
-														},
-														{
-															"name": "Bad Request",
-															"originalRequest": {
-																"method": "POST",
-																"header": [
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/orders/:id/checkout",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"orders",
-																		":id",
-																		"checkout"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Bad Request",
-															"code": 400,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-														},
-														{
-															"name": "Not Found",
-															"originalRequest": {
-																"method": "POST",
-																"header": [
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/orders/:id/checkout",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"orders",
-																		":id",
-																		"checkout"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Not Found",
-															"code": 404,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-														}
-													]
-												}
-											]
-										},
-										{
-											"name": "Get Order By Id:1",
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/orders/:id",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"orders",
-														":id"
-													],
-													"variable": [
-														{
-															"key": "id",
-															"value": "<uuid>",
-															"description": "(Required) "
-														}
-													]
-												},
-												"description": "Searches and returns a order's data based on their identifier"
-											},
-											"response": [
-												{
-													"name": "OK",
-													"originalRequest": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/orders/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"orders",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "OK",
-													"code": 200,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"id\": \"<uuid>\",\n  \"trackId\": \"<string>\",\n  \"status\": \"None\",\n  \"payments\": [\n    {\n      \"id\": \"<uuid>\",\n      \"status\": \"None\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"status\": \"None\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\"\n    }\n  ],\n  \"items\": [\n    {\n      \"id\": \"<uuid>\",\n      \"quantity\": \"<integer>\",\n      \"observation\": \"<string>\",\n      \"description\": \"<string>\",\n      \"price\": \"<string>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"quantity\": \"<integer>\",\n      \"observation\": \"<string>\",\n      \"description\": \"<string>\",\n      \"price\": \"<string>\"\n    }\n  ]\n}"
-												},
-												{
-													"name": "Not Found",
-													"originalRequest": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/orders/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"orders",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "Not Found",
-													"code": 404,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-												}
-											]
-										}
-									]
-								},
-								{
-									"name": "tracking",
-									"item": [
-										{
-											"name": "Get O Rder By Status:1",
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/orders/tracking?status=<string>",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"orders",
-														"tracking"
-													],
-													"query": [
-														{
-															"key": "status",
-															"value": "<string>"
-														}
-													]
-												},
-												"description": "Searches and returns a order's data based on their status. If not provided, then all orders will be returned."
-											},
-											"response": [
-												{
-													"name": "OK",
-													"originalRequest": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/orders/tracking?status=<string>",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"orders",
-																"tracking"
-															],
-															"query": [
-																{
-																	"key": "status",
-																	"value": "<string>"
-																}
-															]
-														}
-													},
-													"status": "OK",
-													"code": 200,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "[\n  {\n    \"status\": \"Received\",\n    \"orders\": [\n      {\n        \"id\": \"<uuid>\",\n        \"trackId\": \"<string>\",\n        \"statusUpdatedAt\": \"<dateTime>\",\n        \"statusUpdatedAtFormatted\": \"<string>\"\n      },\n      {\n        \"id\": \"<uuid>\",\n        \"trackId\": \"<string>\",\n        \"statusUpdatedAt\": \"<dateTime>\",\n        \"statusUpdatedAtFormatted\": \"<string>\"\n      }\n    ]\n  },\n  {\n    \"status\": \"Created\",\n    \"orders\": [\n      {\n        \"id\": \"<uuid>\",\n        \"trackId\": \"<string>\",\n        \"statusUpdatedAt\": \"<dateTime>\",\n        \"statusUpdatedAtFormatted\": \"<string>\"\n      },\n      {\n        \"id\": \"<uuid>\",\n        \"trackId\": \"<string>\",\n        \"statusUpdatedAt\": \"<dateTime>\",\n        \"statusUpdatedAtFormatted\": \"<string>\"\n      }\n    ]\n  }\n]"
-												},
-												{
-													"name": "Bad Request",
-													"originalRequest": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/orders/tracking?status=<string>",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"orders",
-																"tracking"
-															],
-															"query": [
-																{
-																	"key": "status",
-																	"value": "<string>"
-																}
-															]
-														}
-													},
-													"status": "Bad Request",
-													"code": 400,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-												}
-											]
-										}
-									]
-								},
-								{
-									"name": "Create Order:1",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"clientId\": \"<uuid>\"\n}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/api/v1/orders",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"v1",
-												"orders"
-											]
-										},
-										"description": "Register an order"
-									},
-									"response": [
-										{
-											"name": "Created",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"clientId\": \"<uuid>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/orders",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"orders"
-													]
-												}
-											},
-											"status": "Created",
-											"code": 201,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"id\": \"<uuid>\",\n  \"trackId\": \"<string>\"\n}"
-										},
-										{
-											"name": "Bad Request",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"clientId\": \"<uuid>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/orders",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"orders"
-													]
-												}
-											},
-											"status": "Bad Request",
-											"code": 400,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-										},
-										{
-											"name": "Not Found",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"clientId\": \"<uuid>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/orders",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"orders"
-													]
-												}
-											},
-											"status": "Not Found",
-											"code": 404,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-										}
-									]
-								}
+						"url": {
+							"raw": "{{host}}/api/v1/clients",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clients"
 							]
-						},
-						{
-							"name": "products",
-							"item": [
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter todos os clientes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/clients",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categorias",
+			"item": [
+				{
+					"name": "Obter todos as categorias",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products/categories",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "Obter todos os produtos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter todos os Lanches",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products/category/:category_name",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"category",
+								":category_name"
+							],
+							"variable": [
 								{
-									"name": "{id}",
-									"item": [
-										{
-											"name": "image",
-											"item": [
-												{
-													"name": "Get Product Image:1",
-													"request": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/:id/image",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																":id",
-																"image"
-															],
-															"variable": [
-																{
-																	"key": "id",
-																	"value": "<uuid>",
-																	"description": "(Required) "
-																}
-															]
-														},
-														"description": "Searchs and returns a product's image"
-													},
-													"response": [
-														{
-															"name": "OK",
-															"originalRequest": {
-																"method": "GET",
-																"header": [
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/:id/image",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		":id",
-																		"image"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "OK",
-															"code": 200,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"contentType\": \"<string>\",\n  \"fileDownloadName\": \"<string>\",\n  \"lastModified\": \"<dateTime>\",\n  \"entityTag\": {\n    \"tag\": {\n      \"buffer\": \"<string>\",\n      \"offset\": \"<integer>\",\n      \"length\": \"<integer>\",\n      \"value\": \"<string>\",\n      \"hasValue\": \"<boolean>\"\n    },\n    \"isWeak\": \"<boolean>\"\n  },\n  \"enableRangeProcessing\": \"<boolean>\",\n  \"fileLength\": \"<long>\",\n  \"fileName\": \"<string>\"\n}"
-														},
-														{
-															"name": "Bad Request",
-															"originalRequest": {
-																"method": "GET",
-																"header": [
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/:id/image",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		":id",
-																		"image"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Bad Request",
-															"code": 400,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-														}
-													]
-												},
-												{
-													"name": "Upload Product Image:1",
-													"request": {
-														"method": "POST",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "multipart/form-data"
-															},
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"body": {
-															"mode": "formdata",
-															"formdata": [
-																{
-																	"key": "file",
-																	"value": "<string>",
-																	"description": "(Required) ",
-																	"type": "text"
-																}
-															]
-														},
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/:id/image",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																":id",
-																"image"
-															],
-															"variable": [
-																{
-																	"key": "id",
-																	"value": "<uuid>",
-																	"description": "(Required) "
-																}
-															]
-														},
-														"description": "Upload an image for the product"
-													},
-													"response": [
-														{
-															"name": "Created",
-															"originalRequest": {
-																"method": "POST",
-																"header": [
-																	{
-																		"key": "Content-Type",
-																		"value": "multipart/form-data"
-																	}
-																],
-																"body": {
-																	"mode": "formdata",
-																	"formdata": [
-																		{
-																			"key": "file",
-																			"value": "<string>",
-																			"description": "(Required) ",
-																			"type": "text"
-																		}
-																	]
-																},
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/:id/image",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		":id",
-																		"image"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Created",
-															"code": 201,
-															"_postman_previewlanguage": "text",
-															"header": [],
-															"cookie": [],
-															"body": ""
-														},
-														{
-															"name": "Bad Request",
-															"originalRequest": {
-																"method": "POST",
-																"header": [
-																	{
-																		"key": "Content-Type",
-																		"value": "multipart/form-data"
-																	},
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"body": {
-																	"mode": "formdata",
-																	"formdata": [
-																		{
-																			"key": "file",
-																			"value": "<string>",
-																			"description": "(Required) ",
-																			"type": "text"
-																		}
-																	]
-																},
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/:id/image",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		":id",
-																		"image"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Bad Request",
-															"code": 400,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-														}
-													]
-												}
-											]
-										},
-										{
-											"name": "Get Product By Id:1",
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/products/:id",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"products",
-														":id"
-													],
-													"variable": [
-														{
-															"key": "id",
-															"value": "<uuid>",
-															"description": "(Required) "
-														}
-													]
-												},
-												"description": "Search and return a product's data based on their identifier"
-											},
-											"response": [
-												{
-													"name": "OK",
-													"originalRequest": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "OK",
-													"code": 200,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"id\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"imageUrl\": \"<string>\",\n  \"productCategory\": {\n    \"id\": \"<uuid>\",\n    \"description\": \"<string>\",\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  },\n  \"createdAtUtc\": \"<dateTime>\",\n  \"updatedAtUtc\": \"<dateTime>\"\n}"
-												},
-												{
-													"name": "Not Found",
-													"originalRequest": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "Not Found",
-													"code": 404,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-												}
-											]
-										},
-										{
-											"name": "Update Product:1",
-											"request": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"description\": \"<string>\",\n  \"imageUrl\": \"<string>\",\n  \"productCategoryId\": \"<uuid>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/products/:id",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"products",
-														":id"
-													],
-													"variable": [
-														{
-															"key": "id",
-															"value": "<uuid>",
-															"description": "(Required) "
-														}
-													]
-												},
-												"description": "Update a product"
-											},
-											"response": [
-												{
-													"name": "OK",
-													"originalRequest": {
-														"method": "PUT",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"description\": \"<string>\",\n  \"imageUrl\": \"<string>\",\n  \"productCategoryId\": \"<uuid>\"\n}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "OK",
-													"code": 200,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"id\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"imageUrl\": \"<string>\",\n  \"productCategory\": {\n    \"id\": \"<uuid>\",\n    \"description\": \"<string>\",\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  },\n  \"createdAtUtc\": \"<dateTime>\",\n  \"updatedAtUtc\": \"<dateTime>\"\n}"
-												},
-												{
-													"name": "Not Found",
-													"originalRequest": {
-														"method": "PUT",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"description\": \"<string>\",\n  \"imageUrl\": \"<string>\",\n  \"productCategoryId\": \"<uuid>\"\n}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "Not Found",
-													"code": 404,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-												}
-											]
-										},
-										{
-											"name": "Delete Product:1",
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/products/:id",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"products",
-														":id"
-													],
-													"variable": [
-														{
-															"key": "id",
-															"value": "<uuid>",
-															"description": "(Required) "
-														}
-													]
-												},
-												"description": "Delete a product"
-											},
-											"response": [
-												{
-													"name": "No Content",
-													"originalRequest": {
-														"method": "DELETE",
-														"header": [],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "No Content",
-													"code": 204,
-													"_postman_previewlanguage": "text",
-													"header": [],
-													"cookie": [],
-													"body": ""
-												},
-												{
-													"name": "Not Found",
-													"originalRequest": {
-														"method": "DELETE",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "Not Found",
-													"code": 404,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-												}
-											]
-										}
-									]
-								},
-								{
-									"name": "category",
-									"item": [
-										{
-											"name": "{category}",
-											"item": [
-												{
-													"name": "Get All Products By Category:1",
-													"request": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/category/:category",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																"category",
-																":category"
-															],
-															"variable": [
-																{
-																	"key": "category",
-																	"value": "<string>",
-																	"description": "(Required) "
-																}
-															]
-														},
-														"description": "Searchs and returns all products based on their category"
-													},
-													"response": [
-														{
-															"name": "OK",
-															"originalRequest": {
-																"method": "GET",
-																"header": [
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/category/:category",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		"category",
-																		":category"
-																	],
-																	"variable": [
-																		{
-																			"key": "category"
-																		}
-																	]
-																}
-															},
-															"status": "OK",
-															"code": 200,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"description\": \"<string>\",\n    \"amount\": \"<double>\",\n    \"currency\": \"<string>\",\n    \"imageUrl\": \"<string>\",\n    \"productCategory\": {\n      \"id\": \"<uuid>\",\n      \"description\": \"<string>\",\n      \"createdAtUtc\": \"<dateTime>\",\n      \"updatedAtUtc\": \"<dateTime>\"\n    },\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"description\": \"<string>\",\n    \"amount\": \"<double>\",\n    \"currency\": \"<string>\",\n    \"imageUrl\": \"<string>\",\n    \"productCategory\": {\n      \"id\": \"<uuid>\",\n      \"description\": \"<string>\",\n      \"createdAtUtc\": \"<dateTime>\",\n      \"updatedAtUtc\": \"<dateTime>\"\n    },\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  }\n]"
-														}
-													]
-												}
-											]
-										}
-									]
-								},
-								{
-									"name": "categories",
-									"item": [
-										{
-											"name": "{id}",
-											"item": [
-												{
-													"name": "Get Product Category By Id:1",
-													"request": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/categories/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																"categories",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id",
-																	"value": "<uuid>",
-																	"description": "(Required) "
-																}
-															]
-														},
-														"description": "Searches and returns a product's category based on their identifier"
-													},
-													"response": [
-														{
-															"name": "OK",
-															"originalRequest": {
-																"method": "GET",
-																"header": [
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/categories/:id",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		"categories",
-																		":id"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "OK",
-															"code": 200,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"id\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"createdAtUtc\": \"<dateTime>\",\n  \"updatedAtUtc\": \"<dateTime>\"\n}"
-														},
-														{
-															"name": "Not Found",
-															"originalRequest": {
-																"method": "GET",
-																"header": [
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/categories/:id",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		"categories",
-																		":id"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Not Found",
-															"code": 404,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-														}
-													]
-												},
-												{
-													"name": "Update Product Category:1",
-													"request": {
-														"method": "PUT",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{\n  \"description\": \"<string>\"\n}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/categories/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																"categories",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id",
-																	"value": "<uuid>",
-																	"description": "(Required) "
-																}
-															]
-														},
-														"description": "Update product category"
-													},
-													"response": [
-														{
-															"name": "Created",
-															"originalRequest": {
-																"method": "PUT",
-																"header": [
-																	{
-																		"key": "Content-Type",
-																		"value": "application/json"
-																	},
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"body": {
-																	"mode": "raw",
-																	"raw": "{\n  \"description\": \"<string>\"\n}",
-																	"options": {
-																		"raw": {
-																			"headerFamily": "json",
-																			"language": "json"
-																		}
-																	}
-																},
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/categories/:id",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		"categories",
-																		":id"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Created",
-															"code": 201,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"id\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"createdAtUtc\": \"<dateTime>\",\n  \"updatedAtUtc\": \"<dateTime>\"\n}"
-														},
-														{
-															"name": "Not Found",
-															"originalRequest": {
-																"method": "PUT",
-																"header": [
-																	{
-																		"key": "Content-Type",
-																		"value": "application/json"
-																	},
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"body": {
-																	"mode": "raw",
-																	"raw": "{\n  \"description\": \"<string>\"\n}",
-																	"options": {
-																		"raw": {
-																			"headerFamily": "json",
-																			"language": "json"
-																		}
-																	}
-																},
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/categories/:id",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		"categories",
-																		":id"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Not Found",
-															"code": 404,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-														}
-													]
-												},
-												{
-													"name": "Delete Product Category:1",
-													"request": {
-														"method": "DELETE",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/categories/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																"categories",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id",
-																	"value": "<uuid>",
-																	"description": "(Required) "
-																}
-															]
-														},
-														"description": "Delete a product category"
-													},
-													"response": [
-														{
-															"name": "No Content",
-															"originalRequest": {
-																"method": "DELETE",
-																"header": [],
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/categories/:id",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		"categories",
-																		":id"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "No Content",
-															"code": 204,
-															"_postman_previewlanguage": "text",
-															"header": [],
-															"cookie": [],
-															"body": ""
-														},
-														{
-															"name": "Not Found",
-															"originalRequest": {
-																"method": "DELETE",
-																"header": [
-																	{
-																		"key": "Accept",
-																		"value": "application/json"
-																	}
-																],
-																"url": {
-																	"raw": "{{baseUrl}}/api/v1/products/categories/:id",
-																	"host": [
-																		"{{baseUrl}}"
-																	],
-																	"path": [
-																		"api",
-																		"v1",
-																		"products",
-																		"categories",
-																		":id"
-																	],
-																	"variable": [
-																		{
-																			"key": "id"
-																		}
-																	]
-																}
-															},
-															"status": "Not Found",
-															"code": 404,
-															"_postman_previewlanguage": "json",
-															"header": [
-																{
-																	"key": "Content-Type",
-																	"value": "application/json"
-																}
-															],
-															"cookie": [],
-															"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-														}
-													]
-												}
-											]
-										},
-										{
-											"name": "Get All Product Categories:1",
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/products/categories",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"products",
-														"categories"
-													]
-												},
-												"description": "Searches and returns all registered product's categories"
-											},
-											"response": [
-												{
-													"name": "OK",
-													"originalRequest": {
-														"method": "GET",
-														"header": [
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/categories",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																"categories"
-															]
-														}
-													},
-													"status": "OK",
-													"code": 200,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"description\": \"<string>\",\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"description\": \"<string>\",\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  }\n]"
-												}
-											]
-										},
-										{
-											"name": "Create Product Category:1",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"description\": \"<string>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/products/categories",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"products",
-														"categories"
-													]
-												},
-												"description": "Register a new product category"
-											},
-											"response": [
-												{
-													"name": "Created",
-													"originalRequest": {
-														"method": "POST",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"key": "Accept",
-																"value": "application/json"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{\n  \"description\": \"<string>\"\n}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/api/v1/products/categories",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"api",
-																"v1",
-																"products",
-																"categories"
-															]
-														}
-													},
-													"status": "Created",
-													"code": 201,
-													"_postman_previewlanguage": "json",
-													"header": [
-														{
-															"key": "Content-Type",
-															"value": "application/json"
-														}
-													],
-													"cookie": [],
-													"body": "{\n  \"id\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"createdAtUtc\": \"<dateTime>\",\n  \"updatedAtUtc\": \"<dateTime>\"\n}"
-												}
-											]
-										}
-									]
-								},
-								{
-									"name": "Get All Products:1",
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
-										"url": {
-											"raw": "{{baseUrl}}/api/v1/products",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"v1",
-												"products"
-											]
-										},
-										"description": "Search and returns all products"
-									},
-									"response": [
-										{
-											"name": "OK",
-											"originalRequest": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/products",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"products"
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"description\": \"<string>\",\n    \"amount\": \"<double>\",\n    \"currency\": \"<string>\",\n    \"imageUrl\": \"<string>\",\n    \"productCategory\": {\n      \"id\": \"<uuid>\",\n      \"description\": \"<string>\",\n      \"createdAtUtc\": \"<dateTime>\",\n      \"updatedAtUtc\": \"<dateTime>\"\n    },\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"description\": \"<string>\",\n    \"amount\": \"<double>\",\n    \"currency\": \"<string>\",\n    \"imageUrl\": \"<string>\",\n    \"productCategory\": {\n      \"id\": \"<uuid>\",\n      \"description\": \"<string>\",\n      \"createdAtUtc\": \"<dateTime>\",\n      \"updatedAtUtc\": \"<dateTime>\"\n    },\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  }\n]"
-										}
-									]
-								},
-								{
-									"name": "Create Product:1",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "application/json"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"description\": \"<string>\",\n  \"productCategoryId\": \"<uuid>\"\n}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/api/v1/products",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"v1",
-												"products"
-											]
-										},
-										"description": "Register a product"
-									},
-									"response": [
-										{
-											"name": "OK",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"description\": \"<string>\",\n  \"productCategoryId\": \"<uuid>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/products",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"products"
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"id\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"imageUrl\": \"<string>\",\n  \"productCategory\": {\n    \"id\": \"<uuid>\",\n    \"description\": \"<string>\",\n    \"createdAtUtc\": \"<dateTime>\",\n    \"updatedAtUtc\": \"<dateTime>\"\n  },\n  \"createdAtUtc\": \"<dateTime>\",\n  \"updatedAtUtc\": \"<dateTime>\"\n}"
-										},
-										{
-											"name": "Not Found",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Accept",
-														"value": "application/json"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"description\": \"<string>\",\n  \"productCategoryId\": \"<uuid>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/api/v1/products",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"products"
-													]
-												}
-											},
-											"status": "Not Found",
-											"code": 404,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Type",
-													"value": "application/json"
-												}
-											],
-											"cookie": [],
-											"body": "{\n  \"errors\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
-										}
-									]
+									"key": "category_name",
+									"value": "Lanches"
 								}
 							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "Obter todos os Acompanhamentos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products/category/:category_name",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"category",
+								":category_name"
+							],
+							"variable": [
+								{
+									"key": "category_name",
+									"value": "Acompanhamentos"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter todos as Bebidas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products/category/:category_name",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"category",
+								":category_name"
+							],
+							"variable": [
+								{
+									"key": "category_name",
+									"value": "Bebidas"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter todos as Sobremesas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products/category/:category_name",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"category",
+								":category_name"
+							],
+							"variable": [
+								{
+									"key": "category_name",
+									"value": "Sobremesas"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
 		},
 		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "baseUrl",
-			"value": "http://localhost:5001"
+			"name": "Pedidos",
+			"item": [
+				{
+					"name": "Criar um pedido para um cliente",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var host = pm.environment.get(\"host\")\r",
+									"\r",
+									"var getClientsRequest = {\r",
+									"    url: `${host}/api/v1/clients`,\r",
+									"    method: \"GET\"\r",
+									"};\r",
+									"\r",
+									"var createClientRequest = {\r",
+									"    url: `${host}/api/v1/clients`,\r",
+									"    method: \"POST\",\r",
+									"    header: \"Content-Type:application/json\",\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\r",
+									"            \"firstName\": \"Matheus Isaac\",\r",
+									"            \"lastName\": \"Márcio Moraes\",\r",
+									"            \"email\": \"matheus_moraes@lencise.com\",\r",
+									"            \"documentId\": \"60800326350\"\r",
+									"            })\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"var client_id = pm.environment.get(\"client_id\");\r",
+									"\r",
+									"if (client_id === \"abc\") {\r",
+									"    pm.sendRequest(getClientsRequest, function (err, res) {\r",
+									"        if(err) {\r",
+									"            console.log(err);\r",
+									"        } else {\r",
+									"            var clients = res.json();\r",
+									"\r",
+									"            if(clients.length === 0) {                \r",
+									"                pm.sendRequest(createClientRequest, function(err, res) {\r",
+									"                    if (err) {\r",
+									"                        console.log(err)\r",
+									"                    } else {\r",
+									"                        var status = res.code;\r",
+									"\r",
+									"                        if (status === 201) {\r",
+									"                            var jsonData = res.json();\r",
+									"                            pm.environment.set(\"client_id\", jsonData.id);\r",
+									"                        }\r",
+									"                    }\r",
+									"                });\r",
+									"            } else {\r",
+									"                var first_client_id = clients[0].id;\r",
+									"\r",
+									"                pm.environment.set(\"client_id\", first_client_id);\r",
+									"            }\r",
+									"        }\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var status = pm.response.code;\r",
+									"\r",
+									"if (status === 201) {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"order_id\", jsonData.id);\r",
+									"    pm.environment.set(\"order_track_id\", jsonData.trackId);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"clientId\": \"{{client_id}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/orders",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Visualizar um pedido",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/orders/:order_id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								":order_id"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "{{order_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Visualizar todos os pedidos",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/orders/tracking",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"tracking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar um lanche ao pedido",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var host = pm.environment.get(\"host\")\r",
+									"\r",
+									"var getProductsRequest = (category) => { \r",
+									"    return {\r",
+									"        url: `${host}/api/v1/products/category/${category}`,\r",
+									"        method: \"GET\"\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"var getRandomProduct = (category, env_name) => {\r",
+									"    pm.sendRequest(getProductsRequest(category), \r",
+									"        function (err, res){\r",
+									"            if (err) {\r",
+									"                console.log(err)\r",
+									"            } else {\r",
+									"                var products = res.json();\r",
+									"                var product_id = products[(Math.floor(Math.random() * products.length))].id;\r",
+									"                pm.environment.set(env_name, product_id);\r",
+									"            }\r",
+									"        }\r",
+									"    )\r",
+									"}\r",
+									"\r",
+									"getRandomProduct(\"Lanches\", \"lanche_id\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": \"{{lanche_id}}\",\r\n  \"quantity\": {{random_product_quantity}},\r\n  \"observation\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/orders/:order_id/items",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								":order_id",
+								"items"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "{{order_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar um acompanhamento ao pedido",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var host = pm.environment.get(\"host\")\r",
+									"\r",
+									"var getProductsRequest = (category) => { \r",
+									"    return {\r",
+									"        url: `${host}/api/v1/products/category/${category}`,\r",
+									"        method: \"GET\"\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"var getRandomProduct = (category, env_name) => {\r",
+									"    pm.sendRequest(getProductsRequest(category), \r",
+									"        function (err, res){\r",
+									"            if (err) {\r",
+									"                console.log(err)\r",
+									"            } else {\r",
+									"                var products = res.json();\r",
+									"                var product_id = products[(Math.floor(Math.random() * products.length))].id;\r",
+									"                pm.environment.set(env_name, product_id);\r",
+									"            }\r",
+									"        }\r",
+									"    )\r",
+									"}\r",
+									"\r",
+									"getRandomProduct(\"Acompanhamentos\", \"acompanhamento_id\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": \"{{acompanhamento_id}}\",\r\n  \"quantity\": {{random_product_quantity}},\r\n  \"observation\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/orders/:order_id/items",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								":order_id",
+								"items"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "{{order_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar uma bebida ao pedido",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var host = pm.environment.get(\"host\")\r",
+									"\r",
+									"var getProductsRequest = (category) => { \r",
+									"    return {\r",
+									"        url: `${host}/api/v1/products/category/${category}`,\r",
+									"        method: \"GET\"\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"var getRandomProduct = (category, env_name) => {\r",
+									"    pm.sendRequest(getProductsRequest(category), \r",
+									"        function (err, res){\r",
+									"            if (err) {\r",
+									"                console.log(err)\r",
+									"            } else {\r",
+									"                var products = res.json();\r",
+									"                var product_id = products[(Math.floor(Math.random() * products.length))].id;\r",
+									"                pm.environment.set(env_name, product_id);\r",
+									"            }\r",
+									"        }\r",
+									"    )\r",
+									"}\r",
+									"\r",
+									"getRandomProduct(\"Bebidas\", \"bebida_id\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": \"{{bebida_id}}\",\r\n  \"quantity\": {{random_product_quantity}},\r\n  \"observation\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/orders/:order_id/items",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								":order_id",
+								"items"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "{{order_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar uma sobremesa ao pedido",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var host = pm.environment.get(\"host\")\r",
+									"\r",
+									"var getProductsRequest = (category) => { \r",
+									"    return {\r",
+									"        url: `${host}/api/v1/products/category/${category}`,\r",
+									"        method: \"GET\"\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"var getRandomProduct = (category, env_name) => {\r",
+									"    pm.sendRequest(getProductsRequest(category), \r",
+									"        function (err, res){\r",
+									"            if (err) {\r",
+									"                console.log(err)\r",
+									"            } else {\r",
+									"                var products = res.json();\r",
+									"                var product_id = products[(Math.floor(Math.random() * products.length))].id;\r",
+									"                pm.environment.set(env_name, product_id);\r",
+									"            }\r",
+									"        }\r",
+									"    )\r",
+									"}\r",
+									"\r",
+									"getRandomProduct(\"Sobremesas\", \"sobremesa_id\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": \"{{sobremesa_id}}\",\r\n  \"quantity\": {{random_product_quantity}},\r\n  \"observation\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/orders/:order_id/items",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								":order_id",
+								"items"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "{{order_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Realizar o checkout do pedido",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/orders/:order_id/checkout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								":order_id",
+								"checkout"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "{{order_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WebHook do pedido",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderId\": \"{{order_id}}\",\r\n    \"paymentApproved\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/orders/checkout/hook",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"checkout",
+								"hook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Iniciar preparo do pedido",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"OnGoing\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/orders/:order_id/status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								":order_id",
+								"status"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "{{order_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pedido pronto para retirada",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"Done\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/orders/:order_id/status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								":order_id",
+								"status"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "{{order_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pedido entregue ao cliente",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"Completed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/orders/:order_id/status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								":order_id",
+								"status"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "{{order_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var randomProductQuantity = 0;",
+							"",
+							"while(randomProductQuantity === 0) {",
+							"    randomProductQuantity = Math.floor(Math.random() * 5);",
+							"}",
+							"",
+							"pm.environment.set(\"random_product_quantity\", randomProductQuantity);"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	]
 }

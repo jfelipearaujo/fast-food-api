@@ -50,6 +50,6 @@ public class CreateOrderUseCase : ICreateOrderUseCase
 
         await orderRepository.CreateAsync(order.Value, cancellationToken);
 
-        return OrderResponse.MapFromDomain(order.Value, order.Value.GetTotalAmount());
+        return OrderResponse.MapFromDomain(order.Value);
     }
 }

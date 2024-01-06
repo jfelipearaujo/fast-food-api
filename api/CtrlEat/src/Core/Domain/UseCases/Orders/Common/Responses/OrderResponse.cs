@@ -1,8 +1,6 @@
 ﻿using Domain.Entities.OrderAggregate;
 using Domain.Entities.OrderAggregate.Enums;
 
-using System.Globalization;
-
 namespace Domain.UseCases.Orders.Common.Responses;
 
 public class OrderResponse
@@ -21,7 +19,7 @@ public class OrderResponse
 
     // --
 
-    public static OrderResponse MapFromDomain(Order order, decimal totalAmount)
+    public static OrderResponse MapFromDomain(Order order)
     {
         return new OrderResponse
         {
@@ -31,7 +29,6 @@ public class OrderResponse
             TotalPrice = order.GetTotalPrice(),
             Payments = PaymentResponse.MapFromDomain(order.Payments),
             Items = OrderItemResponse.MapFromDomain(order.Items),
-            TotalAmount = totalAmount.ToString("C", CultureInfo.CreateSpecificCulture("pt-BR"))
         };
     }
 
@@ -41,7 +38,7 @@ public class OrderResponse
 
         foreach (var order in orders)
         {
-            response.Add(MapFromDomain(order, order.GetTotalAmount()));
+            response.Add(MapFromDomain(order));
         }
 
         return response;

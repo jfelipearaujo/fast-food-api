@@ -22,15 +22,16 @@ public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
 
         builder.OwnsOne(x => x.FullName, propBuilder =>
         {
-            propBuilder.Property(y => y.FirstName).HasMaxLength(250);
-            propBuilder.Property(y => y.LastName).HasMaxLength(250);
+            propBuilder.Property(y => y.FirstName).HasMaxLength(250).IsRequired(false);
+            propBuilder.Property(y => y.LastName).HasMaxLength(250).IsRequired(false);
         });
 
         builder.Property(y => y.Email)
             .HasConversion(
                 email => email.Value,
                 value => Email.Create(value).Value)
-            .HasMaxLength(250);
+            .HasMaxLength(250)
+            .IsRequired(false);
 
         builder
             .HasIndex(x => x.Email)
@@ -40,7 +41,8 @@ public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
             .HasConversion(
                 documentId => documentId.Value,
                 value => DocumentId.Create(value).Value)
-            .HasMaxLength(14);
+            .HasMaxLength(14)
+            .IsRequired(false);
 
         builder
             .HasIndex(x => x.DocumentId)
