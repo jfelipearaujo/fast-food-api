@@ -22,8 +22,8 @@
 
 # variables
 api_port=5001
-api_image_version=1.2
-db_image_version=1.0
+api_image_version=1.4
+db_image_version=1.1
 
 test:
 	dotnet test ./api/CtrlEat/CtrlEat.sln --collect:"XPlat Code Coverage;Format=json,lcov,cobertura"

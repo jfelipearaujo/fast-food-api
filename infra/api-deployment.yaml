@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ctrl-eat-api
-          image: jsfelipearaujo/ctrl-eat-api:v1.1
+          image: jsfelipearaujo/ctrl-eat-api:v1.3
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 80
@@ -30,10 +30,10 @@ spec:
                 name: ctrl-eat-api-config
             - secretRef:
                 name: ctrl-eat-api-secret
-      #     volumeMounts:
-      #       - name: ctrl-eat-api-vol
-      #         mountPath: /app/images
-      # volumes:
-      #   - name: ctrl-eat-api-vol
-      #     persistentVolumeClaim:
-      #       claimName: ctrl-eat-api-pv-claim
+          volumeMounts:
+            - name: ctrl-eat-api-vol
+              mountPath: /app/images
+      volumes:
+        - name: ctrl-eat-api-vol
+          persistentVolumeClaim:
+            claimName: ctrl-eat-api-pv-claim
