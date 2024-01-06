@@ -40,7 +40,7 @@ public class OrderRepository : IOrderRepository
 
     public async Task<IEnumerable<Order>> GetAllByStatusAsync(OrderStatus status, CancellationToken cancellationToken)
     {
-        var statusOrder = new List<OrderStatus>
+        var desiredStatusOrder = new List<OrderStatus>
         {
             OrderStatus.Done,
             OrderStatus.OnGoing,
@@ -52,7 +52,7 @@ public class OrderRepository : IOrderRepository
                 status != OrderStatus.None,
                 x => x.Status == status,
                 x => x.Status != OrderStatus.Created && x.Status != OrderStatus.Completed && x.Status != OrderStatus.Cancelled)
-            .OrderBy(x => statusOrder.IndexOf(x.Status))
+            .OrderBy(x => desiredStatusOrder.IndexOf(x.Status))
             .ThenBy(x => x.CreatedAtUtc)
             .ToListAsync(cancellationToken);
     }

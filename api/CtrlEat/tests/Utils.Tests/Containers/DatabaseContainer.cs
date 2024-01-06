@@ -10,5 +10,4 @@ public static class DatabaseContainer
             .WithUsername("postgres")
             .WithPassword("StrongPassword123")
             .WithCleanUp(true);
-
 }

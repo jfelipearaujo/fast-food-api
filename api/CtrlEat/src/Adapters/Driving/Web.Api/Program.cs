@@ -51,7 +51,7 @@ builder.Services.AddSwaggerGen(options =>
     options.AddMissingSchemas();
 });
 
-builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddPersistence();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 

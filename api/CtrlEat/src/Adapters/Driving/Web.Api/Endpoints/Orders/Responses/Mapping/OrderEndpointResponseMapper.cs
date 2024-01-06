@@ -117,7 +117,8 @@ public static class OrderEndpointResponseMapper
     {
         return new OrderCheckoutEndpointResponse
         {
-            Status = response.Status
+            TrackId = response.TrackId,
+            PaymentStatus = response.PaymentStatus
         };
     }
 }

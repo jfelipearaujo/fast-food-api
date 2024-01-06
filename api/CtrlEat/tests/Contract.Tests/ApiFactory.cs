@@ -1,10 +1,14 @@
 using Contract.Tests.Extensions;
 
+using Domain.Adapters.Database;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+
+using Persistence;
 
 using Testcontainers.PostgreSql;
 
@@ -27,6 +31,11 @@ public class ApiFactory<TProgramMarker, TDbContext> : WebApplicationFactory<TPro
     {
         builder.ConfigureTestServices(services =>
         {
+            services.RemoveService<IConnectionStringBuilder>();
+
+            services.AddSingleton<IConnectionStringBuilder>(
+                new ConnectionStringBuilder(dbContainer.GetConnectionString()));
+
             services.RemoveDbContext<TDbContext>();
 
             services.AddDbContext<TDbContext>(options =>
