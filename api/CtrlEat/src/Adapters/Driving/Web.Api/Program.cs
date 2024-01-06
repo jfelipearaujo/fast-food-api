@@ -17,6 +17,7 @@ using Web.Api.Endpoints.Clients;
 using Web.Api.Endpoints.Orders;
 using Web.Api.Endpoints.ProductCategories;
 using Web.Api.Endpoints.Products;
+using Web.Api.Extensions;
 using Web.Api.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,6 +85,8 @@ if (app.Environment.IsDevelopment())
         c.SpecUrl = "/swagger/v1/swagger.json";
     });
 }
+
+app.ApplyMigrations();
 
 app.Run();
 
