@@ -1,4 +1,4 @@
-﻿namespace Web.Api.Endpoints.Orders.Requests;
+﻿namespace Web.Api.Endpoints.Orders;
 
 public class AddOrderItemEndpointRequest
 {

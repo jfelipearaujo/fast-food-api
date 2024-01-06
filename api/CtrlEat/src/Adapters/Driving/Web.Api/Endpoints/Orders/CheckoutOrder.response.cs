@@ -1,8 +1,8 @@
 ﻿using Domain.Entities.OrderAggregate.Enums;
 
-namespace Web.Api.Endpoints.Orders.Responses;
+namespace Web.Api.Endpoints.Orders;
 
-public class OrderCheckoutEndpointResponse
+public class CheckoutOrderEndpointResponse
 {
     public string TrackId { get; set; }
 

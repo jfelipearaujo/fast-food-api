@@ -2,7 +2,7 @@
 using Domain.UseCases.Orders.CheckoutOrder.Responses;
 using Domain.UseCases.Orders.Common.Responses;
 
-namespace Web.Api.Endpoints.Orders.Responses.Mapping;
+namespace Web.Api.Endpoints.Orders.Mapping;
 
 public static class OrderEndpointResponseMapper
 {
@@ -113,9 +113,9 @@ public static class OrderEndpointResponseMapper
         return response;
     }
 
-    public static OrderCheckoutEndpointResponse MapToResponse(this CheckoutOrderResponse response)
+    public static CheckoutOrderEndpointResponse MapToResponse(this CheckoutOrderResponse response)
     {
-        return new OrderCheckoutEndpointResponse
+        return new CheckoutOrderEndpointResponse
         {
             TrackId = response.TrackId,
             PaymentStatus = response.PaymentStatus

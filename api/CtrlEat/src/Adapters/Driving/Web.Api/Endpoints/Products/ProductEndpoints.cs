@@ -13,8 +13,7 @@ using Domain.UseCases.Products.UploadProductImage;
 using Domain.UseCases.Products.UploadProductImage.Requests;
 
 using Microsoft.AspNetCore.Http.HttpResults;
-
-using Web.Api.Endpoints.Common.Constants;
+using Web.Api.Common.Constants;
 using Web.Api.Endpoints.Products.Requests;
 using Web.Api.Endpoints.Products.Requests.Mapping;
 using Web.Api.Endpoints.Products.Responses;

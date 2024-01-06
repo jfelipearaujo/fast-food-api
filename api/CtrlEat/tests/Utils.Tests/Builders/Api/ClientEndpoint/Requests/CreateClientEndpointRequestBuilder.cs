@@ -1,7 +1,6 @@
 ﻿using Bogus;
 using Bogus.Extensions.Brazil;
-
-using Web.Api.Endpoints.Clients.Requests;
+using Web.Api.Endpoints.Clients;
 
 namespace Utils.Tests.Builders.Api.ClientEndpoint.Requests;
 

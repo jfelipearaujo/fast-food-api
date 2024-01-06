@@ -1,4 +1,4 @@
-﻿namespace Web.Api.Endpoints.Clients.Requests;
+﻿namespace Web.Api.Endpoints.Clients;
 
 public class CreateClientEndpointRequest
 {

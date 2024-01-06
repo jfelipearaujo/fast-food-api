@@ -18,9 +18,18 @@ using Web.Api.Endpoints.Orders;
 using Web.Api.Endpoints.ProductCategories;
 using Web.Api.Endpoints.Products;
 using Web.Api.Extensions;
+using Web.Api.Middlewares;
 using Web.Api.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLogging(options =>
+{
+    options.ClearProviders();
+    options.AddConsole();
+});
+
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
@@ -65,6 +74,8 @@ app.MapOrderEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
+    app.ApplyMigrations();
+
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
@@ -86,7 +97,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.ApplyMigrations();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.Run();
 

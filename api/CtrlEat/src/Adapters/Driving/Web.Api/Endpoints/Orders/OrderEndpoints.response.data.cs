@@ -1,4 +1,4 @@
-﻿namespace Web.Api.Endpoints.Orders.Responses;
+﻿namespace Web.Api.Endpoints.Orders;
 
 public class OrderItemEndpointResponse
 {

@@ -2,7 +2,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace Web.Api.Endpoints.Clients.Responses;
+namespace Web.Api.Endpoints.Clients;
 
 public class ClientEndpointResponse
 {

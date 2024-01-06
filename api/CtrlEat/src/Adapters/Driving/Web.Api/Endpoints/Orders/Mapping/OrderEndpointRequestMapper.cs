@@ -3,7 +3,7 @@ using Domain.UseCases.Orders.CheckoutHookOrder.Requests;
 using Domain.UseCases.Orders.CreateOrder.Requests;
 using Domain.UseCases.Orders.UpdateOrderStatus.Requests;
 
-namespace Web.Api.Endpoints.Orders.Requests.Mapping;
+namespace Web.Api.Endpoints.Orders.Mapping;
 
 public static class OrderEndpointRequestMapper
 {

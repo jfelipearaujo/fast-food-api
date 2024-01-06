@@ -1,4 +1,4 @@
-﻿namespace Web.Api.Endpoints.Common.Constants;
+﻿namespace Web.Api.Common.Constants;
 
 public static class ContentTypes
 {

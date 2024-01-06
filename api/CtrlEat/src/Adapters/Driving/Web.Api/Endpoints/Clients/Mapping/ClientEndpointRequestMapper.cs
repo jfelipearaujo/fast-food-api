@@ -1,6 +1,6 @@
 ﻿using Domain.UseCases.Clients.CreateClient.Requests;
 
-namespace Web.Api.Endpoints.Clients.Requests.Mapping;
+namespace Web.Api.Endpoints.Clients.Mapping;
 
 public static class ClientEndpointRequestMapper
 {

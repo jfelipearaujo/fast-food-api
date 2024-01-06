@@ -3,7 +3,7 @@ using Domain.UseCases.Orders.Common.Responses;
 
 using System.Text.Json.Serialization;
 
-namespace Web.Api.Endpoints.Orders.Responses;
+namespace Web.Api.Endpoints.Orders;
 
 public class OrderEndpointResponse
 {

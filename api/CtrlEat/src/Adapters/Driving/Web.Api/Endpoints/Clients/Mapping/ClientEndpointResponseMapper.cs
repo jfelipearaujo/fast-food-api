@@ -1,6 +1,6 @@
 ﻿using Domain.UseCases.Clients.Common.Responses;
 
-namespace Web.Api.Endpoints.Clients.Responses.Mapping;
+namespace Web.Api.Endpoints.Clients.Mapping;
 
 public static class ClientEndpointResponseMapper
 {
