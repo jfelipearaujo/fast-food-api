@@ -1,4 +1,5 @@
 ﻿using Domain.UseCases.Orders.AddOrderItem.Requests;
+using Domain.UseCases.Orders.CheckoutHookOrder.Requests;
 using Domain.UseCases.Orders.CreateOrder.Requests;
 using Domain.UseCases.Orders.UpdateOrderStatus.Requests;
 
@@ -31,6 +32,15 @@ public static class OrderEndpointRequestMapper
         {
             OrderId = orderId,
             Status = request.Status,
+        };
+    }
+
+    public static CheckoutHookOrderRequest MapToRequest(this CheckoutHookOrderEndpointRequest request)
+    {
+        return new CheckoutHookOrderRequest
+        {
+            OrderId = request.OrderId,
+            PaymentApproved = request.PaymentApproved,
         };
     }
 }

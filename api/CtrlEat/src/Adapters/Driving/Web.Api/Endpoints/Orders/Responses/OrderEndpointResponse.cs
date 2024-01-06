@@ -14,7 +14,7 @@ public class OrderEndpointResponse
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public OrderStatus Status { get; set; }
 
-    public string TotalAmount { get; set; }
+    public string TotalPrice { get; set; }
 
     public IEnumerable<PaymentResponse> Payments { get; set; }
 

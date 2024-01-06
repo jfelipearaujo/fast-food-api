@@ -7,5 +7,6 @@ public enum OrderStatus
     Received = 2,
     OnGoing = 3,
     Done = 4,
-    Completed = 5
+    Completed = 5,
+    Cancelled = 6
 }

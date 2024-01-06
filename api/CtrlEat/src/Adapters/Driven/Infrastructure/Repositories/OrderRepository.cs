@@ -51,9 +51,9 @@ public class OrderRepository : IOrderRepository
             .WhereIfElse(
                 status != OrderStatus.None,
                 x => x.Status == status,
-                x => x.Status != OrderStatus.Completed)
-            .OrderBy(x => x.CreatedAtUtc)
-            .ThenBy(x => desiredStatusOrder.IndexOf(x.Status))
+                x => x.Status != OrderStatus.Created && x.Status != OrderStatus.Completed && x.Status != OrderStatus.Cancelled)
+            .OrderBy(x => desiredStatusOrder.IndexOf(x.Status))
+            .ThenBy(x => x.CreatedAtUtc)
             .ToListAsync(cancellationToken);
     }
 
@@ -61,7 +61,7 @@ public class OrderRepository : IOrderRepository
     {
         return await context.Order
             .Where(x => x.ClientId == clientId)
-            .Where(x => x.Status != OrderStatus.Completed)
+            .Where(x => x.Status != OrderStatus.Completed && x.Status != OrderStatus.Cancelled)
             .ToListAsync(cancellationToken);
     }
 

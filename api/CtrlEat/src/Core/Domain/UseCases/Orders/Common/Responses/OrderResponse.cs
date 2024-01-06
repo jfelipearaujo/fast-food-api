@@ -13,7 +13,7 @@ public class OrderResponse
 
     public OrderStatus OrderStatus { get; set; }
 
-    public string TotalAmount { get; set; }
+    public string TotalPrice { get; set; }
 
     public IEnumerable<PaymentResponse> Payments { get; set; }
 
@@ -28,6 +28,7 @@ public class OrderResponse
             Id = order.Id.Value,
             TrackId = order.TrackId.Value,
             OrderStatus = order.Status,
+            TotalPrice = order.GetTotalPrice(),
             Payments = PaymentResponse.MapFromDomain(order.Payments),
             Items = OrderItemResponse.MapFromDomain(order.Items),
             TotalAmount = totalAmount.ToString("C", CultureInfo.CreateSpecificCulture("pt-BR"))

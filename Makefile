@@ -20,6 +20,11 @@
 	kube-db-up \
 	kube-db-down \
 
+# variables
+api_port=5001
+api_image_version=1.2
+db_image_version=1.0
+
 test:
 	dotnet test ./api/CtrlEat/CtrlEat.sln --collect:"XPlat Code Coverage;Format=json,lcov,cobertura"
 
@@ -42,28 +47,28 @@ down:
 seed-all: seed-lanches seed-acompanhamentos seed-bebidas seed-sobremesas
 
 seed-lanches:
-	sh ./api/CtrlEat/scripts/api/seed_lanches.sh 5001
+	sh ./api/CtrlEat/scripts/api/seed_lanches.sh $(api_port)
 
 seed-acompanhamentos:
-	sh ./api/CtrlEat/scripts/api/seed_acompanhamentos.sh 5001
+	sh ./api/CtrlEat/scripts/api/seed_acompanhamentos.sh $(api_port)
 
 seed-bebidas:
-	sh ./api/CtrlEat/scripts/api/seed_bebidas.sh 5001
+	sh ./api/CtrlEat/scripts/api/seed_bebidas.sh $(api_port)
 
 seed-sobremesas:
-	sh ./api/CtrlEat/scripts/api/seed_sobremesas.sh 5001
+	sh ./api/CtrlEat/scripts/api/seed_sobremesas.sh $(api_port)
 
 docker-build-api:
-	cd api/CtrlEat && docker build -t jsfelipearaujo/ctrl-eat-api:v1.1 .
+	cd api/CtrlEat && docker build -t jsfelipearaujo/ctrl-eat-api:v$(api_image_version) .
 
 docker-push-api:
-	docker push jsfelipearaujo/ctrl-eat-api:v1.1
+	docker push jsfelipearaujo/ctrl-eat-api:v$(api_image_version)
 
 docker-build-db:
-	cd api/CtrlEat/scripts/database && docker build -t jsfelipearaujo/ctrl-eat-db:v1 .
+	cd api/CtrlEat/scripts/database && docker build -t jsfelipearaujo/ctrl-eat-db:v$(db_image_version) .
 
 docker-push-db:
-	docker push jsfelipearaujo/ctrl-eat-db:v1
+	docker push jsfelipearaujo/ctrl-eat-db:v$(db_image_version)
 
 kube-up:
 	kubectl apply \

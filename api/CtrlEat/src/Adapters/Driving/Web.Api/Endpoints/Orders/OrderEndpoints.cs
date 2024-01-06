@@ -1,4 +1,5 @@
 ﻿using Domain.UseCases.Orders.AddOrderItem;
+using Domain.UseCases.Orders.CheckoutHookOrder;
 using Domain.UseCases.Orders.CheckoutOrder;
 using Domain.UseCases.Orders.CheckoutOrder.Requests;
 using Domain.UseCases.Orders.CreateOrder;
@@ -62,6 +63,13 @@ public static class OrderEndpoints
         group.MapPost("{id}/checkout", CheckoutOrder)
             .WithName(ApiEndpoints.Orders.V1.Checkout)
             .WithDescription("Checkout the order")
+            .Produces(StatusCodes.Status201Created)
+            .Produces<ApiError>(StatusCodes.Status400BadRequest)
+            .Produces<ApiError>(StatusCodes.Status404NotFound);
+
+        group.MapPost("/checkout/hook", CheckoutHookOrder)
+            .WithName(ApiEndpoints.Orders.V1.CheckoutHook)
+            .WithDescription("Checkout Hook the order")
             .Produces(StatusCodes.Status201Created)
             .Produces<ApiError>(StatusCodes.Status400BadRequest)
             .Produces<ApiError>(StatusCodes.Status404NotFound);
@@ -210,5 +218,22 @@ public static class OrderEndpoints
         var response = result.Value.MapToResponse();
 
         return Results.Ok(response);
+    }
+
+    public static async Task<IResult> CheckoutHookOrder(
+        CheckoutHookOrderEndpointRequest endpointRequest,
+        ICheckoutHookOrderUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var request = endpointRequest.MapToRequest();
+
+        var result = await useCase.ExecuteAsync(request, cancellationToken);
+
+        if (result.IsFailed)
+        {
+            return Results.BadRequest(result.ToApiError());
+        }
+
+        return Results.Ok();
     }
 }
