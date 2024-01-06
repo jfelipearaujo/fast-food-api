@@ -22,7 +22,7 @@
 
 # variables
 api_port=5001
-api_image_version=1.4
+api_image_version=1.5
 db_image_version=1.1
 
 test:

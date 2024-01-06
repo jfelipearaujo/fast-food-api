@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ctrl-eat-api
-          image: jsfelipearaujo/ctrl-eat-api:v1.3
+          image: jsfelipearaujo/ctrl-eat-api:v1.5
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 80
