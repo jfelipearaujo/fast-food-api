@@ -5,10 +5,11 @@ metadata:
   labels:
     app: ctrl-eat-api
 spec:
-  storageClassName: api
+  storageClassName: hostpath
   capacity:
     storage: 3Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: "/mnt/data"
+    path: /images

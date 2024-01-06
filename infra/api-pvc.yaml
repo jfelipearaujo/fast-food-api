@@ -5,9 +5,9 @@ metadata:
   labels:
     app: ctrl-eat-api
 spec:
-  storageClassName: api
+  storageClassName: hostpath
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 5Gi

@@ -5,9 +5,9 @@ metadata:
   labels:
     app: ctrl-eat-db
 spec:
-  storageClassName: db
+  storageClassName: local-storage-db
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 3Gi
