@@ -30,10 +30,10 @@ public class ClientResponse
         return new ClientResponse
         {
             Id = client.Id.Value,
-            FirstName = client.FullName.FirstName,
-            LastName = client.FullName.LastName,
-            Email = client.Email.Value,
-            DocumentId = client.DocumentId.Value,
+            FirstName = client.FullName?.FirstName,
+            LastName = client.FullName?.LastName,
+            Email = client.Email?.Value,
+            DocumentId = client.DocumentId?.Value,
             DocumentType = client.DocumentType,
             IsAnonymous = client.IsAnonymous,
             CreatedAtUtc = client.CreatedAtUtc,
