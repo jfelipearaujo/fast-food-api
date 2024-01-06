@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ctrl-eat-db-pv-claim
+  labels:
+    app: ctrl-eat-db
+spec:
+  storageClassName: db
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
