@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Web.Api.Endpoints.Products.Requests;
+namespace Web.Api.Endpoints.Products;
 
-public class CreateProductEndpointRequest
+public class UpdateProductEndpointRequest
 {
     [Required]
     public Guid ProductCategoryId { get; set; }
@@ -15,4 +15,7 @@ public class CreateProductEndpointRequest
 
     [Required]
     public string Currency { get; set; }
+
+    [Required]
+    public string ImageUrl { get; set; }
 }

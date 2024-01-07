@@ -1,11 +1,9 @@
 ﻿using Domain.UseCases.Products.Common.Responses;
 using Domain.UseCases.Products.UpdateProduct.Requests;
+using Web.Api.Endpoints.ProductCategories.Mapping;
+using Web.Api.Endpoints.Products.Mapping;
 
-using Web.Api.Endpoints.ProductCategories.Responses.Mapping;
-using Web.Api.Endpoints.Products.Requests;
-using Web.Api.Endpoints.Products.Responses.Mapping;
-
-namespace Web.Api.Endpoints.Products.Responses.Mapping;
+namespace Web.Api.Endpoints.Products.Mapping;
 
 public static class ProductEndpointResponseMapper
 {

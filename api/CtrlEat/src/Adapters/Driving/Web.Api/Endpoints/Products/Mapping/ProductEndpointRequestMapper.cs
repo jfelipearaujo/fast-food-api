@@ -1,6 +1,6 @@
 ﻿using Domain.UseCases.Products.CreateProduct.Requests;
 
-namespace Web.Api.Endpoints.Products.Requests.Mapping;
+namespace Web.Api.Endpoints.Products.Mapping;
 
 public static class ProductEndpointRequestMapper
 {

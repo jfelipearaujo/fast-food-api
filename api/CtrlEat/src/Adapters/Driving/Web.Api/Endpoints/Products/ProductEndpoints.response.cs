@@ -1,6 +1,6 @@
-﻿using Web.Api.Endpoints.ProductCategories.Responses;
+﻿using Web.Api.Endpoints.ProductCategories;
 
-namespace Web.Api.Endpoints.Products.Responses;
+namespace Web.Api.Endpoints.Products;
 
 public class ProductEndpointResponse
 {

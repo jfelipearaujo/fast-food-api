@@ -1,4 +1,4 @@
-﻿namespace Web.Api.Endpoints.ProductCategories.Responses;
+﻿namespace Web.Api.Endpoints.ProductCategories;
 
 public class ProductCategoryEndpointResponse
 {

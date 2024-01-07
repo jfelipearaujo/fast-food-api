@@ -1,6 +1,6 @@
 ﻿using Domain.UseCases.ProductCategories.Common.Responses;
 
-namespace Web.Api.Endpoints.ProductCategories.Responses.Mapping;
+namespace Web.Api.Endpoints.ProductCategories.Mapping;
 
 public static class ProductCategoryEndpointResponseMapper
 {

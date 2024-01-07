@@ -1,4 +1,4 @@
-﻿using Web.Api.Endpoints.Products.Requests;
+﻿using Web.Api.Endpoints.Products;
 
 namespace Utils.Tests.Builders.Api.ProductEndpoint.Requests;
 
