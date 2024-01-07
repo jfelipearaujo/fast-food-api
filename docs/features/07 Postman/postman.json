@@ -2,10 +2,35 @@
 	"info": {
 		"_postman_id": "8330472b-a86a-4493-9f96-5d0f6cc333cc",
 		"name": "CtrlEat",
+		"description": "O sistema desenvolvido para o controle de pedidos para uma lanchonete de fast food em expansão, visando otimizar o atendimento ao cliente, desde pedidos personalizados até gestão de estoque e pagamentos, promovendo eficiência operacional e satisfação dos clientes.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30871606"
 	},
 	"item": [
+		{
+			"name": "Infra",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/health",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Realiza uma verificação da saúde da aplicação."
+					},
+					"response": []
+				}
+			],
+			"description": "Rotas relacionadas à infraestrutura da API."
+		},
 		{
 			"name": "Clientes",
 			"item": [
@@ -49,7 +74,8 @@
 								"v1",
 								"clients"
 							]
-						}
+						},
+						"description": "Realiza o cadastro de um cliente.\n\nOs dados pessoais podem ou não ser informados."
 					},
 					"response": []
 				},
@@ -74,11 +100,13 @@
 								"v1",
 								"clients"
 							]
-						}
+						},
+						"description": "Retorna todos os clientes cadastrados no sistema."
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "Rotas relacionadas ao gerenciamento dos clientes."
 		},
 		{
 			"name": "Categorias",
@@ -105,11 +133,13 @@
 								"products",
 								"categories"
 							]
-						}
+						},
+						"description": "Retorna todas as categorias dos protudos cadastradas no sistema."
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "Rotas relacionadas ao gerenciamento das categorias dos produtos."
 		},
 		{
 			"name": "Produtos",
@@ -135,7 +165,8 @@
 								"v1",
 								"products"
 							]
-						}
+						},
+						"description": "Retorna todos os produtos cadastrados no sistema."
 					},
 					"response": []
 				},
@@ -168,7 +199,8 @@
 									"value": "Lanches"
 								}
 							]
-						}
+						},
+						"description": "Retorna todos os **Lanches** cadastrados no sistema."
 					},
 					"response": []
 				},
@@ -201,7 +233,8 @@
 									"value": "Acompanhamentos"
 								}
 							]
-						}
+						},
+						"description": "Retorna todos os **Acompanhamentos** cadastrados no sistema."
 					},
 					"response": []
 				},
@@ -234,7 +267,8 @@
 									"value": "Bebidas"
 								}
 							]
-						}
+						},
+						"description": "Retorna todos as **Bebidas** cadastrados no sistema."
 					},
 					"response": []
 				},
@@ -267,11 +301,13 @@
 									"value": "Sobremesas"
 								}
 							]
-						}
+						},
+						"description": "Retorna todos as **Sobremesas** cadastrados no sistema."
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "Rotas relacionadas ao gerenciamento dos produtos."
 		},
 		{
 			"name": "Pedidos",
@@ -377,7 +413,8 @@
 								"v1",
 								"orders"
 							]
-						}
+						},
+						"description": "Inicializa um pedido para o cliente."
 					},
 					"response": []
 				},
@@ -423,7 +460,8 @@
 									"value": "{{order_id}}"
 								}
 							]
-						}
+						},
+						"description": "Retorna os detalhes do pedido do cliente."
 					},
 					"response": []
 				},
@@ -463,7 +501,8 @@
 								"orders",
 								"tracking"
 							]
-						}
+						},
+						"description": "Retorna todos os pedidos no sistema que estejam em preparo.\n\n**ATENÇÃO:** Pedidos aguardando pagamento ou já entregues ao cliente não são mostrados nessa API."
 					},
 					"response": []
 				},
@@ -542,7 +581,8 @@
 									"value": "{{order_id}}"
 								}
 							]
-						}
+						},
+						"description": "Adiciona ao pedido um lanche qualquer e com alguma quantidade aleatória."
 					},
 					"response": []
 				},
@@ -621,7 +661,8 @@
 									"value": "{{order_id}}"
 								}
 							]
-						}
+						},
+						"description": "Adiciona ao pedido um acompanhamento qualquer e com alguma quantidade aleatória."
 					},
 					"response": []
 				},
@@ -700,7 +741,8 @@
 									"value": "{{order_id}}"
 								}
 							]
-						}
+						},
+						"description": "Adiciona ao pedido uma bebida qualquer e com alguma quantidade aleatória."
 					},
 					"response": []
 				},
@@ -779,7 +821,8 @@
 									"value": "{{order_id}}"
 								}
 							]
-						}
+						},
+						"description": "Adiciona ao pedido uma sobremesa qualquer e com alguma quantidade aleatória."
 					},
 					"response": []
 				},
@@ -826,7 +869,8 @@
 									"value": "{{order_id}}"
 								}
 							]
-						}
+						},
+						"description": "Simula o checkout do pedido, ou seja, simula que o cliente realizou o pagamento e está no aguardo da confirmação da resposta se deu certo ou não o pagamento."
 					},
 					"response": []
 				},
@@ -876,7 +920,55 @@
 								"checkout",
 								"hook"
 							]
+						},
+						"description": "Atualiza o status do pagamento do pedido, podendo cancelar o mesmo ou enviá-lo para a cozinha e dar início ao seu preparo."
+					},
+					"response": []
+				},
+				{
+					"name": "Visualizar os pedidos pagos e não iniciados",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/orders/tracking?status=Received",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"tracking"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "Received"
+								}
+							]
+						},
+						"description": "Retorna todos os pedidos no sistema que estejam prontos para iniciarem o preparo."
 					},
 					"response": []
 				},
@@ -932,7 +1024,8 @@
 									"value": "{{order_id}}"
 								}
 							]
-						}
+						},
+						"description": "A cozinha atualiza o status do pedido para dar início ao seu preparo."
 					},
 					"response": []
 				},
@@ -988,7 +1081,8 @@
 									"value": "{{order_id}}"
 								}
 							]
-						}
+						},
+						"description": "A cozinha atualiza o status do pedido para informar ao cliente que o pedido esta pronto para ser retirado."
 					},
 					"response": []
 				},
@@ -1044,11 +1138,13 @@
 									"value": "{{order_id}}"
 								}
 							]
-						}
+						},
+						"description": "A cozinha atualiza o status do pedido informando que o mesmo foi retirado pelo cliente."
 					},
 					"response": []
 				}
 			],
+			"description": "Rotas relacionadas ao gerenciamento de um pedido, sua criação, interação com o cliente e com a cozinha (preparo).",
 			"event": [
 				{
 					"listen": "prerequest",
