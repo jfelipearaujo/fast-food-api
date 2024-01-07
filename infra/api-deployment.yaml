@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: ctrl-eat-api
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: ctrl-eat-api
@@ -25,6 +24,24 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 1
+            periodSeconds: 5
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 1
+            periodSeconds: 5
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
           envFrom:
             - configMapRef:
                 name: ctrl-eat-api-config

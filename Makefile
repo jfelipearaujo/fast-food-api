@@ -46,6 +46,10 @@ down:
 
 seed-all: seed-lanches seed-acompanhamentos seed-bebidas seed-sobremesas
 
+seed-all-local: $(eval api_port = 5001) seed-all
+
+seed-all-kube: $(eval api_port = 30002) seed-all
+
 seed-lanches:
 	sh ./api/CtrlEat/scripts/api/seed_lanches.sh $(api_port)
 
@@ -70,35 +74,9 @@ docker-build-db:
 docker-push-db:
 	docker push jsfelipearaujo/ctrl-eat-db:v$(db_image_version)
 
-kube-up:
-	kubectl apply \
-		-f ./infra/db-pv.yaml \
-		-f ./infra/db-pvc.yaml \
-		-f ./infra/db-configmap.yaml \
-		-f ./infra/db-secret.yaml \
-		-f ./infra/db-deployment.yaml \
-		-f ./infra/db-service.yaml \
-		-f ./infra/api-pv.yaml \
-		-f ./infra/api-pvc.yaml \
-		-f ./infra/api-configmap.yaml \
-		-f ./infra/api-secret.yaml \
-		-f ./infra/api-deployment.yaml \
-		-f ./infra/api-service.yaml
+kube-up: kube-db-up kube-api-up
 
-kube-down:
-	kubectl delete \
-		-f ./infra/db-pv.yaml \
-		-f ./infra/db-pvc.yaml \
-		-f ./infra/db-configmap.yaml \
-		-f ./infra/db-secret.yaml \
-		-f ./infra/db-deployment.yaml \
-		-f ./infra/db-service.yaml \
-		-f ./infra/api-pv.yaml \
-		-f ./infra/api-pvc.yaml \
-		-f ./infra/api-configmap.yaml \
-		-f ./infra/api-secret.yaml \
-		-f ./infra/api-deployment.yaml \
-		-f ./infra/api-service.yaml
+kube-down: kube-db-down kube-api-down
 
 kube-db-up:
 	kubectl apply \
@@ -125,6 +103,7 @@ kube-api-up:
 		-f ./infra/api-configmap.yaml \
 		-f ./infra/api-secret.yaml \
 		-f ./infra/api-deployment.yaml \
+		-f ./infra/api-hpa.yaml \
 		-f ./infra/api-service.yaml
 
 kube-api-down:
@@ -134,4 +113,5 @@ kube-api-down:
 		-f ./infra/api-configmap.yaml \
 		-f ./infra/api-secret.yaml \
 		-f ./infra/api-deployment.yaml \
+		-f ./infra/api-hpa.yaml \
 		-f ./infra/api-service.yaml
