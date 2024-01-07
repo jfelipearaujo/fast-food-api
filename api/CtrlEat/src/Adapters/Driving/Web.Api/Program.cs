@@ -1,7 +1,10 @@
 using Application;
 
+using HealthChecks.UI.Client;
+
 using Infrastructure;
 
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -22,6 +25,10 @@ using Web.Api.Middlewares;
 using Web.Api.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services
+    .AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>("database");
 
 builder.Services.AddLogging(options =>
 {
@@ -66,6 +73,11 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
 var app = builder.Build();
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.MapProductCategoryEndpoints();
 app.MapProductEndpoints();
