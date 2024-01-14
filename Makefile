@@ -74,6 +74,9 @@ docker-build-db:
 docker-push-db:
 	docker push jsfelipearaujo/ctrl-eat-db:v$(db_image_version)
 
+kube-metrics:
+	kubectl apply -f ./infra/metrics.yaml
+
 kube-up: kube-db-up kube-api-up
 
 kube-down: kube-db-down kube-api-down
@@ -115,3 +118,6 @@ kube-api-down:
 		-f ./infra/api-deployment.yaml \
 		-f ./infra/api-hpa.yaml \
 		-f ./infra/api-service.yaml
+
+k6-run:
+	k6 run --config k6/settings/settings.json k6/index.js
