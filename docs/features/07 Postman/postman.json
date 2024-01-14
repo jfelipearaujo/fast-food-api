@@ -305,6 +305,68 @@
 						"description": "Retorna todos as **Sobremesas** cadastrados no sistema."
 					},
 					"response": []
+				},
+				{
+					"name": "Obter imagem de um produto",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var host = pm.environment.get(\"host\")\r",
+									"\r",
+									"var getProductsRequest = (category) => { \r",
+									"    return {\r",
+									"        url: `${host}/api/v1/products/category/${category}`,\r",
+									"        method: \"GET\"\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"var getRandomProduct = (category, env_name) => {\r",
+									"    pm.sendRequest(getProductsRequest(category), \r",
+									"        function (err, res){\r",
+									"            if (err) {\r",
+									"                console.log(err)\r",
+									"            } else {\r",
+									"                var products = res.json();\r",
+									"                var product_id = products[(Math.floor(Math.random() * products.length))].id;\r",
+									"                pm.environment.set(env_name, product_id);\r",
+									"            }\r",
+									"        }\r",
+									"    )\r",
+									"}\r",
+									"\r",
+									"getRandomProduct(\"Lanches\", \"lanche_id\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products/{{lanche_id}}/image",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"{{lanche_id}}",
+								"image"
+							]
+						},
+						"description": "Retorna a imagem do produto."
+					},
+					"response": []
 				}
 			],
 			"description": "Rotas relacionadas ao gerenciamento dos produtos."
