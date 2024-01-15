@@ -3,14 +3,14 @@ import { check, fail, sleep } from 'k6';
 
 import { Trend, Rate } from 'k6/metrics';
 
-export const duration = new Trend('get_all_products_duration', true);
-export const failRate = new Rate('get_all_products_fail_rate');
-export const successRate = new Rate('get_all_products_success_rate');
-export const reqRate = new Rate('get_all_products_req_rate');
+export const duration = new Trend('get_all_orders_duration', true);
+export const failRate = new Rate('get_all_orders_fail_rate');
+export const successRate = new Rate('get_all_orders_success_rate');
+export const reqRate = new Rate('get_all_orders_req_rate');
 
 export default function () {
     const host = 'http://localhost:30002/api/v1';
-    const route = '/products';
+    const route = '/orders/tracking';
 
     const res = http.get(`${host}${route}`);
 

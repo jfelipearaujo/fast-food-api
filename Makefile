@@ -120,4 +120,4 @@ kube-api-down:
 		-f ./infra/api-service.yaml
 
 k6-run:
-	k6 run --config k6/settings/settings.json k6/index.js
+	k6 run k6/index.js
