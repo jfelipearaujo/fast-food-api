@@ -1,7 +1,5 @@
 ## Arquitetura
 
-### Benefícios de utilizar o Kubernetes
-
 A arquitetura escolhida por pensada para ser de fácil manutenção, confiabilidade e caso necessário fácil replicação em outro provedor de nuvem. Utilizar o Kubernetes nos traz diversos benefícios, dentre eles:
 - Escalabilidade
 - Alta disponibilidade
