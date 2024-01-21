@@ -50,6 +50,40 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let create_array = (total, numero) => Array.from(Array(total), () => number_random(numero));\r",
+									"let number_random = (number) => (Math.round(Math.random() * number));\r",
+									"let mod = (dividendo, divisor) => Math.round(dividendo - (Math.floor(dividendo / divisor) * divisor));\r",
+									"\r",
+									"function cpf() {\r",
+									"    let total_array = 9;\r",
+									"    let n = 9;\r",
+									"    let [n1, n2, n3, n4, n5, n6, n7, n8, n9] = create_array(total_array, n);\r",
+									"\r",
+									"    let d1 = n9 * 2 + n8 * 3 + n7 * 4 + n6 * 5 + n5 * 6 + n4 * 7 + n3 * 8 + n2 * 9 + n1 * 10;\r",
+									"    d1 = 11 - (mod(d1, 11));\r",
+									"    \r",
+									"    if (d1 >= 10) {\r",
+									"        d1 = 0;\r",
+									"    }\r",
+									"\r",
+									"    let d2 = d1 * 2 + n9 * 3 + n8 * 4 + n7 * 5 + n6 * 6 + n5 * 7 + n4 * 8 + n3 * 9 + n2 * 10 + n1 * 11;\r",
+									"    d2 = 11 - (mod(d2, 11));\r",
+									"    if (d2 >= 10) {\r",
+									"        d2 = 0;\r",
+									"    }\r",
+									"\r",
+									"    return `${n1}${n2}${n3}${n4}${n5}${n6}${n7}${n8}${n9}${d1}${d2}`;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"random_cpf\", cpf());"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -57,7 +91,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"{{$randomFirstName}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"documentId\": null\r\n}",
+							"raw": "{\r\n  \"firstName\": \"{{$randomFirstName}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"documentId\": \"{{random_cpf}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -305,6 +339,68 @@
 						"description": "Retorna todos as **Sobremesas** cadastrados no sistema."
 					},
 					"response": []
+				},
+				{
+					"name": "Obter imagem de um produto",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var host = pm.environment.get(\"host\")\r",
+									"\r",
+									"var getProductsRequest = (category) => { \r",
+									"    return {\r",
+									"        url: `${host}/api/v1/products/category/${category}`,\r",
+									"        method: \"GET\"\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"var getRandomProduct = (category, env_name) => {\r",
+									"    pm.sendRequest(getProductsRequest(category), \r",
+									"        function (err, res){\r",
+									"            if (err) {\r",
+									"                console.log(err)\r",
+									"            } else {\r",
+									"                var products = res.json();\r",
+									"                var product_id = products[(Math.floor(Math.random() * products.length))].id;\r",
+									"                pm.environment.set(env_name, product_id);\r",
+									"            }\r",
+									"        }\r",
+									"    )\r",
+									"}\r",
+									"\r",
+									"getRandomProduct(\"Lanches\", \"lanche_id\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products/{{lanche_id}}/image",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"{{lanche_id}}",
+								"image"
+							]
+						},
+						"description": "Retorna a imagem do produto."
+					},
+					"response": []
 				}
 			],
 			"description": "Rotas relacionadas ao gerenciamento dos produtos."
@@ -337,7 +433,7 @@
 									"            \"lastName\": \"Márcio Moraes\",\r",
 									"            \"email\": \"matheus_moraes@lencise.com\",\r",
 									"            \"documentId\": \"60800326350\"\r",
-									"            })\r",
+									"        })\r",
 									"    }\r",
 									"};\r",
 									"\r",
@@ -466,7 +562,7 @@
 					"response": []
 				},
 				{
-					"name": "Visualizar todos os pedidos",
+					"name": "Visualizar todos os pedidos em andamento",
 					"event": [
 						{
 							"listen": "prerequest",
