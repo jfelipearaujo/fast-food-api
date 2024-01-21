@@ -104,7 +104,7 @@ Uma vez com todas as dependências instaladas, podemos prosseguir!
 
 Este projeto utiliza o Kubernetes para executar os serviços necessários para a aplicação funcionar corretamente. Para facilitar a execução, foi criado uma pasta `infra` que contém todos os manifestos necessários.
 
-Clique [aqui](./infra) para mais informações sobre o Kubernetes deste projeto.
+Clique [aqui](./infra/kubernetes.md) para mais informações sobre o Kubernetes deste projeto.
 
 ## Inicializando a aplicação via Kubernetes
 
