@@ -63,6 +63,8 @@ public static class OrderEndpointResponseMapper
         {
             Id = order.Id,
             TrackId = order.TrackId,
+            OrderCreatedAt = order.OrderCreatedAt,
+            OrderCreatedAtFormatted = order.OrderCreatedAtFormatted,
             StatusUpdatedAt = order.StatusUpdatedAt,
             StatusUpdatedAtFormatted = order.StatusUpdatedAtFormatted,
         };

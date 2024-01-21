@@ -6,6 +6,10 @@ public class OrderTrackingEndpointDataResponse
 
     public string TrackId { get; set; }
 
+    public DateTime OrderCreatedAt { get; set; }
+
+    public string OrderCreatedAtFormatted { get; set; }
+
     public DateTime StatusUpdatedAt { get; set; }
 
     public string StatusUpdatedAtFormatted { get; set; }

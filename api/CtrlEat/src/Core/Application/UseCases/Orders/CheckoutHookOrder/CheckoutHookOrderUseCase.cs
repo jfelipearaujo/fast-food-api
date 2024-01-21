@@ -53,15 +53,14 @@ public class CheckoutHookOrderUseCase : ICheckoutHookOrderUseCase
 
             // Deliver the order to be prepared
             order.UpdateToStatus(OrderStatus.Received);
+
+            await orderRepository.UpdateAsync(order, cancellationToken);
         }
         else
         {
             payment.UpdateToStatus(PaymentStatus.Rejected);
-
-            order.UpdateToStatus(OrderStatus.Cancelled);
         }
 
-        await orderRepository.UpdateAsync(order, cancellationToken);
         await paymentRepository.UpdateAsync(payment, cancellationToken);
 
         return Result.Ok();
