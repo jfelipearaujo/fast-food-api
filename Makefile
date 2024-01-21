@@ -16,8 +16,8 @@
 	kube-db-down \
 
 # variables
-api_image_version=1.5
-db_image_version=1.1
+api_image_version=1.6
+db_image_version=1.2
 
 test:
 	dotnet test ./api/CtrlEat/CtrlEat.sln --collect:"XPlat Code Coverage;Format=json,lcov,cobertura"
