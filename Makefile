@@ -4,24 +4,18 @@
 	up \
 	up-build \
 	down \
-	seed-all \
-	seed-lanches \
-	seed-acompanhamentos \
-	seed-bebidas \
-	seed-sobremesas \
+	seed-local \
+	seed-kube \
 	docker-build-api \
 	docker-push-api \
 	docker-build-db \
 	docker-push-db \
-	kube-up \
-	kube-down \
 	kube-api-up \
 	kube-api-down \
 	kube-db-up \
 	kube-db-down \
 
 # variables
-api_port=5001
 api_image_version=1.5
 db_image_version=1.1
 
@@ -44,23 +38,23 @@ up-build:
 down:
 	docker compose -f ./api/CtrlEat/docker-compose.yml down
 
-seed-all: seed-lanches seed-acompanhamentos seed-bebidas seed-sobremesas
+gen-cloud-diagrams:
+	cd docs/infra && \
+	python3 cloud_kubernetes_local.py && \
+	python3 cloud_kubernetes_aws.py && \
+	python3 cloud_aws_database_migrations.py
 
-seed-all-local: $(eval api_port = 5001) seed-all
+seed-local:
+	sh ./api/CtrlEat/scripts/api/seed_lanches.sh 5001 && \
+	sh ./api/CtrlEat/scripts/api/seed_acompanhamentos.sh 5001 && \
+	sh ./api/CtrlEat/scripts/api/seed_bebidas.sh 5001 && \
+	sh ./api/CtrlEat/scripts/api/seed_sobremesas.sh 5001
 
-seed-all-kube: $(eval api_port = 30002) seed-all
-
-seed-lanches:
-	sh ./api/CtrlEat/scripts/api/seed_lanches.sh $(api_port)
-
-seed-acompanhamentos:
-	sh ./api/CtrlEat/scripts/api/seed_acompanhamentos.sh $(api_port)
-
-seed-bebidas:
-	sh ./api/CtrlEat/scripts/api/seed_bebidas.sh $(api_port)
-
-seed-sobremesas:
-	sh ./api/CtrlEat/scripts/api/seed_sobremesas.sh $(api_port)
+seed-kube:
+	sh ./api/CtrlEat/scripts/api/seed_lanches.sh 30002 && \
+	sh ./api/CtrlEat/scripts/api/seed_acompanhamentos.sh 30002 && \
+	sh ./api/CtrlEat/scripts/api/seed_bebidas.sh 30002 && \
+	sh ./api/CtrlEat/scripts/api/seed_sobremesas.sh 30002
 
 docker-build-api:
 	cd api/CtrlEat && docker build -t jsfelipearaujo/ctrl-eat-api:v$(api_image_version) .
@@ -74,15 +68,9 @@ docker-build-db:
 docker-push-db:
 	docker push jsfelipearaujo/ctrl-eat-db:v$(db_image_version)
 
-kube-metrics:
-	kubectl apply -f ./infra/metrics.yaml
-
-kube-up: kube-db-up kube-api-up
-
-kube-down: kube-db-down kube-api-down
-
 kube-db-up:
 	kubectl apply \
+		-f ./infra/metrics.yaml \
 		-f ./infra/db-pv.yaml \
 		-f ./infra/db-pvc.yaml \
 		-f ./infra/db-configmap.yaml \
@@ -92,6 +80,7 @@ kube-db-up:
 
 kube-db-down:
 	kubectl delete \
+		-f ./infra/metrics.yaml \
 		-f ./infra/db-pv.yaml \
 		-f ./infra/db-pvc.yaml \
 		-f ./infra/db-configmap.yaml \
