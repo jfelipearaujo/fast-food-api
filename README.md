@@ -133,6 +133,10 @@ kubectl get pods
 make seed-kube
 ```
 
+Caso queira testar a aplicação, vá para a seção [Testando a aplicação via Postman](#testando-a-aplicação-via-postman).
+
+Caso queira derrubar os containers, siga os passos abaixo:
+
 4 - Derrubando os containers da aplicação:
 ```bash
 make kube-api-down
@@ -158,7 +162,7 @@ make kube-db-down
   1. Execute a rota que está em **Pedidos > Criar um pedido para um cliente**.
   2. A collection está configurada para pegar o id do pedido criado e salvar no environment, para que possa ser utilizado nas próximas requisições.
   3. Para verificar se o pedido foi criado, execute a rota que está em **Pedidos > Visualizar um pedido**.
-  4. Uma vez que o pedido foi criado, o status do pedido é será **Created**.
+  4. Uma vez que o pedido foi criado, o status do pedido será **Created**.
 
 4 - Adicionando itens ao **Pedido**
   1. Execute a rota que está em **Pedidos > Adicionar um lanche ao pedido**.
@@ -166,7 +170,7 @@ make kube-db-down
   3. Execute a rota que está em **Pedidos > Adicionar uma bebida ao pedido**.
   4. Execute a rota que está em **Pedidos > Adicionar uma sobremesa ao pedido**.
   5. Para verificar se os itens foram adicionados ao pedido, execute a rota que está em **Pedidos > Visualizar um pedido**.
-  6. ATENÇÃO: Os pedidos exibidos nessa rota devem estar nos seguintes status **Received**, **OnGoing** ou **Done**. Os pedidos **Created** estão aguardando o pagamento e os pedidos **Completed** já foram retirados pelo cliente.
+  6. ATENÇÃO: Os pedidos exibidos na rota **Pedidos > Visualizar um pedido** estarão nos seguintes status **Received**, **OnGoing** ou **Done**. Os pedidos **Created** estão aguardando o pagamento e os pedidos **Completed** já foram retirados pelo cliente.
 
 5 - Realizando o checkout do **Pedido**
   1. Execute a rota que está em **Pedidos > Realizar o checkout do pedido**.
@@ -175,19 +179,23 @@ make kube-db-down
 6 - Simulando o hook de **Pagamento** do **Pedido**
   1. Execute a rota que está em **Pedidos > Simular o hook de pagamento** para aprovar o pagamento.
   2. Para verificar se o pagamento foi realizado, execute a rota que está em **Pedidos > Visualizar um pedido**.
-  3. Uma vez que o pagamento foi realizado, o pedido é disponibilizado para a cozinha, e o status do pedido é alterado para **Received**.
+  3. Uma vez que o pagamento foi realizado, o pedido é disponibilizado para a cozinha, e o status do pedido será alterado para **Received**.
 
-7 - Iniciando um pedido na **Cozinha**
+7 - Visualizando os pedidos prontos para serem iniciados na **Cozinha**
+  1. Execute a rota que está em **Pedidos > Visualizar os pedidos pagos e não iniciados**.
+  2. Será retornado de forma ordenada, os pedidos no status buscado, no caso **Received**.
+
+8 - Iniciando um pedido na **Cozinha**
   1. Execute a rota que está em **Pedidos > Iniciar preparo do pedido**.
   2. Para verificar se o pedido foi iniciado na cozinha, execute a rota que está em **Pedidos > Visualizar um pedido**.
   3. Uma vez que o pedido foi iniciado na cozinha, o status do pedido é alterado para **OnGoing**.
 
-8 - Pronto para retirar um pedido na **Cozinha**
+9 - Pronto para retirar um pedido na **Cozinha**
   1. Execute a rota que está em **Pedidos > Pedido pronto para retirada**.
   2. Para verificar se o pedido está pronto para retirar, execute a rota que está em **Pedidos > Visualizar um pedido**.
   3. Uma vez que o pedido está pronto para retirar, o status do pedido é alterado para **Done**.
 
-9 - Pedido entregue ao **Cliente**
+10 - Pedido entregue ao **Cliente**
   1. Execute a rota que está em **Pedidos > Pedido entregue ao cliente**.
   2. Para verificar se o pedido foi entregue ao cliente, execute a rota que está em **Pedidos > Visualizar um pedido**.
   3. Uma vez que o pedido foi entregue ao cliente, o status do pedido é alterado para **Completed**.
