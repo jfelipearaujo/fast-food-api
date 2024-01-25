@@ -115,7 +115,7 @@ make kube-db-up
 
 Aguarde os containers do banco de dados subirem e execute o comando abaixo para verificar se os pods estão no estado **Running**:
 ```bash
-kubectl get pods
+kubectl get pods --watch
 ```
 
 2 - Inicialize os containers da aplicação:
@@ -125,7 +125,7 @@ make kube-api-up
 
 Aguarde os containers da aplicação subirem e execute o comando abaixo para verificar se os pods estão no estado **Running**:
 ```bash
-kubectl get pods
+kubectl get pods --watch
 ```
 
 3 - Realize o seed dos dados:

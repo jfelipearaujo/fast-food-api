@@ -16,7 +16,7 @@
 	kube-db-down \
 
 # variables
-api_image_version=1.6
+api_image_version=1.8
 db_image_version=1.2
 
 test:
