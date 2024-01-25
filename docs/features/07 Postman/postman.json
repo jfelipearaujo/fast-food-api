@@ -138,6 +138,108 @@
 						"description": "Retorna todos os clientes cadastrados no sistema."
 					},
 					"response": []
+				},
+				{
+					"name": "Obter um cliente pelo CPF (ou Id)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var host = pm.environment.get(\"host\")\r",
+									"\r",
+									"var getClientsRequest = {\r",
+									"    url: `${host}/api/v1/clients`,\r",
+									"    method: \"GET\"\r",
+									"};\r",
+									"\r",
+									"var createClientRequest = {\r",
+									"    url: `${host}/api/v1/clients`,\r",
+									"    method: \"POST\",\r",
+									"    header: \"Content-Type:application/json\",\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\r",
+									"            \"firstName\": \"Matheus Isaac\",\r",
+									"            \"lastName\": \"Márcio Moraes\",\r",
+									"            \"email\": \"matheus_moraes@lencise.com\",\r",
+									"            \"documentId\": \"60800326350\"\r",
+									"        })\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"var document_id = pm.environment.get(\"document_id\");\r",
+									"\r",
+									"if (document_id == \"abc\" || document_id == null) {\r",
+									"    pm.sendRequest(getClientsRequest, function (err, res) {\r",
+									"        if(err) {\r",
+									"            console.log(err);\r",
+									"        } else {\r",
+									"            var clients = res.json();\r",
+									"\r",
+									"            if(clients.length === 0) {                \r",
+									"                pm.sendRequest(createClientRequest, function(err, res) {\r",
+									"                    if (err) {\r",
+									"                        console.log(err)\r",
+									"                    } else {\r",
+									"                        var status = res.code;\r",
+									"\r",
+									"                        if (status === 201) {\r",
+									"                            var jsonData = res.json();\r",
+									"                            pm.environment.set(\"document_id\", jsonData.documentId);\r",
+									"                        }\r",
+									"                    }\r",
+									"                });\r",
+									"            } else {\r",
+									"                var document_id = null;\r",
+									"\r",
+									"                while(document_id == null) {\r",
+									"                    var random_index = Math.floor(Math.random() * clients.length);\r",
+									"                    document_id = clients[random_index].documentId;\r",
+									"                }\r",
+									"\r",
+									"                pm.environment.set(\"document_id\", document_id);\r",
+									"            }\r",
+									"        }\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/clients/:documentId",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clients",
+								":documentId"
+							],
+							"variable": [
+								{
+									"key": "documentId",
+									"value": "{{document_id}}"
+								}
+							]
+						},
+						"description": "Retorna um cliente através do seu CPF. Também é possível utilizar a mesma rota para buscar um cliente através de seu identificador único."
+					},
+					"response": []
 				}
 			],
 			"description": "Rotas relacionadas ao gerenciamento dos clientes."
