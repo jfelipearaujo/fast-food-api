@@ -1,74 +1,93 @@
-from diagrams import Cluster, Diagram
-from diagrams.k8s.compute import Deploy as Deployment, Pod, ReplicaSet
+from diagrams import Cluster, Diagram, Edge
+from diagrams.k8s.compute import Deploy as Deployment, Pod
 from diagrams.k8s.network import Service
 from diagrams.k8s.storage import PV, PVC, StorageClass
 from diagrams.k8s.clusterconfig import HPA
 from diagrams.k8s.podconfig import ConfigMap, Secret
 from diagrams.k8s.infra import Node
 
-graph_attr = {
+diagram_attr = {
     "fontsize": "25",
-    "bgcolor": "white"
+    "bgcolor": "white",
+    "pad": "0.5",
+    "splines": "spline",
 }
 
-with Diagram("Cloud Kubernetes Local", show=False, graph_attr=graph_attr):
-    node = Node("docker-desktop")        
+node_attr = {
+    "fontsize": "20",
+    "size": "5",
+    "bgcolor": "white",
+    "margin": "0.5",
+    "height": "2.1",
+    "pad": "1"
+}
 
-    with Cluster("API"):
-        service = Service("ctrl-eat-api")
-        pv = PV("pv")
-        sc = StorageClass("sc")
+cluster_attr = {
+    "fontsize": "20",
+    "size": "5",
+    "margin": "8",
+    "pad": "2"
+}
 
-        node >> service
+item_attr = {
+    "fontsize": "20",
+    "height": "2.1"
+}
 
-        pods = []
+with Diagram("Cloud Kubernetes Local", show=False, graph_attr=diagram_attr):
+    node = Node("docker-desktop", **node_attr)        
 
-        with Cluster("Pods (up to 5 pods)"):
-            for _ in range(1):
-                pod = Pod("api")
-                pvc = PVC("pvc")
-                pods.append(service >> pod >> pvc)
-        
-        pods << pv << sc
-
-        deployment = Deployment("ctrl-eat-api")
-        config = ConfigMap("config")
-        secret = Secret("secret")
-        hpa = HPA("hpa")
-        rs = ReplicaSet("rs")
-
-        deployment << config
-        deployment << secret
-
-        rs << deployment << hpa
-
-        pods >> rs
-
-    with Cluster("Database"):
-        service = Service("ctrl-eat-db")
-        pv = PV("pv")
-        sc = StorageClass("sc")
+    with Cluster("API", graph_attr=cluster_attr):
+        service = Service("ctrl-eat-api", **item_attr)
+        pv = PV("pv", **item_attr)
+        sc = StorageClass("sc", **item_attr)
 
         node >> service
 
         pods = []
 
-        with Cluster("Pods (up to 1 pods)"):
+        with Cluster("Pods (up to 5 pods)", graph_attr=cluster_attr):
             for _ in range(1):
-                pod = Pod("db")
-                pvc = PVC("pvc")
+                pod = Pod("api", **item_attr)
+                pvc = PVC("pvc", **item_attr)
                 pods.append(service >> pod >> pvc)
         
         pods << pv << sc
 
-        deployment = Deployment("ctrl-eat-db")
-        config = ConfigMap("config")
-        secret = Secret("secret")
-        rs = ReplicaSet("rs")
+        deployment = Deployment("ctrl-eat-api", **item_attr)
+        config = ConfigMap("config", **item_attr)
+        secret = Secret("secret", **item_attr)
+        hpa = HPA("hpa", **item_attr)
 
         deployment << config
         deployment << secret
 
-        rs << deployment
+        deployment << hpa
 
-        pods >> rs
+        pods >> deployment
+
+    with Cluster("Database", graph_attr=cluster_attr):
+        service = Service("ctrl-eat-db", **item_attr)
+        pv = PV("pv", **item_attr)
+        sc = StorageClass("sc", **item_attr)
+
+        node >> service
+
+        pods = []
+
+        with Cluster("Pods (up to 1 pods)", graph_attr=cluster_attr):
+            for _ in range(1):
+                pod = Pod("db", **item_attr)
+                pvc = PVC("pvc", **item_attr)
+                pods.append(service >> pod >> pvc)
+        
+        pods << pv << sc
+
+        deployment = Deployment("ctrl-eat-db", **item_attr)
+        config = ConfigMap("config", **item_attr)
+        secret = Secret("secret", **item_attr)
+
+        deployment << config
+        deployment << secret
+
+        pods >> Edge(label="") << deployment

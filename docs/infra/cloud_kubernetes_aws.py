@@ -8,36 +8,59 @@ from diagrams.aws.network import ElbApplicationLoadBalancer as ALB, APIGateway
 from diagrams.aws.security import WAF
 from diagrams.aws.general import Users
 
-graph_attr = {
+diagram_attr = {
     "fontsize": "25",
-    "bgcolor": "white"
+    "bgcolor": "white",
+    "pad": "0.5",
+    "splines": "spline",
 }
 
-with Diagram("Cloud Kubernetes AWS", show=False, graph_attr=graph_attr):    
-    users = Users("Internet")
+node_attr = {
+    "fontsize": "20",
+    "size": "5",
+    "bgcolor": "white",
+    "margin": "0.5",
+    "height": "2.1",
+    "pad": "1"
+}
 
-    with Cluster("AWS"):
-        waf = WAF("WAF")
+cluster_attr = {
+    "fontsize": "20",
+    "size": "5",
+    "margin": "8",
+    "pad": "2"
+}
+
+item_attr = {
+    "fontsize": "20",
+    "height": "2.2"
+}
+
+with Diagram("Cloud Kubernetes AWS", show=False, graph_attr=diagram_attr):    
+    users = Users("Users", **item_attr)
+
+    with Cluster("AWS", graph_attr=cluster_attr):
+        waf = WAF("WAF", **item_attr)
 
         users >> waf
 
-        with Cluster("VPC"):
-            with Cluster("Public Subnet"):
-                api_gateway = APIGateway("API Gateway")
+        with Cluster("VPC", graph_attr=cluster_attr):
+            with Cluster("Public Subnet", graph_attr=cluster_attr):
+                api_gateway = APIGateway("API Gateway", **item_attr)
                 waf >> api_gateway
 
-            with Cluster("Private Subnet"):
-                alb = ALB("ALB")
+            with Cluster("Private Subnet", graph_attr=cluster_attr):
+                alb = ALB("ALB", **item_attr)
                 api_gateway >> alb
 
                 s3 = S3("Bucket /images")
-                secrets_manager = SecretsManager("Secrets")
-                parameter_store = ParameterStore("Parameters")
-                rds = RDS("RDS")
+                secrets_manager = SecretsManager("Secrets", **item_attr)
+                parameter_store = ParameterStore("Parameters", **item_attr)
+                rds = RDS("RDS", **item_attr)
 
-                service = EKS("k8s Service")
+                service = EKS("k8s Service", **item_attr)
 
-                with Cluster("EKS Cluster"):
+                with Cluster("EKS Cluster", graph_attr=cluster_attr):
                     alb >> service
 
                     pods = []
@@ -45,7 +68,7 @@ with Diagram("Cloud Kubernetes AWS", show=False, graph_attr=graph_attr):
                     labels = ["...", "Pod 1", "Pod 5"]
 
                     for i in range(0, 3):
-                        pod = ECS(labels[i])
+                        pod = ECS(labels[i], **item_attr)
                         pod >> s3
                         pod >> secrets_manager
                         pod >> parameter_store
