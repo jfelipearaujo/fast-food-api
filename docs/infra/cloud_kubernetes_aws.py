@@ -1,5 +1,5 @@
 from diagrams import Cluster, Diagram
-from diagrams.aws.compute import ECS, EKS
+from diagrams.aws.compute import EC2, EKS
 from diagrams.aws.storage import S3
 from diagrams.aws.security import SecretsManager
 from diagrams.aws.management import SystemsManagerParameterStore as ParameterStore
@@ -53,7 +53,7 @@ with Diagram("Cloud Kubernetes AWS", show=False, graph_attr=diagram_attr):
                 alb = ALB("ALB", **item_attr)
                 api_gateway >> alb
 
-                s3 = S3("Bucket /images")
+                s3 = S3("Bucket /images", **item_attr)
                 secrets_manager = SecretsManager("Secrets", **item_attr)
                 parameter_store = ParameterStore("Parameters", **item_attr)
                 rds = RDS("RDS", **item_attr)
@@ -68,7 +68,7 @@ with Diagram("Cloud Kubernetes AWS", show=False, graph_attr=diagram_attr):
                     labels = ["...", "Pod 1", "Pod 5"]
 
                     for i in range(0, 3):
-                        pod = ECS(labels[i], **item_attr)
+                        pod = EC2(labels[i], **item_attr)
                         pod >> s3
                         pod >> secrets_manager
                         pod >> parameter_store
