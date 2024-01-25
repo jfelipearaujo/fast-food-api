@@ -5,6 +5,16 @@ namespace Contract.Tests.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static void RemoveService<TService>(this IServiceCollection services) where TService : class
+    {
+        var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(TService));
+
+        if (descriptor is not null)
+        {
+            services.Remove(descriptor);
+        }
+    }
+
     public static void RemoveDbContext<T>(this IServiceCollection services) where T : DbContext
     {
         var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<T>));

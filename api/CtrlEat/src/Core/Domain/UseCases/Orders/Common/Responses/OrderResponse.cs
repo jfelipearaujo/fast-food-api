@@ -11,6 +11,8 @@ public class OrderResponse
 
     public OrderStatus OrderStatus { get; set; }
 
+    public string TotalPrice { get; set; }
+
     public IEnumerable<PaymentResponse> Payments { get; set; }
 
     public List<OrderItemResponse> Items { get; set; }
@@ -24,6 +26,7 @@ public class OrderResponse
             Id = order.Id.Value,
             TrackId = order.TrackId.Value,
             OrderStatus = order.Status,
+            TotalPrice = order.GetTotalPrice(),
             Payments = PaymentResponse.MapFromDomain(order.Payments),
             Items = OrderItemResponse.MapFromDomain(order.Items),
         };
@@ -33,9 +36,9 @@ public class OrderResponse
     {
         var response = new List<OrderResponse>();
 
-        foreach (var item in orders)
+        foreach (var order in orders)
         {
-            response.Add(MapFromDomain(item));
+            response.Add(MapFromDomain(order));
         }
 
         return response;

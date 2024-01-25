@@ -8,7 +8,7 @@ using Utils.Tests.Builders.Api.ClientEndpoint.Requests;
 using Utils.Tests.Builders.Api.ClientEndpoint.Responses;
 
 using Web.Api.Endpoints;
-using Web.Api.Endpoints.Clients.Responses;
+using Web.Api.Endpoints.Clients;
 using Web.Api.Markers;
 
 namespace Contract.Tests.Endpoints.ClientEndpoints;

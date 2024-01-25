@@ -13,11 +13,13 @@
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Http" Version="7.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.14" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="MinimalHelpers.OpenApi" Version="1.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -28,10 +30,6 @@
     <ProjectReference Include="..\..\..\Core\Application\Application.csproj" />
     <ProjectReference Include="..\..\Driven\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\..\Driven\Persistence\Persistence.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Endpoints\ProductCategories\Requests\Mapping\" />
   </ItemGroup>
 
   <ItemGroup>

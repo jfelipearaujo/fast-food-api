@@ -15,20 +15,17 @@
 - [Mapa de Contexto](./docs/features/01%20Mapa%20de%20Contexto/mapa_contexto.md)
 - [Funcionalidades](./docs/features/features.md)
 - [Diagrama de Relacionamento de Entidades](./docs/database/database.md)
+- [Diagrama de Arquitetura](./docs/features/08%20Arquitetura/architecture.md)
 
-## Conatineres
+## Containers
 
 Este projeto utiliza o Docker para executar os serviços necessários para a aplicação funcionar corretamente. Para facilitar a execução, foi criado um arquivo `docker-compose.yml` que contém todos os serviços necessários.
 
-Ao executar o comando para inicializar os containeres, o Docker irá baixar as imagens necessárias e executar os seguintes containers:
+Ao executar o comando para inicializar os containers, o Docker irá baixar as imagens necessárias e executar os seguintes containers:
 
 - PostgreSQL (16.0)
 - pgAdmin (7.8)
 - Web API (.NET 7)
-
-As URLs necessárias para acessar os serviços são:
-- pgAdmin: [http://localhost:5050](http://localhost:5050) (user: `admin@admin`, password: `admin`)
-- Web API: [http://localhost:5001](http://localhost:5001/swagger/index.html)
 
 ## Dependências
 
@@ -37,10 +34,6 @@ Para executar esta aplicação são necessárias as seguintes dependências:
 - [Docker](https://docs.docker.com/engine/install/)
 - [Makefile](https://linuxhint.com/install-make-ubuntu/)
 - [JQ](https://jqlang.github.io/jq/)
-
-**ATENÇÃO:**
-
-Caso queira executar os testes automatizados ou a própria aplicação, é necessário ter o .NET 7 instalado. Para instalar visite este [link](https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu) e siga as instruções para instalar o dotnet.
 
 ### WSL2
 
@@ -107,65 +100,102 @@ sudo apt install jq
 
 Uma vez com todas as dependências instaladas, podemos prosseguir!
 
-## Inicializando e executando a aplicação
+## Manifestos Kubernetes
 
-1 - Inicialize os containers:
+Este projeto utiliza o Kubernetes para executar os serviços necessários para a aplicação funcionar corretamente. Para facilitar a execução, foi criado uma pasta `infra` que contém todos os manifestos necessários.
+
+Clique [aqui](./infra/kubernetes.md) para mais informações sobre o Kubernetes deste projeto.
+
+## Inicializando a aplicação via Kubernetes
+
+1 - Inicialize os containers do banco de dados:
 ```bash
-make up
+make kube-db-up
 ```
 
-2 - Realize o seed dos dados:
+Aguarde os containers do banco de dados subirem e execute o comando abaixo para verificar se os pods estão no estado **Running**:
 ```bash
-make seed-all
+kubectl get pods --watch
 ```
 
-3 - Acesse a aplicação em [http://localhost:5001/swagger/index.html](http://localhost:5001/swagger/index.html)
-
-## Executando as APIs via Postman
-
-Caso queira executar as requisições através do Postman, basta importar o arquivo [postman.json](./docs/features/07%20Postman/postman.json).
-
-## Executando as APIs via REST Client
-
-É possível utilizar e testar as rotas através do Swagger, porém para facilitar, segue abaixo alguns exemplos de uso das APIs através do VS Code + REST Cliente.
-
-Para visualizar os exemplos de uso, instale a extensão [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VS Code e abra o arquivo [api.http](./api/CtrlEat/src/Adapters/Driving/Web.Api/api.http) para executar as requisições.
-
-Clique na label `Send Request` para executar a chamada da rota:
-
-![rest_client_example](./docs/assets/rest_client_example.png)
-
-## Testes automatizados
-
-Este projeto consta com uma gama de testes automatizados. Para executá-los é essencial ter o Docker rodando pois é utilizado a estratégia dos [Test Containers](https://dotnet.testcontainers.org/) para executar as integrações com o banco de dados PostgreSQL.
-
-Para executar os testes via através da CLI, execute o seguinte comando:
+2 - Inicialize os containers da aplicação:
 ```bash
-make test
+make kube-api-up
 ```
 
-Ou através do Visual Studio:
-
-![visual_studio_test](./docs/assets/visual_studio_test.png)
-
-## Cobertura de código
-
-Este projeto utiliza a ferramenta [ReportGenerator](https://reportgenerator.io/) para visualizar a cobertura do código.
-
-É necessário intalar o ReportGenerator globalmente:
+Aguarde os containers da aplicação subirem e execute o comando abaixo para verificar se os pods estão no estado **Running**:
 ```bash
-dotnet tool install --global dotnet-reportgenerator-globaltool
+kubectl get pods --watch
 ```
 
-Para gerar o relatório de cobertura, execute o seguinte comando:
+3 - Realize o seed dos dados:
 ```bash
-make coverage
+make seed-kube
 ```
 
-O relatório será gerado na pasta `./coveragereport` e pode ser visualizado abrindo o arquivo `./coveragereport/index.html` em seu navegador.
+Caso queira testar a aplicação, vá para a seção [Testando a aplicação via Postman](#testando-a-aplicação-via-postman).
 
-### Sumário de cobertura
-Para visualizar o sumário completo de cobertura, acesse este [arquivo](./coveragereport/SummaryGithub.md).
+Caso queira derrubar os containers, siga os passos abaixo:
 
-### Histórico de cobertura
-![coverage_hist_report](./coveragereport/CoverageHistory.svg)
+4 - Derrubando os containers da aplicação:
+```bash
+make kube-api-down
+```
+
+5 - Derrubando os containers do banco de dados:
+```bash
+make kube-db-down
+```
+
+## Testando a aplicação via Postman
+
+1 - Executando as APIs via Postman
+  1. Importar o arquivo da [collection](./docs/features/07%20Postman/postman.json).
+  2. Importar o arquivo do environment [Kubernetes](./docs/features/07%20Postman/local-kubernetes.postman_environment.json).
+
+2 - Criando um **Cliente**
+  1. Com a collection e environment importados, execute a rota que está em **Clientes > Cadastrar Cliente**.
+  2. A collection está configurada para pegar o id do cliente criado e salvar no environment, para que possa ser utilizado nas próximas requisições.
+  3. Para verificar se o cliente foi criado, execute a rota que está em **Clientes > Obter todos os clientes**.
+
+3 - Criando um **Pedido**
+  1. Execute a rota que está em **Pedidos > Criar um pedido para um cliente**.
+  2. A collection está configurada para pegar o id do pedido criado e salvar no environment, para que possa ser utilizado nas próximas requisições.
+  3. Para verificar se o pedido foi criado, execute a rota que está em **Pedidos > Visualizar um pedido**.
+  4. Uma vez que o pedido foi criado, o status do pedido será **Created**.
+
+4 - Adicionando itens ao **Pedido**
+  1. Execute a rota que está em **Pedidos > Adicionar um lanche ao pedido**.
+  2. Execute a rota que está em **Pedidos > Adicionar um acompanhamento ao pedido**.
+  3. Execute a rota que está em **Pedidos > Adicionar uma bebida ao pedido**.
+  4. Execute a rota que está em **Pedidos > Adicionar uma sobremesa ao pedido**.
+  5. Para verificar se os itens foram adicionados ao pedido, execute a rota que está em **Pedidos > Visualizar um pedido**.
+  6. ATENÇÃO: Os pedidos exibidos na rota **Pedidos > Visualizar um pedido** estarão nos seguintes status **Received**, **OnGoing** ou **Done**. Os pedidos **Created** estão aguardando o pagamento e os pedidos **Completed** já foram retirados pelo cliente.
+
+5 - Realizando o checkout do **Pedido**
+  1. Execute a rota que está em **Pedidos > Realizar o checkout do pedido**.
+  2. Para verificar se o checkout foi realizado, execute a rota que está em **Pedidos > Visualizar um pedido**.
+
+6 - Simulando o hook de **Pagamento** do **Pedido**
+  1. Execute a rota que está em **Pedidos > Simular o hook de pagamento** para aprovar o pagamento.
+  2. Para verificar se o pagamento foi realizado, execute a rota que está em **Pedidos > Visualizar um pedido**.
+  3. Uma vez que o pagamento foi realizado, o pedido é disponibilizado para a cozinha, e o status do pedido será alterado para **Received**.
+
+7 - Visualizando os pedidos prontos para serem iniciados na **Cozinha**
+  1. Execute a rota que está em **Pedidos > Visualizar os pedidos pagos e não iniciados**.
+  2. Será retornado de forma ordenada, os pedidos no status buscado, no caso **Received**.
+
+8 - Iniciando um pedido na **Cozinha**
+  1. Execute a rota que está em **Pedidos > Iniciar preparo do pedido**.
+  2. Para verificar se o pedido foi iniciado na cozinha, execute a rota que está em **Pedidos > Visualizar um pedido**.
+  3. Uma vez que o pedido foi iniciado na cozinha, o status do pedido é alterado para **OnGoing**.
+
+9 - Pronto para retirar um pedido na **Cozinha**
+  1. Execute a rota que está em **Pedidos > Pedido pronto para retirada**.
+  2. Para verificar se o pedido está pronto para retirar, execute a rota que está em **Pedidos > Visualizar um pedido**.
+  3. Uma vez que o pedido está pronto para retirar, o status do pedido é alterado para **Done**.
+
+10 - Pedido entregue ao **Cliente**
+  1. Execute a rota que está em **Pedidos > Pedido entregue ao cliente**.
+  2. Para verificar se o pedido foi entregue ao cliente, execute a rota que está em **Pedidos > Visualizar um pedido**.
+  3. Uma vez que o pedido foi entregue ao cliente, o status do pedido é alterado para **Completed**.

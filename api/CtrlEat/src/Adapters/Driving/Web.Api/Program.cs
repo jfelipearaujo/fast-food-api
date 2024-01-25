@@ -1,7 +1,10 @@
 using Application;
 
+using HealthChecks.UI.Client;
+
 using Infrastructure;
 
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -17,9 +20,23 @@ using Web.Api.Endpoints.Clients;
 using Web.Api.Endpoints.Orders;
 using Web.Api.Endpoints.ProductCategories;
 using Web.Api.Endpoints.Products;
+using Web.Api.Extensions;
+using Web.Api.Middlewares;
 using Web.Api.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services
+    .AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>("database");
+
+builder.Services.AddLogging(options =>
+{
+    options.ClearProviders();
+    options.AddConsole();
+});
+
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
@@ -51,11 +68,16 @@ builder.Services.AddSwaggerGen(options =>
     options.AddMissingSchemas();
 });
 
-builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddPersistence();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
 var app = builder.Build();
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.MapProductCategoryEndpoints();
 app.MapProductEndpoints();
@@ -64,6 +86,8 @@ app.MapOrderEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
+    app.ApplyMigrations();
+
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
@@ -84,6 +108,8 @@ if (app.Environment.IsDevelopment())
         c.SpecUrl = "/swagger/v1/swagger.json";
     });
 }
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.Run();
 

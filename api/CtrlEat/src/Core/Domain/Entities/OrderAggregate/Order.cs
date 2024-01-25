@@ -8,6 +8,7 @@ using Domain.Entities.OrderAggregate.ValueObjects;
 using FluentResults;
 
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace Domain.Entities.OrderAggregate;
 
@@ -74,6 +75,9 @@ public sealed class Order : AggregateRoot<OrderId>
             case (OrderStatus.Created, OrderStatus.Received):
                 Status = OrderStatus.Received;
                 break;
+            case (OrderStatus.Created, OrderStatus.Cancelled):
+                Status = OrderStatus.Cancelled;
+                break;
             case (OrderStatus.Received, OrderStatus.OnGoing):
                 Status = OrderStatus.OnGoing;
                 break;
@@ -90,6 +94,21 @@ public sealed class Order : AggregateRoot<OrderId>
         StatusUpdatedAt = DateTime.UtcNow;
 
         return Result.Ok();
+    }
+
+    public Payment? GetWaitingApprovalPayment()
+    {
+        return Payments.FirstOrDefault(p => p.Status == PaymentStatus.WaitingApproval);
+    }
+
+    public string GetTotalPrice()
+    {
+        var ptBR = CultureInfo.CreateSpecificCulture("pt-BR");
+
+        if (Items.Count == 0)
+            return 0.ToString("C", ptBR);
+
+        return Items.Sum(i => i.Price.Amount * i.Quantity).ToString("C", ptBR);
     }
 
     public static Result<Order> Create(

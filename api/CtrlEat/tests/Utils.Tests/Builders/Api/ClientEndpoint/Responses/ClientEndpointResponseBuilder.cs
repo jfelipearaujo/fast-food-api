@@ -1,7 +1,5 @@
 ﻿using Domain.Entities.ClientAggregate.Enums;
-
-using Web.Api.Endpoints.Clients.Requests;
-using Web.Api.Endpoints.Clients.Responses;
+using Web.Api.Endpoints.Clients;
 
 namespace Utils.Tests.Builders.Api.ClientEndpoint.Responses;
 

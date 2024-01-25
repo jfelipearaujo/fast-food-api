@@ -1,5 +1,4 @@
-﻿using Web.Api.Endpoints.ProductCategories.Requests;
-using Web.Api.Endpoints.ProductCategories.Responses;
+﻿using Web.Api.Endpoints.ProductCategories;
 
 namespace Utils.Tests.Builders.Api.ProductCategoryEndpoint.Responses;
 

@@ -59,7 +59,7 @@ public sealed class OrderItem : AggregateRoot<OrderItemId>
     {
         var currencyCultureName = Price.Currency == Money.BRL ? "pt-BR" : "en-US";
 
-        return (Quantity * Price.Amount).ToString("C", CultureInfo.CreateSpecificCulture(currencyCultureName));
+        return Price.Amount.ToString("C", CultureInfo.CreateSpecificCulture(currencyCultureName));
     }
 
     public static Result<OrderItem> Create(

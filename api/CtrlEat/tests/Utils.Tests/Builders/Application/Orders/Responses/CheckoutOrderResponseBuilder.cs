@@ -1,10 +1,14 @@
 ﻿using Domain.Entities.OrderAggregate.Enums;
+using Domain.Entities.OrderAggregate.ValueObjects;
 using Domain.UseCases.Orders.CheckoutOrder.Responses;
+
+using Utils.Tests.Builders.Domain.ValueObjects;
 
 namespace Utils.Tests.Builders.Application.Orders.Responses;
 
 public class CheckoutOrderResponseBuilder
 {
+    private TrackId trackId;
     private PaymentStatus status;
 
     public CheckoutOrderResponseBuilder()
@@ -14,6 +18,7 @@ public class CheckoutOrderResponseBuilder
 
     public CheckoutOrderResponseBuilder Reset()
     {
+        trackId = default;
         status = default;
 
         return this;
@@ -21,7 +26,14 @@ public class CheckoutOrderResponseBuilder
 
     public CheckoutOrderResponseBuilder WithSample()
     {
+        trackId = new TrackIdBuilder().WithSample().Build();
         status = PaymentStatus.WaitingApproval;
+        return this;
+    }
+
+    public CheckoutOrderResponseBuilder WithTrackId(TrackId trackId)
+    {
+        this.trackId = trackId;
         return this;
     }
 
@@ -35,7 +47,8 @@ public class CheckoutOrderResponseBuilder
     {
         return new CheckoutOrderResponse
         {
-            Status = status
+            TrackId = trackId.Value,
+            PaymentStatus = status
         };
     }
 }

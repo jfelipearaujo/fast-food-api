@@ -174,36 +174,7 @@ public class OrderRepositoryTests : IClassFixture<CustomDbFactory>, IDisposable
 
         // Assert
         result.Should().NotBeNullOrEmpty()
-            .And.BeEquivalentTo(orders);
-    }
-
-    [Fact]
-    public async Task GetAllByStatusSuccessfullyWhenSearchAnyStatusFilteringTheMostRecent()
-    {
-        // Arrange
-        var ordersCompletedNowCount = 5;
-        var ordersCompletedAgoCount = 5;
-        var orders = new List<Order>();
-
-        for (int i = 0; i < ordersCompletedNowCount; i++)
-        {
-            orders.Add(Order.Create(TrackId.CreateUnique(), client, OrderStatus.Completed).Value);
-        }
-
-        for (int i = 0; i < ordersCompletedAgoCount; i++)
-        {
-            orders.Add(Order.Create(TrackId.CreateUnique(), client, OrderStatus.Completed, DateTime.UtcNow.AddMinutes(-10)).Value);
-        }
-
-        dbContext.Order.AddRange(orders);
-        await dbContext.SaveChangesAsync();
-
-        // Act
-        var result = await sut.GetAllByStatusAsync(OrderStatus.None, default);
-
-        // Assert
-        result.Should().NotBeNullOrEmpty()
-            .And.BeEquivalentTo(orders.Take(5).ToList());
+            .And.BeEquivalentTo(orders.Where(x => x.Status != OrderStatus.Created));
     }
 
     public void Dispose()

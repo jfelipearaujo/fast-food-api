@@ -106,4 +106,32 @@ public class OrderTests
         result.Should().BeFailure();
         result.Should().HaveReason(new OrderInvalidStatusTransitionError(currentStatus, toStatus));
     }
+
+    [Fact]
+    public void ShouldCalculateCorrectTotalAmount()
+    {
+        // Arrange
+        var trackId = TrackId.CreateUnique();
+        var client = new ClientBuilder().WithSample().Build();
+
+        var order = Order.Create(trackId, client).Value;
+
+        var orderItem = new OrderItemBuilder()
+            .WithSample()
+            .WithQuantity(4)
+            .WithProduct(new ProductBuilder()
+                .WithSample()
+                .WithPrice("BRL", 55)
+                .WithProductCategory(new ProductCategoryBuilder()
+                    .WithSample()
+                    .Build())
+                .Build())
+            .Build();
+
+        // Act
+        order.AddItem(orderItem);
+
+        // Assert
+        order.GetTotalPrice().Should().Be("R$ 220,00");
+    }
 }

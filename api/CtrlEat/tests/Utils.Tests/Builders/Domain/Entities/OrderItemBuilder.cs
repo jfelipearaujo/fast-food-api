@@ -39,6 +39,20 @@ public class OrderItemBuilder
         return this;
     }
 
+    public OrderItemBuilder WithQuantity(int quantity)
+    {
+        this.quantity = quantity;
+
+        return this;
+    }
+
+    public OrderItemBuilder WithProduct(Product product)
+    {
+        this.product = product;
+
+        return this;
+    }
+
     public OrderItem Build()
     {
         return OrderItem.Create(quantity, observation, product, id).Value;

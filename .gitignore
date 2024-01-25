@@ -404,3 +404,6 @@ FodyWeavers.xsd
 coveragereport/*
 !coveragereport/SummaryGithub.md
 !coveragereport/CoverageHistory.svg
+
+# Python
+.venv

@@ -7,8 +7,8 @@ using Utils.Tests.Builders.Api.ProductEndpoint.Requests;
 using Utils.Tests.Builders.Api.ProductEndpoint.Responses;
 
 using Web.Api.Endpoints;
-using Web.Api.Endpoints.ProductCategories.Responses;
-using Web.Api.Endpoints.Products.Responses;
+using Web.Api.Endpoints.ProductCategories;
+using Web.Api.Endpoints.Products;
 using Web.Api.Markers;
 
 namespace Contract.Tests.Endpoints.ProductEndpoints;
