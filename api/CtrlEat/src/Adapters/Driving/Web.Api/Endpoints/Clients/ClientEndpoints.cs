@@ -14,10 +14,11 @@ public static class ClientEndpoints
             .HasApiVersion(ApiEndpoints.Clients.V1.Version)
             .WithOpenApi();
 
-        group.MapGet("{id}", GetClientById.HandleAsync)
+        group.MapGet("{id}", GetClientByIdOrDocumentId.HandleAsync)
             .WithName(ApiEndpoints.Clients.V1.GetById)
-            .WithDescription("Searches and returns a client's data based on their identifier")
+            .WithDescription("Searches and returns a client's data based on their identifier or document id")
             .Produces<ClientEndpointResponse>(StatusCodes.Status200OK)
+            .Produces<ApiError>(StatusCodes.Status400BadRequest)
             .Produces<ApiError>(StatusCodes.Status404NotFound);
 
         group.MapGet("/", GetAllClients.HandleAsync)
