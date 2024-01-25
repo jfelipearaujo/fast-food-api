@@ -38,11 +38,11 @@ with Diagram("Cloud Kubernetes Local", show=False, graph_attr=diagram_attr):
     node = Node("docker-desktop", **node_attr)        
 
     with Cluster("API", graph_attr=cluster_attr):
-        service = Service("ctrl-eat-api", **item_attr)
+        api_service = Service("ctrl-eat-api", **item_attr)
         pv = PV("pv", **item_attr)
         sc = StorageClass("sc", **item_attr)
 
-        node >> service
+        node >> api_service
 
         pods = []
 
@@ -50,7 +50,7 @@ with Diagram("Cloud Kubernetes Local", show=False, graph_attr=diagram_attr):
             for _ in range(1):
                 pod = Pod("api", **item_attr)
                 pvc = PVC("pvc", **item_attr)
-                pods.append(service >> pod >> pvc)
+                pods.append(api_service >> pod >> pvc)
         
         pods << pv << sc
 
@@ -67,11 +67,13 @@ with Diagram("Cloud Kubernetes Local", show=False, graph_attr=diagram_attr):
         pods >> deployment
 
     with Cluster("Database", graph_attr=cluster_attr):
-        service = Service("ctrl-eat-db", **item_attr)
+        db_service = Service("ctrl-eat-db", **item_attr)
         pv = PV("pv", **item_attr)
         sc = StorageClass("sc", **item_attr)
 
-        node >> service
+        api_service >> Edge(label="") << db_service
+
+        node >> db_service
 
         pods = []
 
@@ -79,7 +81,7 @@ with Diagram("Cloud Kubernetes Local", show=False, graph_attr=diagram_attr):
             for _ in range(1):
                 pod = Pod("db", **item_attr)
                 pvc = PVC("pvc", **item_attr)
-                pods.append(service >> pod >> pvc)
+                pods.append(db_service >> pod >> pvc)
         
         pods << pv << sc
 
