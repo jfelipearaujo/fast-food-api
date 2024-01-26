@@ -1,5 +1,5 @@
 from diagrams import Cluster, Diagram
-from diagrams.aws.compute import EC2, EKS
+from diagrams.aws.compute import EKS, ElasticContainerServiceContainer as EC2
 from diagrams.aws.storage import S3
 from diagrams.aws.security import SecretsManager
 from diagrams.aws.management import SystemsManagerParameterStore as ParameterStore
