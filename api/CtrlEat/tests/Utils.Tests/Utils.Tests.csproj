@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Adapters\Driving\Web.Api\Web.Api.csproj" />
     <ProjectReference Include="..\..\src\Core\Domain\Domain.csproj" />
+    <ProjectReference Include="..\..\src\External\Web.Api\Web.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

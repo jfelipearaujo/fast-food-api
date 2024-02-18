@@ -13,11 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "src\Core\App
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Core\Domain\Domain.csproj", "{BAB88CDC-F970-485F-8B0A-362F25E1E726}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Adapters\Driven\Infrastructure\Infrastructure.csproj", "{08B81AF4-5071-4239-9698-8F3E1BBFCC4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Core\Infrastructure\Infrastructure.csproj", "{08B81AF4-5071-4239-9698-8F3E1BBFCC4E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Api", "src\Adapters\Driving\Web.Api\Web.Api.csproj", "{38F87FB6-5A77-4F10-B9A0-B8539E0B731B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Api", "src\External\Web.Api\Web.Api.csproj", "{38F87FB6-5A77-4F10-B9A0-B8539E0B731B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "src\Adapters\Driven\Persistence\Persistence.csproj", "{1CF874B9-4FDB-4C86-8608-5AD0E58D4754}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "src\External\Persistence\Persistence.csproj", "{1CF874B9-4FDB-4C86-8608-5AD0E58D4754}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5151E50C-A595-478F-90C1-8F619215C699}"
 	ProjectSection(SolutionItems) = preProject
