@@ -17,6 +17,8 @@ public sealed class Client : AggregateRoot<ClientId>
 
     public DocumentId DocumentId { get; private set; }
 
+    public string Password { get; set; }
+
     public DocumentType DocumentType { get; private set; }
 
     public bool IsAnonymous { get; private set; }

@@ -37,6 +37,9 @@ public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
             .HasIndex(x => x.Email)
             .IsUnique();
 
+        builder.Property(x => x.Password)
+            .IsRequired(true);
+
         builder.Property(x => x.DocumentId)
             .HasConversion(
                 documentId => documentId.Value,
