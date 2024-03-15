@@ -57,7 +57,7 @@ jobs:
 
       - name: Build image
         run: |
-          docker build -t jsfelipearaujo/ctrl-eat-api:latest -t jsfelipearaujo/ctrl-eat-api:${{ github.run_number }} .
+          docker build -t jsfelipearaujo/ctrl-eat-api:latest -t jsfelipearaujo/ctrl-eat-api:v${{ github.run_number }} .
 
       - name: Push image <latest>
         run: |
@@ -65,7 +65,7 @@ jobs:
 
       - name: Push image <run_number>
         run: |
-          docker push jsfelipearaujo/ctrl-eat-api:${{ github.run_number }}
+          docker push jsfelipearaujo/ctrl-eat-api:v${{ github.run_number }}
 
   deploy:
     name: Deploy to EKS
@@ -89,4 +89,4 @@ jobs:
 
       - name: Update the K8s deployment image
         run: |
-          kubectl set image deployment/ctrl-eat-api ctrl-eat-api=jsfelipearaujo/ctrl-eat-api:${{ github.run_number }}
+          kubectl set image deployment/ctrl-eat-api ctrl-eat-api=jsfelipearaujo/ctrl-eat-api:v${{ github.run_number }}
