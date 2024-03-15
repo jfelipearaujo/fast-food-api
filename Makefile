@@ -57,10 +57,11 @@ seed-kube:
 	sh ./api/CtrlEat/scripts/api/seed_sobremesas.sh 30002
 
 docker-build-api:
-	cd api/CtrlEat && docker build -t jsfelipearaujo/ctrl-eat-api:v$(api_image_version) .
+	cd api/CtrlEat && docker build -t jsfelipearaujo/ctrl-eat-api:latest -t jsfelipearaujo/ctrl-eat-api:$$(git rev-parse --short HEAD) .
 
 docker-push-api:
-	docker push jsfelipearaujo/ctrl-eat-api:v$(api_image_version)
+	docker push jsfelipearaujo/ctrl-eat-api:latest && \
+	docker push jsfelipearaujo/ctrl-eat-api:$$(git rev-parse --short HEAD)
 
 docker-build-db:
 	cd api/CtrlEat/scripts/database && docker build -t jsfelipearaujo/ctrl-eat-db:v$(db_image_version) .

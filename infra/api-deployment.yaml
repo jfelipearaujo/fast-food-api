@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ctrl-eat-api
+  namespace: fastfood
 spec:
   selector:
     matchLabels:
@@ -11,10 +12,11 @@ spec:
       labels:
         app: ctrl-eat-api
     spec:
+      serviceAccountName: sa-fastfood        
       containers:
         - name: ctrl-eat-api
-          image: jsfelipearaujo/ctrl-eat-api:v1.8
-          imagePullPolicy: "IfNotPresent"
+          image: jsfelipearaujo/ctrl-eat-api:latest
+          imagePullPolicy: "Always"
           ports:
             - containerPort: 80
           resources:
@@ -45,12 +47,25 @@ spec:
           envFrom:
             - configMapRef:
                 name: ctrl-eat-api-config
-            - secretRef:
-                name: ctrl-eat-api-secret
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: password
           volumeMounts:
-            - name: ctrl-eat-api-vol
-              mountPath: /app/images
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
       volumes:
-        - name: ctrl-eat-api-vol
-          persistentVolumeClaim:
-            claimName: ctrl-eat-api-pv-claim
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aws-secrets"

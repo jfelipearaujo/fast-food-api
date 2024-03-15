@@ -10,14 +10,14 @@ ENV DB_PASS=""
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["src/Adapters/Driving/Web.Api/Web.Api.csproj", "src/Adapters/Driving/Web.Api/"]
 COPY ["src/Core/Application/Application.csproj", "src/Core/Application/"]
 COPY ["src/Core/Domain/Domain.csproj", "src/Core/Domain/"]
-COPY ["src/Adapters/Driven/Infrastructure/Infrastructure.csproj", "src/Adapters/Driven/Infrastructure/"]
-COPY ["src/Adapters/Driven/Persistence/Persistence.csproj", "src/Adapters/Driven/Persistence/"]
-RUN dotnet restore "src/Adapters/Driving/Web.Api/Web.Api.csproj"
+COPY ["src/Core/Infrastructure/Infrastructure.csproj", "src/Core/Infrastructure/"]
+COPY ["src/External/Persistence/Persistence.csproj", "src/External/Persistence/"]
+COPY ["src/External/Web.Api/Web.Api.csproj", "src/External/Web.Api/"]
+RUN dotnet restore "src/External/Web.Api/Web.Api.csproj"
 COPY . .
-WORKDIR "/src/src/Adapters/Driving/Web.Api"
+WORKDIR "/src/src/External/Web.Api"
 RUN dotnet build "Web.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
