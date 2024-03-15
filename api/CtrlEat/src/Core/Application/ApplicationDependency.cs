@@ -1,4 +1,5 @@
-﻿using Application.UseCases.Clients.CreateClient;
+﻿using Application.Services.StorageService;
+using Application.UseCases.Clients.CreateClient;
 using Application.UseCases.Clients.GetAllClients;
 using Application.UseCases.Clients.GetClientByDocumentId;
 using Application.UseCases.Clients.GetClientById;
@@ -23,6 +24,7 @@ using Application.UseCases.Products.GetProductsByCategory;
 using Application.UseCases.Products.UpdateProduct;
 using Application.UseCases.Products.UploadProductImage;
 
+using Domain.Adapters.Storage;
 using Domain.UseCases.Clients.CreateClient;
 using Domain.UseCases.Clients.GetAllClients;
 using Domain.UseCases.Clients.GetClientByDocumentId;
@@ -87,6 +89,7 @@ public static class ApplicationDependency
         services.AddScoped<ICheckoutHookOrderUseCase, CheckoutHookOrderUseCase>();
 
         services.AddSingleton<IFileSystem, FileSystem>();
+        services.AddScoped<IStorageService, StorageService>();
 
         return services;
     }

@@ -3,6 +3,8 @@ using Application.UseCases.Common.Errors;
 using Application.UseCases.Products.UploadProductImage.Errors;
 
 using Domain.Adapters.Repositories;
+using Domain.Adapters.Storage;
+using Domain.Adapters.Storage.Requests;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.UploadProductImage;
 using Domain.UseCases.Products.UploadProductImage.Requests;
@@ -17,11 +19,16 @@ public class UploadProductImageUseCase : IUploadProductImageUseCase
 {
     private readonly IProductRepository repository;
     private readonly IFileSystem fileSystem;
+    private readonly IStorageService storageService;
 
-    public UploadProductImageUseCase(IProductRepository repository, IFileSystem fileSystem)
+    public UploadProductImageUseCase(
+        IProductRepository repository,
+        IFileSystem fileSystem,
+        IStorageService storageService)
     {
         this.repository = repository;
         this.fileSystem = fileSystem;
+        this.storageService = storageService;
     }
 
     public async Task<Result<string>> ExecuteAsync(
@@ -42,18 +49,19 @@ public class UploadProductImageUseCase : IUploadProductImageUseCase
             return Result.Fail(new ProductNotFoundError(request.Id));
         }
 
-        var baseDirectory = fileSystem.Directory.GetCurrentDirectory();
-        var directory = fileSystem.Path.Join(baseDirectory, "images");
+        await using var memoryStream = new MemoryStream();
+        await request.File.CopyToAsync(memoryStream, cancellationToken);
 
-        if (!fileSystem.Directory.Exists(directory))
+        var filePath = $"app/images/{product.Id.Value}{extension}";
+
+        var uploadRequest = new UploadObjectRequest
         {
-            fileSystem.Directory.CreateDirectory(directory);
-        }
+            InputStream = memoryStream,
+            Name = filePath,
+            BucketName = "jsfelipearaujo"
+        };
 
-        var filePath = fileSystem.Path.Combine(directory, $"{product.Id.Value}{extension}");
-
-        using var stream = fileSystem.File.OpenWrite(filePath);
-        await request.File.CopyToAsync(stream, cancellationToken);
+        await storageService.UploadFileAsync(uploadRequest, cancellationToken);
 
         product.Update(imageUrl: filePath);
 

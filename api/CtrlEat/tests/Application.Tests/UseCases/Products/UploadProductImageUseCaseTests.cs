@@ -4,6 +4,7 @@ using Application.UseCases.Products.UploadProductImage;
 using Application.UseCases.Products.UploadProductImage.Errors;
 
 using Domain.Adapters.Repositories;
+using Domain.Adapters.Storage;
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
 
@@ -20,13 +21,15 @@ public class UploadProductImageUseCaseTests
     private readonly UploadProductImageUseCase sut;
     private readonly IProductRepository repository;
     private readonly IFileSystem fileSystem;
+    private readonly IStorageService storageService;
 
     public UploadProductImageUseCaseTests()
     {
         repository = Substitute.For<IProductRepository>();
         fileSystem = Substitute.For<IFileSystem>();
+        storageService = Substitute.For<IStorageService>();
 
-        sut = new UploadProductImageUseCase(repository, fileSystem);
+        sut = new UploadProductImageUseCase(repository, fileSystem, storageService);
     }
 
     [Fact]
