@@ -42,9 +42,6 @@ jobs:
     needs: 
     - build-test
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./api/CtrlEat
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -71,7 +68,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./api/CtrlEat/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
