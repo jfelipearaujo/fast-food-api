@@ -42,7 +42,7 @@ gen-cloud-diagrams:
 	cd docs/infra && \
 	python3 cloud_kubernetes_local.py && \
 	python3 cloud_kubernetes_aws.py && \
-	python3 cloud_aws_database_migrations.py
+	python3 cloud_aws_authorizer.py
 
 seed-local:
 	sh ./api/CtrlEat/scripts/api/seed_lanches.sh 5001 && \
