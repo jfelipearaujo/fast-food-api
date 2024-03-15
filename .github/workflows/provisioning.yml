@@ -32,10 +32,10 @@ jobs:
         run: dotnet restore CtrlEat.sln
 
       - name: Build
-        run: dotnet build CtrlEat.sln --configuration Release
+        run: dotnet build CtrlEat.sln --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test CtrlEat.sln --no-build --verbosity normal
+        run: dotnet test CtrlEat.sln --configuration Release --no-build
   
   image:
     name: Build & Push Docker Images
