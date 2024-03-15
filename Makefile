@@ -15,10 +15,6 @@
 	kube-db-up \
 	kube-db-down \
 
-# variables
-api_image_version=1.8
-db_image_version=1.2
-
 test:
 	dotnet test ./api/CtrlEat/CtrlEat.sln --collect:"XPlat Code Coverage;Format=json,lcov,cobertura"
 
@@ -63,51 +59,25 @@ docker-push-api:
 	docker push jsfelipearaujo/ctrl-eat-api:latest && \
 	docker push jsfelipearaujo/ctrl-eat-api:$$(git rev-parse --short HEAD)
 
-docker-build-db:
-	cd api/CtrlEat/scripts/database && docker build -t jsfelipearaujo/ctrl-eat-db:v$(db_image_version) .
-
-docker-push-db:
-	docker push jsfelipearaujo/ctrl-eat-db:v$(db_image_version)
-
-kube-db-up:
-	kubectl apply \
-		-f ./infra/metrics.yaml \
-		-f ./infra/db-pv.yaml \
-		-f ./infra/db-pvc.yaml \
-		-f ./infra/db-configmap.yaml \
-		-f ./infra/db-secret.yaml \
-		-f ./infra/db-deployment.yaml \
-		-f ./infra/db-service.yaml
-
-kube-db-down:
-	kubectl delete \
-		-f ./infra/metrics.yaml \
-		-f ./infra/db-pv.yaml \
-		-f ./infra/db-pvc.yaml \
-		-f ./infra/db-configmap.yaml \
-		-f ./infra/db-secret.yaml \
-		-f ./infra/db-deployment.yaml \
-		-f ./infra/db-service.yaml
-
 kube-api-up:
 	kubectl apply \
-		-f ./infra/api-pv.yaml \
-		-f ./infra/api-pvc.yaml \
+		-f ./infra/api-namespace.yaml \
 		-f ./infra/api-configmap.yaml \
+		-f ./infra/api-service-account.yaml \
 		-f ./infra/api-secret.yaml \
 		-f ./infra/api-deployment.yaml \
-		-f ./infra/api-hpa.yaml \
-		-f ./infra/api-service.yaml
+		-f ./infra/api-service.yaml \
+		-f ./infra/api-hpa.yaml
 
 kube-api-down:
 	kubectl delete \
-		-f ./infra/api-pv.yaml \
-		-f ./infra/api-pvc.yaml \
+		-f ./infra/api-namespace.yaml \
 		-f ./infra/api-configmap.yaml \
+		-f ./infra/api-service-account.yaml \
 		-f ./infra/api-secret.yaml \
 		-f ./infra/api-deployment.yaml \
-		-f ./infra/api-hpa.yaml \
-		-f ./infra/api-service.yaml
+		-f ./infra/api-service.yaml \
+		-f ./infra/api-hpa.yaml
 
 k6-run:
 	k6 run k6/index.js

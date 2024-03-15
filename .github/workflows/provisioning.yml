@@ -1,0 +1,89 @@
+name: provisioning
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  # pull_request:
+  #   branches:
+  #     - main
+  
+jobs:
+  build-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api/CtrlEat
+    strategy:
+      matrix:
+        dotnet-version: ['7.0.x']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Install dependencies
+        run: dotnet restore CtrlEat.sln
+
+      - name: Build
+        run: dotnet build CtrlEat.sln --configuration Release
+
+      - name: Test
+        run: dotnet test CtrlEat.sln --no-build --verbosity normal
+  
+  image:
+    name: Build & Push Docker Images
+    needs: 
+    - build-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api/CtrlEat
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build the Docker images
+        run: docker build -t jsfelipearaujo/ctrl-eat-api:latest -t jsfelipearaujo/ctrl-eat-api:$$(git rev-parse --short HEAD) .
+
+      - name: Push the Docker image <latest>
+        run: docker push jsfelipearaujo/ctrl-eat-api:latest
+
+      - name: Push the Docker image <commit>
+        run: docker push jsfelipearaujo/ctrl-eat-api:$$(git rev-parse --short HEAD)
+
+  deploy:
+    name: Deploy to EKS
+    needs: 
+    - image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Apply K8s manifests
+        run: |
+          kubectl apply \
+          -f ./infra/api-namespace.yaml \
+          -f ./infra/api-configmap.yaml \
+          -f ./infra/api-service-account.yaml \
+          -f ./infra/api-secret.yaml \
+          -f ./infra/api-deployment.yaml \
+          -f ./infra/api-service.yaml \
+          -f ./infra/api-hpa.yaml
+
+      - name: Update the K8s deployment image
+        run: |
+          kubectl set image deployment/ctrl-eat-api ctrl-eat-api=jsfelipearaujo/ctrl-eat-api:$$(git rev-parse --short HEAD)
