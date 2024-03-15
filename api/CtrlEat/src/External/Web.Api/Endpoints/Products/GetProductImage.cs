@@ -25,6 +25,6 @@ public static class GetProductImage
             return Results.BadRequest(result.ToApiError());
         }
 
-        return Results.File(result.Value, ContentTypes.ImageJpeg);
+        return Results.Stream(result.Value, ContentTypes.ApplicationOctetStream, $"image-{request.Id}.jpg");
     }
 }

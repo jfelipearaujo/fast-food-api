@@ -3,11 +3,14 @@ using Application.UseCases.Products.GetProductImage;
 using Application.UseCases.Products.GetProductImage.Errors;
 
 using Domain.Adapters.Repositories;
+using Domain.Adapters.Storage;
+using Domain.Adapters.Storage.Requests;
+using Domain.Adapters.Storage.Responses;
 using Domain.Entities.ProductAggregate;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.GetProductImage.Requests;
 
-using System.IO.Abstractions;
+using System.Net;
 
 using Utils.Tests.Builders.Domain.Entities;
 
@@ -18,14 +21,14 @@ public class GetProductImageUseCaseTests
     private readonly GetProductImageUseCase sut;
 
     private readonly IProductRepository repository;
-    private readonly IFileSystem fileSystem;
+    private readonly IStorageService storageService;
 
     public GetProductImageUseCaseTests()
     {
         repository = Substitute.For<IProductRepository>();
-        fileSystem = Substitute.For<IFileSystem>();
+        storageService = Substitute.For<IStorageService>();
 
-        sut = new GetProductImageUseCase(repository, fileSystem);
+        sut = new GetProductImageUseCase(repository, storageService);
     }
 
     [Fact]
@@ -48,22 +51,18 @@ public class GetProductImageUseCaseTests
         repository.GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
             .Returns(product);
 
-        fileSystem.Path
-            .Combine(Arg.Any<string>(), Arg.Any<string>())
-            .Returns($"{product.Id.Value}.jpg");
-
-        fileSystem.File
-            .Exists(Arg.Any<string>())
-            .Returns(true);
+        storageService.DownloadFileAsync(Arg.Any<DownloadObjectRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new DownloadObjectResponse
+            {
+                FileStream = new MemoryStream(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
 
         // Act
         var response = await sut.Execute(request, CancellationToken.None);
 
         // Assert
-        response.Should().BeSuccess().And.Satisfy(result =>
-        {
-            result.Value.Should().Be($"{product.Id.Value}.jpg");
-        });
+        response.Should().BeSuccess();
 
         await repository
             .Received(1)
@@ -114,13 +113,12 @@ public class GetProductImageUseCaseTests
         repository.GetByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
             .Returns(product);
 
-        fileSystem.Path
-            .Combine(Arg.Any<string>(), Arg.Any<string>())
-            .Returns($"{product.Id.Value}.jpg");
-
-        fileSystem.File
-            .Exists(Arg.Any<string>())
-            .Returns(false);
+        storageService.DownloadFileAsync(Arg.Any<DownloadObjectRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new DownloadObjectResponse
+            {
+                FileStream = new MemoryStream(),
+                StatusCode = (int)HttpStatusCode.NotFound
+            });
 
         // Act
         var response = await sut.Execute(request, CancellationToken.None);

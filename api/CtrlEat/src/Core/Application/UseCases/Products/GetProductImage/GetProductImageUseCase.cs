@@ -3,28 +3,32 @@ using Application.UseCases.Common.Errors;
 using Application.UseCases.Products.GetProductImage.Errors;
 
 using Domain.Adapters.Repositories;
+using Domain.Adapters.Storage;
+using Domain.Adapters.Storage.Requests;
 using Domain.Entities.ProductAggregate.ValueObjects;
 using Domain.UseCases.Products.GetProductImage;
 using Domain.UseCases.Products.GetProductImage.Requests;
 
 using FluentResults;
 
-using System.IO.Abstractions;
+using System.Net;
 
 namespace Application.UseCases.Products.GetProductImage;
 
 public class GetProductImageUseCase : IGetProductImageUseCase
 {
     private readonly IProductRepository repository;
-    private readonly IFileSystem fileSystem;
+    private readonly IStorageService storageService;
 
-    public GetProductImageUseCase(IProductRepository repository, IFileSystem fileSystem)
+    public GetProductImageUseCase(
+        IProductRepository repository,
+        IStorageService storageService)
     {
         this.repository = repository;
-        this.fileSystem = fileSystem;
+        this.storageService = storageService;
     }
 
-    public async Task<Result<string>> Execute(
+    public async Task<Result<MemoryStream>> Execute(
         GetProductImageRequest request,
         CancellationToken cancellationToken)
     {
@@ -37,15 +41,21 @@ public class GetProductImageUseCase : IGetProductImageUseCase
             return Result.Fail(new ProductNotFoundError(request.Id));
         }
 
-        var baseDirectory = fileSystem.Directory.GetCurrentDirectory();
-        var directory = fileSystem.Path.Join(baseDirectory, "images");
-        var filePath = fileSystem.Path.Combine(directory, $"{product.Id.Value}{Images.FILE_EXTENSION_JPG}");
+        var filePath = $"app/images/{product.Id.Value}{Images.FILE_EXTENSION_JPG}";
 
-        if (!fileSystem.File.Exists(filePath))
+        var fileRequest = new DownloadObjectRequest
+        {
+            Name = filePath,
+            BucketName = "jsfelipearaujo"
+        };
+
+        var fileResponse = await storageService.DownloadFileAsync(fileRequest, cancellationToken);
+
+        if (fileResponse.StatusCode == (int)HttpStatusCode.NotFound)
         {
             return Result.Fail(new ProductImageNotFountError(request.Id));
         }
 
-        return filePath;
+        return fileResponse.FileStream;
     }
 }
