@@ -38,7 +38,7 @@ public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
             .IsUnique();
 
         builder.Property(x => x.Password)
-            .IsRequired(true);
+            .IsRequired(false);
 
         builder.Property(x => x.DocumentId)
             .HasConversion(

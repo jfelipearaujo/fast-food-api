@@ -1,10 +1,12 @@
 ﻿using Application.UseCases.Clients.CreateClient.Errors;
+
 using Domain.Adapters.Repositories;
 using Domain.Entities.ClientAggregate;
 using Domain.Entities.ClientAggregate.ValueObjects;
 using Domain.UseCases.Clients.Common.Responses;
 using Domain.UseCases.Clients.CreateClient;
 using Domain.UseCases.Clients.CreateClient.Requests;
+
 using FluentResults;
 
 namespace Application.UseCases.Clients.CreateClient;
