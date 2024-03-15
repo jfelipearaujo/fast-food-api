@@ -57,13 +57,19 @@ jobs:
 
       - name: Build image
         run: |
-          docker build -t jsfelipearaujo/ctrl-eat-api:${{ github.sha }} . \
+          docker build -t jsfelipearaujo/ctrl-eat-api:${{ github.sha }} .
+
+      - name: Tag image
+        run: |
           docker tag jsfelipearaujo/ctrl-eat-api:${{ github.sha }} jsfelipearaujo/ctrl-eat-api:latest
 
-      - name: Push image
+      - name: Push image <latest>
         run: |
-          docker push jsfelipearaujo/ctrl-eat-api:${{ github.sha }} \
           docker push jsfelipearaujo/ctrl-eat-api:latest
+
+      - name: Push image <sha>
+        run: |
+          docker push jsfelipearaujo/ctrl-eat-api:${{ github.sha }}
 
   deploy:
     name: Deploy to EKS
