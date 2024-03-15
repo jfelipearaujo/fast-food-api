@@ -2,10 +2,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: ctrl-eat-api-config
+  namespace: fastfood
   labels:
     app: ctrl-eat-api
 data:
-  DB_NAME: AppDbCtrlEat
-  DB_HOST: ctrl-eat-db
+  DB_NAME: "fastfood"
+  DB_HOST: "" #TODO: Add the RDS endpoint
   DB_PORT: "5432"
-  DB_USER: postgres
+  DB_USER: "fastfood"

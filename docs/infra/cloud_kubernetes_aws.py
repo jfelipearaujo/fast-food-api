@@ -1,5 +1,5 @@
 from diagrams import Cluster, Diagram
-from diagrams.aws.compute import EKS, ElasticContainerServiceContainer as EC2
+from diagrams.aws.compute import EKS
 from diagrams.aws.storage import S3
 from diagrams.aws.security import SecretsManager
 from diagrams.aws.management import SystemsManagerParameterStore as ParameterStore
@@ -7,6 +7,7 @@ from diagrams.aws.database import RDSPostgresqlInstance as RDS
 from diagrams.aws.network import ElbApplicationLoadBalancer as ALB, APIGateway
 from diagrams.aws.security import WAF
 from diagrams.aws.general import Users
+from diagrams.k8s.compute import Pod
 
 diagram_attr = {
     "fontsize": "25",
@@ -63,14 +64,9 @@ with Diagram("Cloud Kubernetes AWS", show=False, graph_attr=diagram_attr):
                 with Cluster("EKS Cluster", graph_attr=cluster_attr):
                     alb >> service
 
-                    pods = []
-
-                    labels = ["...", "Pod 1", "Pod 5"]
-
-                    for i in range(0, 3):
-                        pod = EC2(labels[i], **item_attr)
-                        pod >> s3
-                        pod >> secrets_manager
-                        pod >> parameter_store
-                        pod >> rds
-                        pods.append(service >> pod)
+                    pod = Pod(**item_attr)
+                    pod >> s3
+                    pod >> secrets_manager
+                    pod >> parameter_store
+                    pod >> rds
+                    service >> pod

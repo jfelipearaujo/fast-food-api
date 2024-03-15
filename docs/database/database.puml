@@ -75,7 +75,6 @@ entity "Payment" as payment {
     Status: Integer
     Amount: Decimal
     Currency: String
-    Details: String
     ---
     CreatedAtUtc: DateTime
     UpdatedAtUtc: DateTime
@@ -85,7 +84,6 @@ entity "Order" as order {
     *Id: Guid <<PK>>
     ---
     ClientId: Guid <<FK>>
-    PaymentId: Guid <<FK>>
     TrackId: String
     Status: Integer
     StatusUpdatedAtUtc: DateTime
@@ -116,6 +114,7 @@ note right of order
     3 = Em Preparação
     4 = Pronto
     5 = Finalizado
+    6 = Cancelado
 end note
 
 ' a product has Exactly One category

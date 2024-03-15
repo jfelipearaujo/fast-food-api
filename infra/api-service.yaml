@@ -2,13 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ctrl-eat-api
+  namespace: fastfood
   labels:
     app: ctrl-eat-api
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-    - port: 80
+    - protocol: TCP
+      port: 80
       targetPort: 80
-      nodePort: 30002
   selector:
     app: ctrl-eat-api

@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: ctrl-eat-db-config
-  labels:
-    app: ctrl-eat-db
-data:
-  POSTGRES_DB: AppDbCtrlEat
-  POSTGRES_USER: postgres
