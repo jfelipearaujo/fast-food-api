@@ -17,15 +17,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Attach to EKS cluster
-        run: aws eks update-kubeconfig --region us-east-1 --name fastfood
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: us-east-1
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Attach to EKS cluster
+        run: aws eks update-kubeconfig --region us-east-1 --name fastfood
 
       - name: Destroy K8s manifests
         run: |
