@@ -99,4 +99,8 @@ jobs:
 
       - name: Update the K8s deployment image
         run: |
-          kubectl set image deployment/ctrl-eat-api ctrl-eat-api=jsfelipearaujo/ctrl-eat-api:v${{ github.run_number }}
+          kubectl set image deployments/ctrl-eat-api ctrl-eat-api=jsfelipearaujo/ctrl-eat-api:v${{ github.run_number }} -n fastfood
+
+      - name: Wait for the deployment to be ready
+        run: |
+          kubectl rollout status deployments/ctrl-eat-api -n fastfood

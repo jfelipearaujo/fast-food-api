@@ -4,6 +4,7 @@ metadata:
   name: ctrl-eat-api
   namespace: fastfood
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: ctrl-eat-api
@@ -20,30 +21,12 @@ spec:
           ports:
             - containerPort: 80
           resources:
-            requests:
-              memory: "120Mi"
-              cpu: "200m"
             limits:
-              memory: "240Mi"
-              cpu: "400m"
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 3
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 80
-            initialDelaySeconds: 1
-            periodSeconds: 5
-            timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 3
+              memory: 200Mi
+              cpu: 100m
+            requests:
+              memory: 200Mi
+              cpu: 100m
           envFrom:
             - configMapRef:
                 name: ctrl-eat-api-config
