@@ -1,0 +1,38 @@
+name: destroy
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  #   branches:
+  #     - main
+  
+jobs:  
+  deploy:
+    name: Destroy Infrastructure
+    needs: 
+    - image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: us-east-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Destroy K8s manifests
+        run: |
+          kubectl delete \
+          -f ./infra/api-namespace.yaml \
+          -f ./infra/api-configmap.yaml \
+          -f ./infra/api-service-account.yaml \
+          -f ./infra/api-secret.yaml \
+          -f ./infra/api-deployment.yaml \
+          -f ./infra/api-service.yaml \
+          -f ./infra/api-hpa.yaml
