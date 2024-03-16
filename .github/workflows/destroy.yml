@@ -17,6 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Attach to EKS cluster
+        run: aws eks update-kubeconfig --region us-east-1 --name fastfood
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
