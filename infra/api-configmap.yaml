@@ -7,6 +7,5 @@ metadata:
     app: ctrl-eat-api
 data:
   DB_NAME: "fastfood"
-  DB_HOST: "" #TODO: Add the RDS endpoint
   DB_PORT: "5432"
   DB_USER: "fastfood"

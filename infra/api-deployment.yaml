@@ -48,6 +48,11 @@ spec:
             - configMapRef:
                 name: ctrl-eat-api-config
           env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: host
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
