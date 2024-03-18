@@ -8,8 +8,8 @@ on:
   # pull_request:
   #   branches:
   #     - main
-  
-jobs:  
+
+jobs:
   destroy:
     name: Destroy Infrastructure
     runs-on: ubuntu-latest

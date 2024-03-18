@@ -8,7 +8,7 @@ on:
   # pull_request:
   #   branches:
   #     - main
-  
+
 jobs:
   build-test:
     name: Build & Test
@@ -18,7 +18,7 @@ jobs:
         working-directory: ./api/CtrlEat
     strategy:
       matrix:
-        dotnet-version: ['7.0.x']
+        dotnet-version: ["7.0.x"]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,11 +36,11 @@ jobs:
 
       - name: Test
         run: dotnet test CtrlEat.sln --configuration Release --no-build
-  
+
   image:
     name: Build & Push Docker Images
-    needs: 
-    - build-test
+    needs:
+      - build-test
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -48,7 +48,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -69,8 +69,8 @@ jobs:
 
   deploy:
     name: Deploy to EKS
-    needs: 
-    - image
+    needs:
+      - image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -5,8 +5,11 @@ metadata:
   namespace: fastfood
   labels:
     app: ctrl-eat-api
+  annotations:
+   service.beta.kubernetes.io/aws-load-balancer-name: lb-fastfood
 spec:
   type: LoadBalancer
+  loadBalancerClass: service.k8s.aws/nlb
   ports:
     - protocol: TCP
       port: 80
