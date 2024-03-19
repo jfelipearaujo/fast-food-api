@@ -6,7 +6,7 @@ namespace Domain.UseCases.Products.GetProductImage;
 
 public interface IGetProductImageUseCase
 {
-    Task<Result<MemoryStream>> Execute(
+    Task<Result<byte[]>> Execute(
         GetProductImageRequest request,
         CancellationToken cancellationToken);
 }

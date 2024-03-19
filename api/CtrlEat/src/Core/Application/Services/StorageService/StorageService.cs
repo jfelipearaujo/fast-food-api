@@ -47,7 +47,7 @@ public class StorageService : IStorageService
                     return response;
                 }
 
-                response.FileStream = ms;
+                response.FileData = ms.ToArray();
                 response.StatusCode = 200;
                 response.Message = $"{request.Name} has been downloaded sucessfully";
             }
@@ -77,7 +77,7 @@ public class StorageService : IStorageService
     {
         var config = new AmazonS3Config
         {
-            RegionEndpoint = Amazon.RegionEndpoint.USEast1
+            RegionEndpoint = Amazon.RegionEndpoint.USEast1,
         };
 
         var response = new UploadObjectResponse();

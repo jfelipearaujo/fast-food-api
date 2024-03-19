@@ -45,7 +45,7 @@ public class ApiFactory<TProgramMarker, TDbContext> : WebApplicationFactory<TPro
             storageService.DownloadFileAsync(Arg.Any<DownloadObjectRequest>(), Arg.Any<CancellationToken>())
                 .Returns(new DownloadObjectResponse
                 {
-                    FileData = new byte[] { },
+                    FileData = Array.Empty<byte>(),
                     StatusCode = (int)HttpStatusCode.OK
                 });
 

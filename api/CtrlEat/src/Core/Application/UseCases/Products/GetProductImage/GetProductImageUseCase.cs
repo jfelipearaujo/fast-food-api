@@ -28,7 +28,7 @@ public class GetProductImageUseCase : IGetProductImageUseCase
         this.storageService = storageService;
     }
 
-    public async Task<Result<MemoryStream>> Execute(
+    public async Task<Result<byte[]>> Execute(
         GetProductImageRequest request,
         CancellationToken cancellationToken)
     {
@@ -56,6 +56,6 @@ public class GetProductImageUseCase : IGetProductImageUseCase
             return Result.Fail(new ProductImageNotFountError(request.Id));
         }
 
-        return fileResponse.FileStream;
+        return fileResponse.FileData;
     }
 }

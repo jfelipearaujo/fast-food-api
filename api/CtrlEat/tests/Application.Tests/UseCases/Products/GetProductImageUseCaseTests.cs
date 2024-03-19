@@ -54,7 +54,7 @@ public class GetProductImageUseCaseTests
         storageService.DownloadFileAsync(Arg.Any<DownloadObjectRequest>(), Arg.Any<CancellationToken>())
             .Returns(new DownloadObjectResponse
             {
-                FileStream = new MemoryStream(),
+                FileData = Array.Empty<byte>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
 
@@ -116,7 +116,7 @@ public class GetProductImageUseCaseTests
         storageService.DownloadFileAsync(Arg.Any<DownloadObjectRequest>(), Arg.Any<CancellationToken>())
             .Returns(new DownloadObjectResponse
             {
-                FileStream = new MemoryStream(),
+                FileData = new byte[] { },
                 StatusCode = (int)HttpStatusCode.NotFound
             });
 
