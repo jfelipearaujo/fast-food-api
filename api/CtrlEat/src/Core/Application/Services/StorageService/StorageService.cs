@@ -2,9 +2,13 @@
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 
+using Application.UseCases.Products.UploadProductImage;
+
 using Domain.Adapters.Storage;
 using Domain.Adapters.Storage.Requests;
 using Domain.Adapters.Storage.Responses;
+
+using Microsoft.Extensions.Logging;
 
 using System.Net;
 
@@ -12,10 +16,19 @@ namespace Application.Services.StorageService;
 
 public class StorageService : IStorageService
 {
+    private readonly ILogger<UploadProductImageUseCase> logger;
+
+    public StorageService(ILogger<UploadProductImageUseCase> logger)
+    {
+        this.logger = logger;
+    }
+
     public async Task<DownloadObjectResponse> DownloadFileAsync(
         DownloadObjectRequest request,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Downloading file {fileName} from S3", request.Name);
+
         var config = new AmazonS3Config
         {
             RegionEndpoint = Amazon.RegionEndpoint.USEast1
@@ -42,10 +55,14 @@ public class StorageService : IStorageService
 
                 if (ms.Length == 0)
                 {
+                    logger.LogWarning("File {fileName} could not be downloaded from S3", request.Name);
+
                     response.StatusCode = 404;
                     response.Message = $"{request.Name} could not be downloaded";
                     return response;
                 }
+
+                logger.LogInformation("File {fileName} downloaded from S3", request.Name);
 
                 response.FileData = ms.ToArray();
                 response.StatusCode = 200;
@@ -53,17 +70,23 @@ public class StorageService : IStorageService
             }
             else
             {
+                logger.LogWarning("File {fileName} could not be downloaded from S3, status {status}", request.Name, getObjectResponse.HttpStatusCode);
+
                 response.StatusCode = (int)getObjectResponse.HttpStatusCode;
                 response.Message = $"{request.Name} could not be downloaded";
             }
         }
         catch (AmazonS3Exception s3Ex)
         {
+            logger.LogError(s3Ex, "Error downloading file {fileName} from S3", request.Name);
+
             response.StatusCode = (int)s3Ex.StatusCode;
             response.Message = s3Ex.Message;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error downloading file {fileName} from S3", request.Name);
+
             response.StatusCode = 500;
             response.Message = ex.Message;
         }
@@ -75,6 +98,8 @@ public class StorageService : IStorageService
         UploadObjectRequest request,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Uploading file {fileName} to S3", request.Name);
+
         var config = new AmazonS3Config
         {
             RegionEndpoint = Amazon.RegionEndpoint.USEast1,
@@ -95,7 +120,11 @@ public class StorageService : IStorageService
             using var client = new AmazonS3Client(config);
             using var transferUtility = new TransferUtility(client);
 
+            logger.LogInformation("Uploading...");
+
             await transferUtility.UploadAsync(uploadRequest, cancellationToken);
+
+            logger.LogInformation("File {fileName} uploaded to S3", request.Name);
 
             response.Url = request.BucketName + "/" + request.Name;
             response.StatusCode = 201;
@@ -103,11 +132,15 @@ public class StorageService : IStorageService
         }
         catch (AmazonS3Exception s3Ex)
         {
+            logger.LogError(s3Ex, "S3 Error uploading file {fileName} to S3", request.Name);
+
             response.StatusCode = (int)s3Ex.StatusCode;
             response.Message = s3Ex.Message;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error uploading file {fileName} to S3", request.Name);
+
             response.StatusCode = 500;
             response.Message = ex.Message;
         }
