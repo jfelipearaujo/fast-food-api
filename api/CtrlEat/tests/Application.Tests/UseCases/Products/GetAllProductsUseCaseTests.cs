@@ -1,7 +1,10 @@
 ﻿using Application.UseCases.Products.GetAllProducts;
+
 using Domain.Adapters.Repositories;
 using Domain.Entities.ProductAggregate;
 using Domain.UseCases.Products.Common.Responses;
+
+using Microsoft.Extensions.Logging;
 
 using Utils.Tests.Builders.Domain.Entities;
 
@@ -11,13 +14,15 @@ public class GetAllProductsUseCaseTests
 {
     private readonly GetAllProductsUseCase sut;
 
+    private readonly ILogger<GetAllProductsUseCase> logger;
     private readonly IProductRepository repository;
 
     public GetAllProductsUseCaseTests()
     {
+        logger = Substitute.For<ILogger<GetAllProductsUseCase>>();
         repository = Substitute.For<IProductRepository>();
 
-        sut = new GetAllProductsUseCase(repository);
+        sut = new GetAllProductsUseCase(logger, repository);
     }
 
     [Fact]
