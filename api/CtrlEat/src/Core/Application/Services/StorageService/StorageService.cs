@@ -116,6 +116,21 @@ public class StorageService : IStorageService
             };
 
             using var client = new AmazonS3Client(config);
+
+            var listObjectsRequest = new ListObjectsRequest
+            {
+                BucketName = request.BucketName
+            };
+
+            logger.LogInformation("Listing files in bucket {bucketName}", request.BucketName);
+
+            var listObjectsResponse = await client.ListObjectsAsync(listObjectsRequest, cancellationToken);
+
+            foreach (var s3Object in listObjectsResponse.S3Objects)
+            {
+                logger.LogInformation("file: {fileName}", s3Object.Key);
+            }
+
             using var transferUtility = new TransferUtility(client);
 
             logger.LogInformation("Uploading...");
