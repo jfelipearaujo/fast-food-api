@@ -1,5 +1,4 @@
-﻿using Amazon.Runtime;
-using Amazon.S3;
+﻿using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 
@@ -28,10 +27,6 @@ public class StorageService : IStorageService
     {
         logger.LogInformation("Downloading file {fileName} from S3", request.Name);
 
-        var credentials = new BasicAWSCredentials(
-                       Environment.GetEnvironmentVariable("ACCESS_KEY"),
-                       Environment.GetEnvironmentVariable("SECRET_KEY"));
-
         var config = new AmazonS3Config
         {
             RegionEndpoint = Amazon.RegionEndpoint.USEast1
@@ -41,7 +36,7 @@ public class StorageService : IStorageService
 
         try
         {
-            using var client = new AmazonS3Client(credentials, config);
+            using var client = new AmazonS3Client(config);
 
             var getObjectRequest = new GetObjectRequest
             {
@@ -103,10 +98,6 @@ public class StorageService : IStorageService
     {
         logger.LogInformation("Uploading file {fileName} to S3", request.Name);
 
-        var credentials = new BasicAWSCredentials(
-                       Environment.GetEnvironmentVariable("ACCESS_KEY"),
-                       Environment.GetEnvironmentVariable("SECRET_KEY"));
-
         var config = new AmazonS3Config
         {
             RegionEndpoint = Amazon.RegionEndpoint.USEast1,
@@ -124,7 +115,7 @@ public class StorageService : IStorageService
                 CannedACL = S3CannedACL.NoACL
             };
 
-            using var client = new AmazonS3Client(credentials, config);
+            using var client = new AmazonS3Client(config);
 
             var listObjectsRequest = new ListObjectsRequest
             {
