@@ -2,8 +2,6 @@
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 
-using Application.UseCases.Products.UploadProductImage;
-
 using Domain.Adapters.Storage;
 using Domain.Adapters.Storage.Requests;
 using Domain.Adapters.Storage.Responses;
@@ -16,9 +14,9 @@ namespace Application.Services.StorageService;
 
 public class StorageService : IStorageService
 {
-    private readonly ILogger<UploadProductImageUseCase> logger;
+    private readonly ILogger<StorageService> logger;
 
-    public StorageService(ILogger<UploadProductImageUseCase> logger)
+    public StorageService(ILogger<StorageService> logger)
     {
         this.logger = logger;
     }
