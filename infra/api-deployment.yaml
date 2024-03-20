@@ -46,6 +46,16 @@ spec:
                 secretKeyRef:
                   name: database-secret
                   key: password
+            - name: ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: access_key
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: secret_key
           volumeMounts:
             - name: secrets-store-inline
               mountPath: "/mnt/secrets-store"
