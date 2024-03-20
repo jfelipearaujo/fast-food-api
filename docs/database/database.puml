@@ -12,6 +12,7 @@ entity "Client" as client {
     FirstName: String <<nullable>>
     LastName: String <<nullable>>
     Email: String <<nullable>>
+    Password: String <<nullable>>
     DocumentId: String <<nullable>>
     DocumentType: Integer <<nullable>>
     IsAnonymous: Boolean
